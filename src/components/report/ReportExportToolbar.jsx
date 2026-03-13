@@ -16,9 +16,10 @@ function ToolbarButton({ actionId, children, disabled, icon: Icon, isBusy, onCli
   return (
     <Button
       aria-label={t(`export:buttons.${actionId}`)}
-      className="w-full sm:w-auto"
+      className="w-full justify-start sm:w-auto sm:justify-center"
       disabled={disabled || isBusy}
       onClick={onClick}
+      size="sm"
       tone="ghost"
     >
       {isBusy ? <LoaderCircle className="animate-spin" size={16} /> : <Icon size={16} />}
@@ -31,7 +32,11 @@ export function ReportExportToolbar({ disabled, isBusy, onAction }) {
   const { t } = useTranslation("export");
 
   return (
-    <div aria-label={t("export:toolbarLabel")} className="flex flex-wrap gap-2" role="toolbar">
+    <div
+      aria-label={t("export:toolbarLabel")}
+      className="grid gap-2 sm:grid-cols-2 xl:grid-cols-4"
+      role="toolbar"
+    >
       <ToolbarButton
         actionId="copyReport"
         disabled={disabled}

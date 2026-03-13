@@ -48,14 +48,16 @@ export function MeetingInputPanel({
   }, [inputText]);
 
   return (
-    <section className="rounded-[--radius-panel] border border-white/80 bg-white/92 p-4 shadow-[var(--shadow-card)] backdrop-blur-xl sm:p-5">
-      <div className="space-y-3">
+    <section className="rounded-[--radius-panel] border border-white/80 bg-white/92 p-5 shadow-[var(--shadow-card)] backdrop-blur-xl sm:p-6 lg:p-6">
+      <div className="space-y-4 lg:space-y-3.5">
         <label className="block">
-          <span className="mb-2 block text-sm font-medium text-[--color-ink]">{t("home:fields.transcript")}</span>
+          <span className="mb-3 block text-sm font-semibold uppercase tracking-[0.14em] text-[--color-muted]">
+            {t("home:fields.transcript")}
+          </span>
           <textarea
             aria-describedby={displayError ? `${helperId} ${errorId}` : helperId}
             aria-invalid={displayError ? "true" : "false"}
-            className={`min-h-[120px] max-h-[300px] w-full resize-none overflow-y-auto rounded-[--radius-panel] border bg-[--color-panel] px-4 py-4 font-mono text-sm leading-6 text-[--color-ink] outline-none transition focus:border-[--color-accent] ${displayError ? "border-red-300" : "border-[--color-border]"}`}
+            className={`min-h-[132px] max-h-[300px] w-full resize-none overflow-y-auto rounded-[--radius-panel] border bg-[--color-panel] px-4 py-3.5 font-mono text-sm leading-6 text-[--color-ink] outline-none transition focus:border-[--color-accent] lg:min-h-[120px] ${displayError ? "border-red-300" : "border-[--color-border]"}`}
             id="meeting-transcript"
             onBlur={markTranscriptTouched}
             onChange={(event) => setInputText(event.target.value)}
@@ -65,21 +67,22 @@ export function MeetingInputPanel({
             rows={1}
             value={inputText}
           />
+          <div className="mt-2 flex flex-wrap items-end justify-between gap-x-3 gap-y-1 px-1 text-xs leading-5 text-[--color-muted]">
+            <p className="max-w-[36rem]" id={helperId}>
+              {t("home:helper.transcriptFormats")}
+            </p>
+            <p className="shrink-0 whitespace-nowrap">
+              {t("home:helper.transcriptLength", {
+                current: currentLength,
+                min: MIN_TRANSCRIPT_LENGTH,
+                max: MAX_TRANSCRIPT_LENGTH
+              })}
+            </p>
+          </div>
         </label>
 
-        <div className="flex flex-wrap items-center justify-between gap-2 px-1 text-xs leading-5 text-[--color-muted]">
-          <p id={helperId}>{t("home:helper.transcriptFormats")}</p>
-          <p>
-            {t("home:helper.transcriptLength", {
-              current: currentLength,
-              min: MIN_TRANSCRIPT_LENGTH,
-              max: MAX_TRANSCRIPT_LENGTH
-            })}
-          </p>
-        </div>
-
         <div className="grid gap-3 sm:grid-cols-2">
-          <label className="flex cursor-pointer items-center justify-center gap-2 rounded-[--radius-button] border border-[--color-border] bg-white px-4 py-3 text-sm font-semibold text-[--color-ink] transition hover:bg-[--color-panel]">
+          <label className="flex min-h-12 cursor-pointer items-center justify-center gap-2 rounded-[--radius-button] border border-[--color-border] bg-white/92 px-4 py-3 text-sm font-semibold text-[--color-ink] transition hover:bg-[--color-panel]">
             <FileUp size={16} />
             {t("home:buttons.uploadFile")}
             <input
@@ -101,16 +104,17 @@ export function MeetingInputPanel({
         </div>
 
         <div className="space-y-2">
-          <p className="px-1 text-xs font-medium uppercase tracking-[0.18em] text-[--color-muted]">
+          <p className="px-1 text-[11px] font-medium uppercase tracking-[0.16em] text-[--color-muted]">
             {t("example:scenarioLabel")}
           </p>
-          <div className="grid gap-2 sm:grid-cols-3">
+          <div className="grid gap-2 lg:grid-cols-3">
             {exampleMeetings.map((meeting) => (
               <Button
                 aria-label={meeting.title}
-                className={`w-full justify-start text-left ${activeExampleId === meeting.id ? "border-[--color-accent] bg-[--color-panel]" : ""}`}
+                className={`w-full justify-start text-left lg:min-h-0 lg:px-3 lg:py-2.5 ${activeExampleId === meeting.id ? "border-[--color-accent] bg-[--color-panel]" : ""}`}
                 key={meeting.id}
                 onClick={() => loadExample(meeting.id)}
+                size="sm"
                 tone="ghost"
               >
                 <Sparkles size={16} />
@@ -136,7 +140,7 @@ export function MeetingInputPanel({
 
         <Button
           aria-label={isGenerating ? t("report:loading.title") : t("home:buttons.generateReport")}
-          className="w-full"
+          className="w-full border-[--color-panel-strong] bg-[linear-gradient(135deg,_#17c8e3_0%,_#5ee6f2_100%)] shadow-[0_18px_36px_rgba(23,200,227,0.28)] ring-1 ring-white/70 hover:-translate-y-0.5 hover:shadow-[0_22px_42px_rgba(23,200,227,0.34)]"
           disabled={isGenerateDisabled}
           onClick={onGenerate}
         >

@@ -268,15 +268,15 @@ Status: Deferred for the MVP. Analytics can be added later once usage tracking i
 
 ## Feature: Visual consistency
 
-- [ ] Standardize button styles across app
-- [ ] Standardize spacing between sections
-- [ ] Improve typography hierarchy
+- [x] Standardize button styles across app
+- [x] Standardize spacing between sections
+- [x] Improve typography hierarchy
 
 ## Feature: Responsive layout
 
-- [ ] Test layout on tablet breakpoints
-- [ ] Improve mobile layout for report workspace
-- [ ] Ensure email form works on small screens
+- [x] Test layout on tablet breakpoints
+- [x] Improve mobile layout for report workspace
+- [x] Ensure email form works on small screens
 
 ---
 

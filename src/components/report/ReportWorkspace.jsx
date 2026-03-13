@@ -11,13 +11,14 @@ import { Button } from "../ui/Button";
 import { ErrorBanner } from "../ui/ErrorBanner";
 import { ReportExportToolbar } from "./ReportExportToolbar";
 import { formatDateTime } from "../../lib/locale";
+import { EmailPanel } from "../email/EmailPanel";
 
 function LoadingState({ title, body, progress, t }) {
   return (
     <div className="rounded-[--radius-panel] border border-[--color-border] bg-[linear-gradient(180deg,_rgba(255,255,255,0.96),_rgba(240,247,250,0.9))] p-6 sm:p-8">
       <div className="max-w-2xl">
-        <h2 className="text-3xl font-semibold text-[--color-ink]">{title}</h2>
-        <p className="mt-3 text-sm leading-7 text-[--color-muted]">{body}</p>
+        <h2 className="font-display text-3xl font-semibold text-[--color-ink] sm:text-4xl">{title}</h2>
+        <p className="mt-3 max-w-xl text-sm leading-7 text-[--color-muted]">{body}</p>
         <div className="mt-5 rounded-[--radius-button] border border-[--color-border] bg-white/80 p-4">
           <div className="flex items-center justify-between gap-3 text-xs font-semibold uppercase tracking-[0.16em] text-[--color-muted]">
             <span>{t(`report:progress.${progress.currentStage}`)}</span>
@@ -60,11 +61,11 @@ function LoadingState({ title, body, progress, t }) {
 
 function PlaceholderState({ icon: Icon, title, body, actions = null }) {
   return (
-    <div className="flex min-h-[520px] flex-col items-center justify-center rounded-[--radius-panel] border border-dashed border-[--color-border] bg-[linear-gradient(180deg,_rgba(255,255,255,0.96),_rgba(240,247,250,0.9))] px-8 text-center">
+    <div className="flex min-h-[420px] flex-col items-center justify-center rounded-[--radius-panel] border border-dashed border-[--color-border] bg-[linear-gradient(180deg,_rgba(255,255,255,0.96),_rgba(240,247,250,0.9))] px-6 py-10 text-center sm:min-h-[520px] sm:px-8">
       <div className="flex size-18 items-center justify-center rounded-full bg-[--color-panel] text-[--color-accent]">
         <Icon size={28} />
       </div>
-      <h2 className="mt-6 text-3xl font-semibold text-[--color-ink]">{title}</h2>
+      <h2 className="mt-6 font-display text-3xl font-semibold text-[--color-ink] sm:text-4xl">{title}</h2>
       <p className="mt-3 max-w-md text-sm leading-7 text-[--color-muted]">{body}</p>
       {actions ? <div className="mt-6 flex flex-wrap justify-center gap-3">{actions}</div> : null}
     </div>
@@ -87,8 +88,8 @@ function ReportSection({
   };
 
   return (
-    <section className={`rounded-[--radius-panel] border border-[--color-border] p-5 ${tones[tone]}`}>
-      <div className="flex items-center justify-between gap-3">
+    <section className={`rounded-[--radius-panel] border border-[--color-border] p-5 sm:p-6 ${tones[tone]}`}>
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div className="flex items-center gap-3">
           <h3 className="text-sm font-semibold uppercase tracking-[0.18em] text-[--color-muted]">{title}</h3>
           {badge ? (
@@ -127,6 +128,7 @@ export function ReportWorkspace({
   exportActions
 }) {
   const { t, i18n } = useTranslation(["common", "report", "export"]);
+  const [emailFeedback, setEmailFeedback] = useState(null);
   const isReady = status === "success" && report;
   const language = i18n.resolvedLanguage || i18n.language;
 
@@ -167,16 +169,16 @@ export function ReportWorkspace({
   }
 
   return (
-    <section className="rounded-[--radius-panel] border border-white/80 bg-white/92 p-5 shadow-[var(--shadow-card)] backdrop-blur-xl sm:p-7">
-      <div className="flex flex-col gap-4 border-b border-[--color-border] pb-5 xl:flex-row xl:items-start xl:justify-between">
+    <section className="rounded-[--radius-panel] border border-white/80 bg-white/92 p-5 shadow-[var(--shadow-card)] backdrop-blur-xl sm:p-6 lg:p-7">
+      <div className="flex flex-col gap-4 border-b border-[--color-border] pb-6 xl:flex-row xl:items-start xl:justify-between">
         <div>
           <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[--color-warning]">
             {t("report:generatedReport")}
           </p>
-          <h2 className="mt-2 font-display text-3xl font-semibold text-[--color-ink]">
+          <h2 className="mt-2 font-display text-3xl font-semibold text-[--color-ink] sm:text-4xl">
             {report?.meeting_title || t("report:structuredMeetingIntelligence")}
           </h2>
-          <p className="mt-2 text-sm text-[--color-muted]">
+          <p className="mt-3 max-w-2xl text-sm leading-7 text-[--color-muted]">
             {generationMeta
               ? t("report:meta", {
                   mode: t(
@@ -208,7 +210,7 @@ export function ReportWorkspace({
         </div>
       </div>
 
-      <div className="mt-6 space-y-6">
+      <div className="mt-8 space-y-8">
         {generationError && status === "error" ? (
           <ErrorBanner>{generationError}</ErrorBanner>
         ) : null}
@@ -218,13 +220,14 @@ export function ReportWorkspace({
         {isReady ? (
           <>
             <ReportSection title={t("export:toolbarTitle")}>
-              <div className="space-y-4">
+              <div className="space-y-5">
                 <p className="text-sm text-[--color-muted]">{t("export:toolbarBody")}</p>
                 <ReportExportToolbar
                   disabled={!isReady}
                   isBusy={exportActions.isBusy}
                   onAction={exportActions}
                 />
+                <EmailPanel report={report} setEmailFeedback={setEmailFeedback} />
               </div>
             </ReportSection>
 
@@ -234,11 +237,19 @@ export function ReportWorkspace({
               </ErrorBanner>
             ) : null}
 
+            {emailFeedback ? (
+              <ErrorBanner role="status" tone={emailFeedback.tone}>
+                {emailFeedback.message}
+              </ErrorBanner>
+            ) : null}
+
             <ReportSection title={t("report:sections.summary")}>
-              <p className="text-sm leading-7 text-[--color-ink]">{report.summary}</p>
+              <p className="max-w-4xl text-sm leading-7 text-[--color-ink] sm:text-[15px]">
+                {report.summary}
+              </p>
             </ReportSection>
 
-            <div className="grid gap-6 xl:grid-cols-[1.2fr_0.8fr]">
+            <div className="grid gap-6 2xl:grid-cols-[1.2fr_0.8fr]">
               <ReportSection
                 badge={report.decisions.length}
                 collapsible={report.decisions.length > 2}
@@ -316,7 +327,7 @@ export function ReportWorkspace({
               </div>
             </ReportSection>
 
-            <div className="grid gap-6 xl:grid-cols-2">
+            <div className="grid gap-6 2xl:grid-cols-2">
               <ReportSection
                 badge={report.risks.length}
                 collapsible={report.risks.length > 2}
