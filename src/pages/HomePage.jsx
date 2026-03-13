@@ -39,7 +39,7 @@ export function HomePage() {
           {t("home:hero.subtitle")}
         </p>
         <button
-          className="mt-3 text-sm font-semibold text-[--color-panel-strong] underline decoration-[--color-accent] decoration-2 underline-offset-4 transition hover:text-[--color-accent]"
+          className="mt-3 cursor-pointer text-sm font-semibold text-[--color-panel-strong] underline decoration-[--color-accent] decoration-2 underline-offset-4 transition duration-150 ease-out hover:text-[--color-accent] hover:decoration-[3px] active:text-[--color-panel-strong]"
           onClick={meetingInput.loadExample}
           type="button"
         >

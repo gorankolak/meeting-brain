@@ -66,9 +66,17 @@ export function useMeetingInput() {
   }
 
   function loadExample(exampleId) {
-    const example =
-      exampleMeetings.find((meeting) => meeting.id === exampleId) ||
-      getDefaultExampleMeeting(t);
+    const requestedExample = exampleId
+      ? exampleMeetings.find((meeting) => meeting.id === exampleId)
+      : null;
+    const activeExampleIndex = exampleMeetings.findIndex(
+      (meeting) => meeting.id === activeExampleId
+    );
+    const nextExample =
+      activeExampleIndex >= 0
+        ? exampleMeetings[(activeExampleIndex + 1) % exampleMeetings.length]
+        : getDefaultExampleMeeting(t);
+    const example = requestedExample || nextExample;
 
     setMeetingTitle(example.title);
     setInputText(example.transcript);

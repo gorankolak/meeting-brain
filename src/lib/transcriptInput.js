@@ -63,6 +63,21 @@ export function getExampleMeetings(t) {
       id: "vendorCoordinationReview",
       title: t("example:meetings.vendorCoordinationReview.title"),
       transcript: t("example:meetings.vendorCoordinationReview.transcript")
+    },
+    {
+      id: "customerEscalationTriage",
+      title: t("example:meetings.customerEscalationTriage.title"),
+      transcript: t("example:meetings.customerEscalationTriage.transcript")
+    },
+    {
+      id: "marketingLaunchReadiness",
+      title: t("example:meetings.marketingLaunchReadiness.title"),
+      transcript: t("example:meetings.marketingLaunchReadiness.transcript")
+    },
+    {
+      id: "financePlanningSync",
+      title: t("example:meetings.financePlanningSync.title"),
+      transcript: t("example:meetings.financePlanningSync.transcript")
     }
   ];
 }

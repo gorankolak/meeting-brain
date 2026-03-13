@@ -19,10 +19,10 @@ export function LanguageSwitcher() {
           <button
             aria-label={t(`language.options.${language}`)}
             aria-pressed={isActive}
-            className={`rounded-full px-3 py-1.5 text-xs font-semibold tracking-[0.08em] transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[--color-accent] focus-visible:ring-offset-2 focus-visible:ring-offset-white ${
+            className={`cursor-pointer rounded-full px-3 py-1.5 text-xs font-semibold tracking-[0.08em] transition duration-150 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[--color-accent] focus-visible:ring-offset-2 focus-visible:ring-offset-white ${
               isActive
-                ? "bg-[--color-panel-strong] text-white shadow-[var(--shadow-soft)]"
-                : "text-[--color-muted] hover:text-[--color-ink]"
+                ? "bg-[--color-panel-strong] text-white shadow-[var(--shadow-soft)] hover:brightness-110 active:brightness-95"
+                : "text-[--color-muted] hover:bg-white hover:text-[--color-ink] hover:shadow-[0_8px_18px_rgba(15,23,42,0.08)] active:bg-white/80"
             }`}
             key={language}
             onClick={() => i18n.changeLanguage(language)}

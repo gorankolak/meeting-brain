@@ -54,7 +54,7 @@ export function EmailPanel({ report, setEmailFeedback }) {
             {t("export:email.recipientLabel")}
           </span>
           <input
-            className="min-w-0 w-full rounded-[--radius-button] border border-[--color-border] bg-white px-4 py-3 text-sm outline-none transition focus:border-[--color-accent]"
+            className="min-w-0 w-full rounded-[--radius-button] border border-[--color-border] bg-white px-4 py-3 text-sm outline-none transition duration-150 ease-out focus:border-[--color-accent] focus:shadow-[0_0_0_4px_rgba(23,200,227,0.12)]"
             id="email-recipient"
             onChange={(event) => setRecipient(event.target.value)}
             placeholder={t("export:email.recipientPlaceholder")}

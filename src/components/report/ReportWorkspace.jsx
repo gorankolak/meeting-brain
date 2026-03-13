@@ -124,7 +124,7 @@ function ReportSection({
             <button
               aria-label={isOpen ? t("report:actions.hide") : t("report:actions.show")}
               aria-expanded={isOpen}
-              className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.14em] text-[--color-muted] transition hover:text-[--color-ink]"
+              className="inline-flex cursor-pointer items-center gap-2 rounded-full px-2 py-1 text-xs font-semibold uppercase tracking-[0.14em] text-[--color-muted] transition duration-150 ease-out hover:bg-[--color-panel] hover:text-[--color-ink] active:bg-white"
               onClick={() => setIsOpen((current) => !current)}
               type="button"
             >

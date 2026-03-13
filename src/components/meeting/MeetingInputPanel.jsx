@@ -49,7 +49,7 @@ export function MeetingInputPanel({
           <textarea
             aria-describedby={displayError ? errorId : undefined}
             aria-invalid={displayError ? "true" : "false"}
-            className={`min-h-[120px] max-h-[300px] w-full resize-none overflow-y-auto rounded-[--radius-panel] border bg-[--color-panel] px-4 py-3 font-mono text-sm leading-6 text-[--color-ink] outline-none transition focus:border-[--color-accent] ${displayError ? "border-red-300" : "border-[--color-border]"}`}
+            className={`min-h-[120px] max-h-[300px] w-full resize-none overflow-y-auto rounded-[--radius-panel] border bg-[--color-panel] px-4 py-3 font-mono text-sm leading-6 text-[--color-ink] outline-none transition duration-150 ease-out focus:border-[--color-accent] focus:bg-white focus:shadow-[0_0_0_4px_rgba(23,200,227,0.12)] ${displayError ? "border-red-300" : "border-[--color-border]"}`}
             id="meeting-transcript"
             onBlur={markTranscriptTouched}
             onChange={(event) => setInputText(event.target.value)}
@@ -62,7 +62,7 @@ export function MeetingInputPanel({
         </label>
 
         <div className="grid grid-cols-2 gap-3">
-          <label className="flex min-h-12 cursor-pointer items-center justify-center gap-2 rounded-[--radius-button] border border-[--color-border] bg-white/92 px-4 py-3 text-sm font-semibold text-[--color-ink] transition duration-150 hover:bg-[--color-panel] focus-within:outline-3 focus-within:outline-offset-2 focus-within:outline-[--color-accent]">
+          <label className="flex min-h-12 cursor-pointer items-center justify-center gap-2 rounded-[--radius-button] border border-[--color-border] bg-white/92 px-4 py-3 text-sm font-semibold text-[--color-ink] shadow-[0_10px_24px_rgba(15,23,42,0.04)] transition duration-150 ease-out hover:-translate-y-0.5 hover:border-sky-200 hover:bg-[--color-panel] hover:shadow-[0_16px_32px_rgba(15,23,42,0.08)] active:translate-y-0 active:bg-white active:shadow-[0_8px_18px_rgba(15,23,42,0.05)] focus-within:outline-3 focus-within:outline-offset-2 focus-within:outline-[--color-accent]">
             <FileUp size={16} />
             {t("home:buttons.uploadFile")}
             <input
