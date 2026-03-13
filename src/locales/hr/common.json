@@ -1,0 +1,58 @@
+{
+  "appTitle": "Meeting Brain",
+  "appTagline": "Od zapisnika do strukturiranih akcija",
+  "nav": {
+    "workspace": "Radni prostor",
+    "privacy": "Privatnost",
+    "terms": "Uvjeti"
+  },
+  "footer": {
+    "disclaimer": "Meeting Brain MVP. Pregledajte generirane rezultate prije dijeljenja.",
+    "security": "Frontend nikada ne izlaže API ključeve pružatelja usluga."
+  },
+  "language": {
+    "switcherLabel": "Odabir jezika",
+    "short": {
+      "hr": "HR",
+      "en": "EN"
+    },
+    "options": {
+      "hr": "Hrvatski",
+      "en": "English"
+    }
+  },
+  "actions": {
+    "retry": "Pokušaj ponovno",
+    "cancel": "Odustani",
+    "returnToWorkspace": "Natrag u radni prostor"
+  },
+  "states": {
+    "readyToAnalyze": "Spremno za analizu"
+  },
+  "generationMode": {
+    "fallback": "Rezervni",
+    "llm": "LLM"
+  },
+  "errors": {
+    "reportFailed": "Generiranje izvještaja nije uspjelo.",
+    "emailFailed": "Slanje e-pošte nije uspjelo.",
+    "fileReadFailed": "Učitavanje datoteke nije uspjelo.",
+    "fileTooLarge": "Datoteka prelazi MVP ograničenje od 5 MB.",
+    "transcriptTooShort": "Zapisnik mora imati najmanje 20 znakova.",
+    "reportRequired": "Najprije generirajte izvještaj."
+  },
+  "legal": {
+    "privacy": {
+      "title": "Privatnost",
+      "body": "Meeting Brain obrađuje poslani sadržaj sastanka kako bi generirao strukturirane izvještaje. Za produkcijsku uporabu konfigurirajte LLM i e-mail pružatelje kroz Netlify varijable okruženja i provjerite politiku zadržavanja prije rada s osjetljivim podacima."
+    },
+    "terms": {
+      "title": "Uvjeti",
+      "body": "Meeting Brain je dostupan kao MVP radni prostor. Generirane rezultate treba pregledati čovjek prije vanjske distribucije ili uvoza u projektne sustave."
+    }
+  },
+  "notFound": {
+    "title": "Stranica nije pronađena",
+    "body": "Ruta ne postoji u ovom MVP-u. Glavna funkcionalnost nalazi se u glavnom radnom prostoru."
+  }
+}

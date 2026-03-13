@@ -1,0 +1,58 @@
+{
+  "appTitle": "Meeting Brain",
+  "appTagline": "Minutes to structured action",
+  "nav": {
+    "workspace": "Workspace",
+    "privacy": "Privacy",
+    "terms": "Terms"
+  },
+  "footer": {
+    "disclaimer": "Meeting Brain MVP. Review generated outputs before distribution.",
+    "security": "Frontend never exposes provider API keys."
+  },
+  "language": {
+    "switcherLabel": "Language selection",
+    "short": {
+      "hr": "HR",
+      "en": "EN"
+    },
+    "options": {
+      "hr": "Croatian",
+      "en": "English"
+    }
+  },
+  "actions": {
+    "retry": "Retry",
+    "cancel": "Cancel",
+    "returnToWorkspace": "Return to workspace"
+  },
+  "states": {
+    "readyToAnalyze": "Ready to analyze"
+  },
+  "generationMode": {
+    "fallback": "Fallback",
+    "llm": "LLM"
+  },
+  "errors": {
+    "reportFailed": "Report generation failed.",
+    "emailFailed": "Email send failed.",
+    "fileReadFailed": "Unable to read the uploaded file.",
+    "fileTooLarge": "File exceeds the 5MB MVP limit.",
+    "transcriptTooShort": "Transcript must be at least 20 characters.",
+    "reportRequired": "Generate a report first."
+  },
+  "legal": {
+    "privacy": {
+      "title": "Privacy",
+      "body": "Meeting Brain processes submitted meeting content to generate structured reports. For production use, configure your LLM and email providers in Netlify environment variables and review retention policy before handling sensitive data."
+    },
+    "terms": {
+      "title": "Terms",
+      "body": "Meeting Brain is provided as an MVP workspace. Generated outputs should be reviewed by a human before external distribution or project system import."
+    }
+  },
+  "notFound": {
+    "title": "Page not found",
+    "body": "The route does not exist in this MVP. Core functionality lives on the main workspace."
+  }
+}

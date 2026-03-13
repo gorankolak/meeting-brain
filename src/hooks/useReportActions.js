@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { formatReportAsMarkdown } from "../lib/formatters";
 
 function triggerDownload(filename, content, type) {
@@ -11,24 +12,33 @@ function triggerDownload(filename, content, type) {
 }
 
 export function useReportActions(report) {
+  const { t, i18n } = useTranslation(["common", "export"]);
+
   function ensureReport() {
     if (!report) {
-      throw new Error("Generate a report first.");
+      throw new Error(t("common:errors.reportRequired"));
     }
   }
+
+  const exportLanguage = i18n.resolvedLanguage || i18n.language;
+  const baseFilename = t("export:fileBaseName");
 
   return {
     copyMarkdown: async () => {
       ensureReport();
-      await navigator.clipboard.writeText(formatReportAsMarkdown(report));
+      await navigator.clipboard.writeText(formatReportAsMarkdown(report, t, exportLanguage));
     },
     downloadMarkdown: () => {
       ensureReport();
-      triggerDownload("meeting-report.md", formatReportAsMarkdown(report), "text/markdown");
+      triggerDownload(
+        `${baseFilename}.md`,
+        formatReportAsMarkdown(report, t, exportLanguage),
+        "text/markdown"
+      );
     },
     downloadJson: () => {
       ensureReport();
-      triggerDownload("meeting-report.json", JSON.stringify(report, null, 2), "application/json");
+      triggerDownload(`${baseFilename}.json`, JSON.stringify(report, null, 2), "application/json");
     }
   };
 }

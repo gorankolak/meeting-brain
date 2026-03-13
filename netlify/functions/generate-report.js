@@ -1,9 +1,65 @@
 import { z } from "zod";
 
+const COPY = {
+  hr: {
+    unclear: "Nejasno",
+    meetingParticipant: "Sudionik sastanka",
+    referencedInNotes: "Spomenuto u bilješkama sa sastanka",
+    derivedFromTranscript: "Izvedeno iz formulacije u zapisniku.",
+    extractedFromTranscript: "Izdvojeno iz zapisnika.",
+    riskImpact: "Može utjecati na rok isporuke ili kvalitetu izdanja.",
+    mitigation: "Pratiti na sljedećoj radnoj sesiji.",
+    followUp: "Potrebno praćenje.",
+    fallbackTitle: "Generirani izvještaj sa sastanka",
+    fallbackSummary: "Meeting Brain nije uspio izvući detaljan sažetak iz dostavljenog unosa.",
+    transcriptTooShort: "Zapisnik mora imati najmanje 20 znakova.",
+    methodNotAllowed: "Metoda nije dopuštena.",
+    unableToGenerate: "Generiranje izvještaja nije uspjelo.",
+    followUpLabel: "pracenje",
+    unclearInstruction: "Koristi \"Nejasno\" kada polje nije moguće pouzdano izdvojiti.",
+    outputLanguageInstruction: "Vrati sav prirodni jezik u hrvatskom jeziku."
+  },
+  en: {
+    unclear: "Unclear",
+    meetingParticipant: "Meeting participant",
+    referencedInNotes: "Referenced in meeting notes",
+    derivedFromTranscript: "Derived from transcript wording.",
+    extractedFromTranscript: "Extracted from transcript.",
+    riskImpact: "May affect delivery timeline or release quality.",
+    mitigation: "Follow up in the next working session.",
+    followUp: "Needs follow-up.",
+    fallbackTitle: "Generated Meeting Report",
+    fallbackSummary: "Meeting Brain could not derive a detailed summary from the supplied input.",
+    transcriptTooShort: "Transcript must be at least 20 characters.",
+    methodNotAllowed: "Method not allowed.",
+    unableToGenerate: "Unable to generate report.",
+    followUpLabel: "follow-up",
+    unclearInstruction: "Use \"Unclear\" when a string field cannot be reliably extracted.",
+    outputLanguageInstruction: "Return all natural-language field content in English."
+  }
+};
+
+function getLanguage(language) {
+  return language === "en" ? "en" : "hr";
+}
+
+function getCopy(language) {
+  return COPY[getLanguage(language)];
+}
+
+function parsePayload(body) {
+  try {
+    return JSON.parse(body || "{}");
+  } catch {
+    return {};
+  }
+}
+
 const requestSchema = z.object({
   meetingTitle: z.string().optional().default(""),
-  transcript: z.string().min(20, "Transcript must be at least 20 characters."),
-  sourceType: z.string().default("pasted_notes")
+  transcript: z.string().min(20),
+  sourceType: z.string().default("pasted_notes"),
+  language: z.string().default("hr")
 });
 
 const responseSchema = z.object({
@@ -86,10 +142,11 @@ function sentenceList(transcript) {
 
 function inferOwner(text) {
   const match = text.match(/^([A-Z][a-z]+):/);
-  return match ? match[1] : "Unclear";
+  return match ? match[1] : null;
 }
 
-function buildFallbackReport({ meetingTitle, transcript, sourceType }) {
+function buildFallbackReport({ meetingTitle, transcript, sourceType, language }) {
+  const copy = getCopy(language);
   const lines = sentenceList(transcript);
   const decisions = [];
   const actionItems = [];
@@ -99,12 +156,12 @@ function buildFallbackReport({ meetingTitle, transcript, sourceType }) {
   const stakeholders = new Map();
 
   lines.forEach((line, index) => {
-    const owner = inferOwner(line);
-    if (owner !== "Unclear") {
+    const owner = inferOwner(line) || copy.unclear;
+    if (owner !== copy.unclear) {
       stakeholders.set(owner, {
         name: owner,
-        role: "Meeting participant",
-        involvement: "Referenced in meeting notes"
+        role: copy.meetingParticipant,
+        involvement: copy.referencedInNotes
       });
     }
 
@@ -113,7 +170,7 @@ function buildFallbackReport({ meetingTitle, transcript, sourceType }) {
       decisions.push({
         id: `DEC-${String(decisions.length + 1).padStart(3, "0")}`,
         decision: line.replace(/^[A-Z][a-z]+:\s*/, ""),
-        reasoning: "Derived from transcript wording.",
+        reasoning: copy.derivedFromTranscript,
         owner,
         confidence: "medium"
       });
@@ -127,7 +184,7 @@ function buildFallbackReport({ meetingTitle, transcript, sourceType }) {
         deadline: "",
         priority: normalized.includes("today") || normalized.includes("wednesday") ? "high" : "medium",
         status: "open",
-        notes: "Extracted from transcript."
+        notes: copy.extractedFromTranscript
       });
     }
 
@@ -135,8 +192,8 @@ function buildFallbackReport({ meetingTitle, transcript, sourceType }) {
       risks.push({
         id: `RSK-${String(risks.length + 1).padStart(3, "0")}`,
         risk: line.replace(/^[A-Z][a-z]+:\s*/, ""),
-        impact: "May affect delivery timeline or release quality.",
-        mitigation: "Follow up in the next working session.",
+        impact: copy.riskImpact,
+        mitigation: copy.mitigation,
         owner
       });
     }
@@ -146,7 +203,7 @@ function buildFallbackReport({ meetingTitle, transcript, sourceType }) {
         id: `Q-${String(openQuestions.length + 1).padStart(3, "0")}`,
         question: line.replace(/^[A-Z][a-z]+:\s*/, ""),
         owner,
-        notes: "Needs follow-up."
+        notes: copy.followUp
       });
     }
 
@@ -161,17 +218,15 @@ function buildFallbackReport({ meetingTitle, transcript, sourceType }) {
     assignee: item.owner,
     due_date: item.deadline,
     priority: item.priority,
-    labels: ["meeting-brain", "follow-up"]
+    labels: ["meeting-brain", copy.followUpLabel]
   }));
 
   return {
-    meeting_title: meetingTitle || "Generated Meeting Report",
+    meeting_title: meetingTitle || copy.fallbackTitle,
     meeting_type: "general",
     source_type: sourceType,
     generated_at: new Date().toISOString(),
-    summary:
-      lines.slice(0, 3).join(" ").slice(0, 420) ||
-      "Meeting Brain could not derive a detailed summary from the supplied input.",
+    summary: lines.slice(0, 3).join(" ").slice(0, 420) || copy.fallbackSummary,
     decisions,
     action_items: actionItems,
     risks,
@@ -183,10 +238,13 @@ function buildFallbackReport({ meetingTitle, transcript, sourceType }) {
 }
 
 function buildGeminiPrompt(input) {
+  const copy = getCopy(input.language);
+
   return `You are Meeting Brain, an expert PMO meeting analyst.
 Return JSON only and match the required schema exactly.
 Do not invent names, dates, or responsibilities.
-Use "Unclear" when a string field cannot be reliably extracted.
+${copy.unclearInstruction}
+${copy.outputLanguageInstruction}
 
 Schema fields:
 meeting_title, meeting_type, source_type, generated_at, summary, decisions, action_items, risks, open_questions, next_steps, stakeholders, jira_tasks
@@ -233,7 +291,7 @@ async function generateWithGemini(input) {
 
   const parsed = JSON.parse(text);
   parsed.generated_at = parsed.generated_at || new Date().toISOString();
-  parsed.meeting_title = parsed.meeting_title || input.meetingTitle || "Generated Meeting Report";
+  parsed.meeting_title = parsed.meeting_title || input.meetingTitle || getCopy(input.language).fallbackTitle;
   parsed.source_type = parsed.source_type || input.sourceType;
 
   return { report: parsed, mode: "llm" };
@@ -241,15 +299,20 @@ async function generateWithGemini(input) {
 
 export default async function handler(event) {
   if (event.httpMethod !== "POST") {
-    return json(405, { error: "Method not allowed." });
+    return json(405, { error: COPY.hr.methodNotAllowed });
   }
 
   try {
-    const input = requestSchema.parse(JSON.parse(event.body || "{}"));
+    const input = requestSchema.parse(parsePayload(event.body));
+    if (input.transcript.length < 20) {
+      return json(400, { error: getCopy(input.language).transcriptTooShort });
+    }
+
     const result = await generateWithGemini(input);
     const validated = responseSchema.parse(result.report);
     return json(200, { report: validated, mode: result.mode });
   } catch (error) {
-    return json(400, { error: error.message || "Unable to generate report." });
+    const payload = parsePayload(event.body);
+    return json(400, { error: error.message || getCopy(payload.language).unableToGenerate });
   }
 }

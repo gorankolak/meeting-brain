@@ -1,17 +1,17 @@
 import { Mail, Copy, FileJson, FileText, TriangleAlert, CheckCircle2 } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import { Button } from "../ui/Button";
 import { EmailPanel } from "../email/EmailPanel";
+import { formatDateTime } from "../../lib/locale";
 
-function EmptyState() {
+function PlaceholderState({ icon: Icon, title, body }) {
   return (
     <div className="flex min-h-[520px] flex-col items-center justify-center rounded-[--radius-panel] border border-dashed border-[--color-border] bg-[linear-gradient(180deg,_rgba(255,255,255,0.96),_rgba(240,247,250,0.9))] px-8 text-center">
       <div className="flex size-18 items-center justify-center rounded-full bg-[--color-panel] text-[--color-accent]">
-        <FileText size={28} />
+        <Icon size={28} />
       </div>
-      <h2 className="mt-6 text-3xl font-semibold text-[--color-ink]">No report generated yet</h2>
-      <p className="mt-3 max-w-md text-sm leading-7 text-[--color-muted]">
-        Paste meeting notes, upload a document, or load an example to generate a schema-validated report.
-      </p>
+      <h2 className="mt-6 text-3xl font-semibold text-[--color-ink]">{title}</h2>
+      <p className="mt-3 max-w-md text-sm leading-7 text-[--color-muted]">{body}</p>
     </div>
   );
 }
@@ -38,51 +38,90 @@ export function ReportWorkspace({
   emailFeedback,
   setEmailFeedback
 }) {
+  const { t, i18n } = useTranslation(["common", "report", "export"]);
   const isReady = status === "success" && report;
+  const language = i18n.resolvedLanguage || i18n.language;
+
+  function renderState() {
+    if (status === "loading") {
+      return (
+        <PlaceholderState
+          body={t("report:loading.body")}
+          icon={FileText}
+          title={t("report:loading.title")}
+        />
+      );
+    }
+
+    if (status === "error") {
+      return (
+        <PlaceholderState
+          body={t("report:error.body")}
+          icon={TriangleAlert}
+          title={t("report:error.title")}
+        />
+      );
+    }
+
+    return (
+      <PlaceholderState
+        body={t("report:empty.body")}
+        icon={FileText}
+        title={t("report:empty.title")}
+      />
+    );
+  }
 
   return (
     <section className="rounded-[--radius-panel] border border-white/80 bg-white/92 p-5 shadow-[var(--shadow-card)] backdrop-blur-xl">
       <div className="flex flex-col gap-4 border-b border-[--color-border] pb-5 xl:flex-row xl:items-start xl:justify-between">
         <div>
           <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[--color-warning]">
-            Generated report
+            {t("report:generatedReport")}
           </p>
           <h2 className="mt-2 font-display text-3xl font-semibold text-[--color-ink]">
-            {report?.meeting_title || "Structured meeting intelligence"}
+            {report?.meeting_title || t("report:structuredMeetingIntelligence")}
           </h2>
           <p className="mt-2 text-sm text-[--color-muted]">
             {generationMeta
-              ? `${generationMeta.mode} mode • ${generationMeta.generatedAt}`
-              : "Ready to analyze"}
+              ? t("report:meta", {
+                  mode: t(
+                    generationMeta.mode === "mock"
+                      ? "common:generationMode.fallback"
+                      : "common:generationMode.llm"
+                  ),
+                  timestamp: formatDateTime(generationMeta.generatedAt, language)
+                })
+              : t("common:states.readyToAnalyze")}
           </p>
         </div>
         <div className="flex flex-wrap gap-2">
           <Button disabled={!isReady} onClick={exportActions.copyMarkdown} tone="ghost">
             <Copy size={16} />
-            Copy markdown
+            {t("export:buttons.copyMarkdown")}
           </Button>
           <Button disabled={!isReady} onClick={exportActions.downloadMarkdown} tone="ghost">
             <FileText size={16} />
-            Markdown
+            {t("export:buttons.downloadMarkdown")}
           </Button>
           <Button disabled={!isReady} onClick={exportActions.downloadJson} tone="ghost">
             <FileJson size={16} />
-            JSON
+            {t("export:buttons.downloadJson")}
           </Button>
         </div>
       </div>
 
       <div className="mt-6 space-y-5">
-        {!isReady ? <EmptyState /> : null}
+        {!isReady ? renderState() : null}
 
         {isReady ? (
           <>
-            <ReportSection title="Meeting summary">
+            <ReportSection title={t("report:sections.summary")}>
               <p className="text-sm leading-7 text-[--color-ink]">{report.summary}</p>
             </ReportSection>
 
             <div className="grid gap-5 xl:grid-cols-[1.2fr_0.8fr]">
-              <ReportSection title="Key decisions">
+              <ReportSection title={t("report:sections.decisions")}>
                 <div className="space-y-3">
                   {report.decisions.length ? (
                     report.decisions.map((decision) => (
@@ -90,17 +129,18 @@ export function ReportWorkspace({
                         <p className="text-sm font-semibold text-[--color-ink]">{decision.decision}</p>
                         <p className="mt-2 text-sm text-[--color-muted]">{decision.reasoning}</p>
                         <p className="mt-3 text-xs uppercase tracking-[0.14em] text-[--color-muted]">
-                          {decision.owner} • confidence {decision.confidence}
+                          {t("report:fields.owner")}: {decision.owner} • {t("report:fields.confidence")}{" "}
+                          {t(`report:enums.confidence.${decision.confidence}`)}
                         </p>
                       </article>
                     ))
                   ) : (
-                    <p className="text-sm text-[--color-muted]">No explicit decisions captured.</p>
+                    <p className="text-sm text-[--color-muted]">{t("report:empty.decisions")}</p>
                   )}
                 </div>
               </ReportSection>
 
-              <ReportSection title="Next steps">
+              <ReportSection title={t("report:sections.nextSteps")}>
                 <ul className="space-y-3 text-sm text-[--color-ink]">
                   {report.next_steps.length ? (
                     report.next_steps.map((step) => (
@@ -110,13 +150,13 @@ export function ReportWorkspace({
                       </li>
                     ))
                   ) : (
-                    <li className="text-[--color-muted]">No next steps identified.</li>
+                    <li className="text-[--color-muted]">{t("report:empty.nextSteps")}</li>
                   )}
                 </ul>
               </ReportSection>
             </div>
 
-            <ReportSection title="Action items">
+            <ReportSection title={t("report:sections.actionItems")}>
               <div className="space-y-3">
                 {report.action_items.length ? (
                   report.action_items.map((item) => (
@@ -126,21 +166,25 @@ export function ReportWorkspace({
                     >
                       <div>
                         <p className="text-sm font-semibold text-[--color-ink]">{item.task}</p>
-                        <p className="mt-1 text-sm text-[--color-muted]">{item.notes || "No additional notes."}</p>
+                        <p className="mt-1 text-sm text-[--color-muted]">
+                          {item.notes || t("report:empty.notes")}
+                        </p>
                       </div>
                       <div className="text-xs uppercase tracking-[0.14em] text-[--color-muted]">
-                        {item.owner} • {item.deadline || "No deadline"} • {item.priority}
+                        {t("report:fields.owner")}: {item.owner} • {t("report:fields.deadline")}:{" "}
+                        {item.deadline || t("report:empty.deadline")} • {t("report:fields.priority")}:{" "}
+                        {t(`report:enums.priority.${item.priority}`)}
                       </div>
                     </div>
                   ))
                 ) : (
-                  <p className="text-sm text-[--color-muted]">No action items identified.</p>
+                  <p className="text-sm text-[--color-muted]">{t("report:empty.actionItems")}</p>
                 )}
               </div>
             </ReportSection>
 
             <div className="grid gap-5 xl:grid-cols-2">
-              <ReportSection title="Risks and blockers" tone="warning">
+              <ReportSection title={t("report:sections.risks")} tone="warning">
                 <div className="space-y-3">
                   {report.risks.length ? (
                     report.risks.map((risk) => (
@@ -151,32 +195,35 @@ export function ReportWorkspace({
                             <p className="text-sm font-semibold text-[--color-ink]">{risk.risk}</p>
                             <p className="mt-1 text-sm text-[--color-muted]">{risk.impact}</p>
                             <p className="mt-2 text-xs uppercase tracking-[0.14em] text-[--color-muted]">
-                              {risk.owner} • mitigation: {risk.mitigation}
+                              {t("report:fields.owner")}: {risk.owner} • {t("report:fields.mitigation")}:{" "}
+                              {risk.mitigation}
                             </p>
                           </div>
                         </div>
                       </div>
                     ))
                   ) : (
-                    <p className="text-sm text-[--color-muted]">No material risks surfaced.</p>
+                    <p className="text-sm text-[--color-muted]">{t("report:empty.risks")}</p>
                   )}
                 </div>
               </ReportSection>
 
-              <ReportSection title="Open questions">
+              <ReportSection title={t("report:sections.openQuestions")}>
                 <div className="space-y-3">
                   {report.open_questions.length ? (
                     report.open_questions.map((question) => (
                       <article key={question.id} className="rounded-[--radius-button] bg-[--color-panel] p-4">
                         <p className="text-sm font-semibold text-[--color-ink]">{question.question}</p>
-                        <p className="mt-2 text-sm text-[--color-muted]">{question.notes || "No notes."}</p>
+                        <p className="mt-2 text-sm text-[--color-muted]">
+                          {question.notes || t("report:empty.questionNotes")}
+                        </p>
                         <p className="mt-3 text-xs uppercase tracking-[0.14em] text-[--color-muted]">
-                          {question.owner}
+                          {t("report:fields.owner")}: {question.owner}
                         </p>
                       </article>
                     ))
                   ) : (
-                    <p className="text-sm text-[--color-muted]">No open questions identified.</p>
+                    <p className="text-sm text-[--color-muted]">{t("report:empty.openQuestions")}</p>
                   )}
                 </div>
               </ReportSection>

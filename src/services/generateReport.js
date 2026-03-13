@@ -12,7 +12,7 @@ export async function generateReport(payload) {
   const data = await response.json();
 
   if (!response.ok) {
-    throw new Error(data.error || "Report generation failed.");
+    throw new Error(data.error || "REPORT_GENERATION_FAILED");
   }
 
   return {

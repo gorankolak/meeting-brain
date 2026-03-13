@@ -14,8 +14,8 @@ export const router = createBrowserRouter([
         path: "privacy",
         element: (
           <LegalPage
-            title="Privacy"
-            body="Meeting Brain processes submitted meeting content to generate structured reports. For production use, configure your LLM and email providers in Netlify environment variables and review retention policy before handling sensitive data."
+            bodyKey="common:legal.privacy.body"
+            titleKey="common:legal.privacy.title"
           />
         )
       },
@@ -23,8 +23,8 @@ export const router = createBrowserRouter([
         path: "terms",
         element: (
           <LegalPage
-            title="Terms"
-            body="Meeting Brain is provided as an MVP workspace. Generated outputs should be reviewed by a human before external distribution or project system import."
+            bodyKey="common:legal.terms.body"
+            titleKey="common:legal.terms.title"
           />
         )
       },

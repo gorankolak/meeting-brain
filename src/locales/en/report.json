@@ -1,0 +1,54 @@
+{
+  "generatedReport": "Generated report",
+  "structuredMeetingIntelligence": "Structured meeting intelligence",
+  "meta": "{{mode}} mode • {{timestamp}}",
+  "sections": {
+    "summary": "Meeting summary",
+    "decisions": "Key decisions",
+    "actionItems": "Action items",
+    "risks": "Risks and blockers",
+    "nextSteps": "Next steps",
+    "openQuestions": "Open questions"
+  },
+  "fields": {
+    "owner": "Owner",
+    "deadline": "Deadline",
+    "confidence": "Confidence",
+    "mitigation": "Mitigation",
+    "priority": "Priority",
+    "generated": "Generated"
+  },
+  "empty": {
+    "title": "No report generated yet",
+    "body": "Paste meeting notes, upload a document, or load an example to generate a schema-validated report.",
+    "decisions": "No explicit decisions captured.",
+    "nextSteps": "No next steps identified.",
+    "actionItems": "No action items identified.",
+    "risks": "No material risks surfaced.",
+    "openQuestions": "No open questions identified.",
+    "notes": "No additional notes.",
+    "questionNotes": "No notes.",
+    "deadline": "No deadline"
+  },
+  "loading": {
+    "title": "Generating structured report",
+    "body": "Analyzing the transcript and preparing the summary, decisions, and action items."
+  },
+  "error": {
+    "title": "Report generation failed",
+    "body": "Review the input and try again."
+  },
+  "enums": {
+    "confidence": {
+      "high": "high",
+      "medium": "medium",
+      "low": "low"
+    },
+    "priority": {
+      "high": "high",
+      "medium": "medium",
+      "low": "low",
+      "unclear": "unclear"
+    }
+  }
+}

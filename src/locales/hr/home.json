@@ -1,0 +1,29 @@
+{
+  "eyebrow": "Ulazni zapisnik",
+  "title": "Pretvori bilješke sa sastanka u projektne zadatke",
+  "fields": {
+    "meetingTitle": "Naziv sastanka",
+    "transcript": "Transkript ili bilješke"
+  },
+  "placeholders": {
+    "meetingTitle": "Pregled sprinta, rollout sinkronizacija, koordinacija s dobavljačem...",
+    "transcript": "[10:00] Ana: Dobro jutro svima. Danas raspravljamo o..."
+  },
+  "buttons": {
+    "uploadFile": "Učitaj datoteku",
+    "generateReport": "Generiraj strukturirani izvještaj"
+  },
+  "helper": {
+    "supportedFiles": "Podržani su PDF, DOCX, TXT i MD do 5 MB",
+    "loadedFile": "Učitana datoteka: {{fileName}}"
+  },
+  "sourceTypes": {
+    "pasted_notes": "zalijepljene bilješke",
+    "pdf_upload": "pdf prijenos",
+    "doc_upload": "doc prijenos",
+    "docx_upload": "docx prijenos",
+    "txt_upload": "txt prijenos",
+    "md_upload": "md prijenos",
+    "example": "primjer"
+  }
+}

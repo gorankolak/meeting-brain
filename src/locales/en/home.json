@@ -1,0 +1,29 @@
+{
+  "eyebrow": "Input transcript",
+  "title": "Build a project-ready report from raw meeting notes",
+  "fields": {
+    "meetingTitle": "Meeting title",
+    "transcript": "Transcript or notes"
+  },
+  "placeholders": {
+    "meetingTitle": "Sprint review, rollout sync, vendor coordination...",
+    "transcript": "[10:00] Alice: Welcome everyone. Today we are discussing..."
+  },
+  "buttons": {
+    "uploadFile": "Upload file",
+    "generateReport": "Generate structured report"
+  },
+  "helper": {
+    "supportedFiles": "Supports PDF, DOCX, TXT, MD up to 5MB",
+    "loadedFile": "Loaded file: {{fileName}}"
+  },
+  "sourceTypes": {
+    "pasted_notes": "pasted notes",
+    "pdf_upload": "pdf upload",
+    "doc_upload": "doc upload",
+    "docx_upload": "docx upload",
+    "txt_upload": "txt upload",
+    "md_upload": "md upload",
+    "example": "example"
+  }
+}

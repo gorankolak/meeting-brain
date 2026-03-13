@@ -10,7 +10,7 @@ export async function sendReportEmail(payload) {
   const data = await response.json();
 
   if (!response.ok) {
-    throw new Error(data.error || "Email send failed.");
+    throw new Error(data.error || "EMAIL_SEND_FAILED");
   }
 
   return data;

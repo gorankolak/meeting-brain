@@ -1,8 +1,10 @@
-import { useState } from "react";
-import { exampleMeetings } from "../lib/exampleMeetings";
+import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
+import { getExampleMeeting } from "../lib/exampleMeetings";
 import { parseFileToText } from "../services/parseFile";
 
 export function useMeetingInput() {
+  const { t } = useTranslation(["common", "example"]);
   const [meetingTitle, setMeetingTitle] = useState("");
   const [inputText, setInputText] = useState("");
   const [sourceType, setSourceType] = useState("pasted_notes");
@@ -30,18 +32,33 @@ export function useMeetingInput() {
       setSourceType(inferSourceType(file));
       setError("");
     } catch (fileError) {
-      setError(fileError.message || "Unable to read the uploaded file.");
+      if (fileError.message === "FILE_TOO_LARGE") {
+        setError(t("common:errors.fileTooLarge"));
+        return;
+      }
+
+      setError(t("common:errors.fileReadFailed"));
     }
   }
 
   function loadExample() {
-    const example = exampleMeetings[0];
+    const example = getExampleMeeting(t);
     setMeetingTitle(example.title);
     setInputText(example.transcript);
     setFileName("");
     setSourceType("example");
     setError("");
   }
+
+  useEffect(() => {
+    if (sourceType !== "example") {
+      return;
+    }
+
+    const example = getExampleMeeting(t);
+    setMeetingTitle(example.title);
+    setInputText(example.transcript);
+  }, [sourceType, t]);
 
   return {
     meetingTitle,

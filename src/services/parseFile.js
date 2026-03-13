@@ -26,7 +26,7 @@ async function parseDocx(file) {
 
 export async function parseFileToText(file) {
   if (file.size > 5 * 1024 * 1024) {
-    throw new Error("File exceeds the 5MB MVP limit.");
+    throw new Error("FILE_TOO_LARGE");
   }
 
   if (file.type === "application/pdf") {

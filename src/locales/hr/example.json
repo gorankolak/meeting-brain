@@ -1,0 +1,10 @@
+{
+  "loadExampleMeeting": "Učitaj primjer sastanka",
+  "helperText": "Primjer koristi lokalizirani naslov i zapisnik kako bi i demo izlaz pratio odabrani jezik.",
+  "meetings": {
+    "productDevSprintReview": {
+      "title": "Pregled sprinta razvoja proizvoda",
+      "transcript": "[10:00] Aleks: Dobrodošli. Danas trebamo pregledati napredak sprinta 4 i odlučiti što blokira izdanje u srijedu.\n[10:02] Sara: Modul za autentikaciju je gotov, ali MFA na stagingu i dalje vraća 502 pogreške.\n[10:04] Marko: To možemo popraviti za oko četiri sata ako danas damo prioritet tom zadatku.\n[10:05] Nina: Podrška za preglednike je i dalje problem. Legacy Internet Explorer troši puno QA vremena.\n[10:07] Aleks: Prestanimo podržavati IE od sljedećeg tjedna i obavijestimo customer success tim.\n[10:09] Sara: Slažem se. U ovom sprintu trebamo se fokusirati na isporuku autentikacije i telemetry nadzorne ploče.\n[10:10] Marko: Danas ću istražiti MFA 502 problem.\n[10:12] Aleks: Sara, molim te obavijesti CSM o završetku podrške za IE i potvrdi sastanak s product ownerom u petak u 14:00.\n[10:14] Nina: Jedno neriješeno pitanje je pripada li telemetry nadzorna ploča sprintu 4 ili sprintu 5.\n[10:15] Aleks: Odluka je donesena. Izdanje u srijedu ide samo ako se riješi MFA blokada."
+    }
+  }
+}

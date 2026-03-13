@@ -1,0 +1,19 @@
+{
+  "buttons": {
+    "copyMarkdown": "Copy markdown",
+    "downloadMarkdown": "Markdown",
+    "downloadJson": "JSON",
+    "sendEmail": "Send via email"
+  },
+  "fileBaseName": "meeting-brain-report",
+  "email": {
+    "recipientLabel": "Recipient email",
+    "recipientPlaceholder": "teammates@company.com",
+    "sending": "Sending..."
+  },
+  "messages": {
+    "emailMock": "Mock email prepared for {{recipient}}. Configure Resend to enable delivery.",
+    "emailSent": "Report sent to {{recipient}}.",
+    "emailError": "Email send failed."
+  }
+}

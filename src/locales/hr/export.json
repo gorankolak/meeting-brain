@@ -1,0 +1,19 @@
+{
+  "buttons": {
+    "copyMarkdown": "Kopiraj Markdown",
+    "downloadMarkdown": "Markdown",
+    "downloadJson": "JSON",
+    "sendEmail": "Pošalji e-poštom"
+  },
+  "fileBaseName": "meeting-brain-izvjestaj",
+  "email": {
+    "recipientLabel": "E-pošta primatelja",
+    "recipientPlaceholder": "tim@tvrtka.com",
+    "sending": "Šaljem..."
+  },
+  "messages": {
+    "emailMock": "Pripremljena je probna e-pošta za {{recipient}}. Konfigurirajte Resend za stvarnu isporuku.",
+    "emailSent": "Izvještaj je poslan na {{recipient}}.",
+    "emailError": "Slanje e-pošte nije uspjelo."
+  }
+}

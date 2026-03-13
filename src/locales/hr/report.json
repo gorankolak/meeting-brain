@@ -1,0 +1,54 @@
+{
+  "generatedReport": "Generirani izvještaj",
+  "structuredMeetingIntelligence": "Strukturirana inteligencija sastanka",
+  "meta": "{{mode}} način rada • {{timestamp}}",
+  "sections": {
+    "summary": "Sažetak sastanka",
+    "decisions": "Ključne odluke",
+    "actionItems": "Akcijske stavke",
+    "risks": "Rizici i blokade",
+    "nextSteps": "Sljedeći koraci",
+    "openQuestions": "Otvorena pitanja"
+  },
+  "fields": {
+    "owner": "Vlasnik",
+    "deadline": "Rok",
+    "confidence": "Pouzdanost",
+    "mitigation": "Ublažavanje",
+    "priority": "Prioritet",
+    "generated": "Generirano"
+  },
+  "empty": {
+    "title": "Izvještaj još nije generiran",
+    "body": "Zalijepite bilješke sa sastanka, učitajte dokument ili otvorite primjer za generiranje izvještaja koji prolazi validaciju sheme.",
+    "decisions": "Nisu zabilježene jasne odluke.",
+    "nextSteps": "Nisu prepoznati sljedeći koraci.",
+    "actionItems": "Nisu prepoznate akcijske stavke.",
+    "risks": "Nisu otkriveni značajni rizici.",
+    "openQuestions": "Nisu prepoznata otvorena pitanja.",
+    "notes": "Nema dodatnih napomena.",
+    "questionNotes": "Nema napomena.",
+    "deadline": "Bez roka"
+  },
+  "loading": {
+    "title": "Generiram strukturirani izvještaj",
+    "body": "Analiziram transkript i pripremam sažetak, odluke i akcijske stavke."
+  },
+  "error": {
+    "title": "Generiranje izvještaja nije uspjelo",
+    "body": "Provjerite unos i pokušajte ponovno."
+  },
+  "enums": {
+    "confidence": {
+      "high": "visoka",
+      "medium": "srednja",
+      "low": "niska"
+    },
+    "priority": {
+      "high": "visok",
+      "medium": "srednji",
+      "low": "nizak",
+      "unclear": "nejasan"
+    }
+  }
+}
