@@ -1,10 +1,19 @@
 {
   "loadExampleMeeting": "Load example meeting",
+  "scenarioLabel": "Example scenarios",
   "helperText": "The example uses a localized title and transcript so demo output follows the selected language.",
   "meetings": {
     "productDevSprintReview": {
       "title": "Product Dev Sprint Review",
       "transcript": "[10:00] Alex: Welcome. Today we need to review sprint 4 progress and decide what blocks Wednesday's release.\n[10:02] Sarah: The auth module is complete, but MFA is still returning 502 errors on staging.\n[10:04] Mike: We can fix that in around four hours if we prioritize it today.\n[10:05] Nina: Browser support is still a concern. Legacy Internet Explorer support is consuming a lot of QA time.\n[10:07] Alex: Let's drop IE support starting next week and inform the customer success team.\n[10:09] Sarah: Agreed. For this sprint we should focus on shipping auth and the telemetry dashboard.\n[10:10] Mike: I will debug the MFA 502 issue today.\n[10:12] Alex: Sarah, please notify CSM about IE support ending and confirm the product owner meeting Friday at 2 PM.\n[10:14] Nina: One unresolved question is whether the telemetry dashboard belongs in sprint 4 or sprint 5.\n[10:15] Alex: Decision taken. Wednesday release proceeds only if MFA blocker is resolved."
+    },
+    "infrastructureRolloutCheckpoint": {
+      "title": "Infrastructure Rollout Checkpoint",
+      "transcript": "[09:00] Priya: We need a final readiness check for the regional Kubernetes rollout before Monday.\n[09:02] Tomas: Frankfurt is stable, but the backup cluster in Dublin has not passed failover yet.\n[09:04] Elena: Security still needs the signed VPN access list from the managed hosting vendor.\n[09:06] Priya: Can we get failover testing and vendor approval closed today?\n[09:07] Tomas: I can run the failover exercise by 3 PM and post the results in the ops channel.\n[09:09] Elena: I will escalate the VPN paperwork to the vendor account manager right after this meeting.\n[09:11] Priya: Decision: we only release the rollout plan after Dublin failover passes and vendor access is approved.\n[09:13] Tomas: One open risk is overnight alert noise if we leave the old node pool online during cutover.\n[09:15] Priya: Add that risk to the launch checklist and assign platform on-call for Monday morning."
+    },
+    "vendorCoordinationReview": {
+      "title": "Vendor Coordination Review",
+      "transcript": "[14:00] Maya: We are here to align on the CRM migration timeline with the integration vendor.\n[14:02] Daniel: Their latest estimate moved data mapping completion from March 18 to March 25.\n[14:04] Luc: That pushes user acceptance testing into the same week as finance close, which is not workable.\n[14:06] Maya: What options do we have to protect the April 1 launch target?\n[14:08] Daniel: The vendor can add one extra engineer if we approve the change request by tomorrow noon.\n[14:10] Luc: Finance can still support UAT on March 27 and March 28 if data mapping is frozen by March 24.\n[14:12] Maya: Decision: approve the extra engineer today and require a revised delivery plan by 5 PM.\n[14:14] Daniel: I will send the signed change request and ask for a daily status update until UAT starts.\n[14:16] Luc: Open question: who signs off on the cutover checklist if the vendor PM is out next week?"
     }
   }
 }

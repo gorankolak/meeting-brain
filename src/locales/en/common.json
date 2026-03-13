@@ -38,7 +38,10 @@
     "emailFailed": "Email send failed.",
     "fileReadFailed": "Unable to read the uploaded file.",
     "fileTooLarge": "File exceeds the 5MB MVP limit.",
+    "fileTypeUnsupported": "Unsupported file type. Upload a PDF, DOCX, TXT, or MD file.",
+    "transcriptRequired": "Transcript is required before generating a report.",
     "transcriptTooShort": "Transcript must be at least 20 characters.",
+    "transcriptTooLong": "Transcript must be 20,000 characters or fewer.",
     "reportRequired": "Generate a report first."
   },
   "legal": {

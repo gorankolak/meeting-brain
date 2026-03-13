@@ -1,10 +1,19 @@
 {
   "loadExampleMeeting": "Učitaj primjer sastanka",
+  "scenarioLabel": "Primjeri scenarija",
   "helperText": "Primjer koristi lokalizirani naslov i zapisnik kako bi i demo izlaz pratio odabrani jezik.",
   "meetings": {
     "productDevSprintReview": {
       "title": "Pregled sprinta razvoja proizvoda",
       "transcript": "[10:00] Aleks: Dobrodošli. Danas trebamo pregledati napredak sprinta 4 i odlučiti što blokira izdanje u srijedu.\n[10:02] Sara: Modul za autentikaciju je gotov, ali MFA na stagingu i dalje vraća 502 pogreške.\n[10:04] Marko: To možemo popraviti za oko četiri sata ako danas damo prioritet tom zadatku.\n[10:05] Nina: Podrška za preglednike je i dalje problem. Legacy Internet Explorer troši puno QA vremena.\n[10:07] Aleks: Prestanimo podržavati IE od sljedećeg tjedna i obavijestimo customer success tim.\n[10:09] Sara: Slažem se. U ovom sprintu trebamo se fokusirati na isporuku autentikacije i telemetry nadzorne ploče.\n[10:10] Marko: Danas ću istražiti MFA 502 problem.\n[10:12] Aleks: Sara, molim te obavijesti CSM o završetku podrške za IE i potvrdi sastanak s product ownerom u petak u 14:00.\n[10:14] Nina: Jedno neriješeno pitanje je pripada li telemetry nadzorna ploča sprintu 4 ili sprintu 5.\n[10:15] Aleks: Odluka je donesena. Izdanje u srijedu ide samo ako se riješi MFA blokada."
+    },
+    "infrastructureRolloutCheckpoint": {
+      "title": "Kontrolna točka rollouta infrastrukture",
+      "transcript": "[09:00] Petra: Trebamo završnu provjeru spremnosti za regionalni rollout Kubernetesa prije ponedjeljka.\n[09:02] Toma: Frankfurt je stabilan, ali backup klaster u Dublinu još nije prošao failover test.\n[09:04] Elena: Sigurnosni tim još čeka potpisani popis VPN pristupa od vendor partnera za hosting.\n[09:06] Petra: Možemo li danas zatvoriti failover testiranje i odobrenje vendora?\n[09:07] Toma: Mogu odraditi failover vježbu do 15:00 i objaviti rezultate u ops kanalu.\n[09:09] Elena: Odmah nakon sastanka eskalirat ću VPN dokumentaciju vendor account manageru.\n[09:11] Petra: Odluka: plan rollouta objavljujemo tek kada Dublin prođe failover i kada vendor pristup bude odobren.\n[09:13] Toma: Otvoreni rizik je noćni šum upozorenja ako tijekom prijelaza ostavimo stari node pool online.\n[09:15] Petra: Dodaj taj rizik na launch checklistu i zaduži platform on-call za ponedjeljak ujutro."
+    },
+    "vendorCoordinationReview": {
+      "title": "Pregled koordinacije s vendorom",
+      "transcript": "[14:00] Maja: Ovdje smo kako bismo uskladili rok migracije CRM-a s integracijskim vendorom.\n[14:02] Danijel: Njihova zadnja procjena pomaknula je završetak mapiranja podataka s 18. ožujka na 25. ožujka.\n[14:04] Luka: To gura UAT u isti tjedan kao i finance close, što nam ne odgovara.\n[14:06] Maja: Koje opcije imamo da zaštitimo cilj lansiranja 1. travnja?\n[14:08] Danijel: Vendor može dodati još jednog inženjera ako odobrimo change request do sutra u podne.\n[14:10] Luka: Finance i dalje može podržati UAT 27. i 28. ožujka ako mapiranje podataka bude zaključano do 24. ožujka.\n[14:12] Maja: Odluka: danas odobravamo dodatnog inženjera i tražimo revidirani plan isporuke do 17:00.\n[14:14] Danijel: Poslat ću potpisani change request i tražiti dnevni status update dok UAT ne krene.\n[14:16] Luka: Otvoreno pitanje: tko potpisuje cutover checklistu ako vendor PM sljedeći tjedan bude odsutan?"
     }
   }
 }

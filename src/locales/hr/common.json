@@ -38,7 +38,10 @@
     "emailFailed": "Slanje e-pošte nije uspjelo.",
     "fileReadFailed": "Učitavanje datoteke nije uspjelo.",
     "fileTooLarge": "Datoteka prelazi MVP ograničenje od 5 MB.",
+    "fileTypeUnsupported": "Nepodržana vrsta datoteke. Učitaj PDF, DOCX, TXT ili MD datoteku.",
+    "transcriptRequired": "Transkript je obavezan prije generiranja izvještaja.",
     "transcriptTooShort": "Zapisnik mora imati najmanje 20 znakova.",
+    "transcriptTooLong": "Zapisnik mora imati najviše 20.000 znakova.",
     "reportRequired": "Najprije generirajte izvještaj."
   },
   "legal": {

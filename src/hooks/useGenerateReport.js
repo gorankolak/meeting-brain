@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
+import { validateTranscript } from "../lib/transcriptInput";
 import { generateReport } from "../services/generateReport";
 
 export function useGenerateReport() {
@@ -11,9 +12,10 @@ export function useGenerateReport() {
   const [hasStartedGeneration, setHasStartedGeneration] = useState(false);
 
   async function generate(data) {
-    if (data.transcript.length < 20) {
+    const transcriptError = validateTranscript(data.transcript);
+    if (transcriptError) {
       setStatus("error");
-      setError(t("errors.transcriptTooShort"));
+      setError(t(transcriptError));
       return;
     }
 
