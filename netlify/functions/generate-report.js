@@ -693,7 +693,7 @@ async function generateWithGemini(input) {
   }
 }
 
-export default async function handler(event) {
+export async function handler(event) {
   if (event.httpMethod !== "POST") {
     return json(405, { error: COPY.hr.methodNotAllowed });
   }
@@ -714,3 +714,5 @@ export default async function handler(event) {
     return json(400, { error: error.message || getCopy(payload.language).unableToGenerate });
   }
 }
+
+export default handler;

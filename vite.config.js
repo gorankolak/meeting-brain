@@ -30,8 +30,9 @@ function netlifyFunctionBridge() {
 
     const moduleUrl = pathToFileURL(path.join(projectRoot, "netlify/functions", fileName)).href;
     const module = await import(`${moduleUrl}?t=${Date.now()}`);
-    handlerCache.set(fileName, module.default);
-    return module.default;
+    const handler = module.handler || module.default;
+    handlerCache.set(fileName, handler);
+    return handler;
   }
 
   return {

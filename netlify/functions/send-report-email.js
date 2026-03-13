@@ -50,7 +50,7 @@ function renderHtml(report, language) {
   `;
 }
 
-export default async function handler(event) {
+export async function handler(event) {
   if (event.httpMethod !== "POST") {
     return json(405, { error: COPY.hr.methodNotAllowed });
   }
@@ -100,3 +100,5 @@ export default async function handler(event) {
     return json(400, { error: error.message || COPY[getLanguage(payload.language)].unableToSend });
   }
 }
+
+export default handler;
