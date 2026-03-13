@@ -8,6 +8,7 @@ export function useGenerateReport() {
   const [report, setReport] = useState(null);
   const [error, setError] = useState("");
   const [meta, setMeta] = useState(null);
+  const [hasStartedGeneration, setHasStartedGeneration] = useState(false);
 
   async function generate(data) {
     if (data.transcript.length < 20) {
@@ -16,6 +17,7 @@ export function useGenerateReport() {
       return;
     }
 
+    setHasStartedGeneration(true);
     setStatus("loading");
     setError("");
 
@@ -45,6 +47,7 @@ export function useGenerateReport() {
     report,
     error,
     meta,
+    hasStartedGeneration,
     generateReport: generate
   };
 }

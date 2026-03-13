@@ -1,6 +1,14 @@
 {
-  "eyebrow": "Ulazni zapisnik",
-  "title": "Pretvori bilješke sa sastanka u projektne zadatke",
+  "hero": {
+    "eyebrow": "Meeting Brain",
+    "title": "Pretvori bilješke\nsa sastanka u zadatke",
+    "subtitle": "Zalijepi transkript, učitaj bilješke ili isprobaj primjer sastanka. Meeting Brain izdvaja sažetak, odgovorne osobe, rizike i sljedeće korake u projektni izvještaj."
+  },
+  "card": {
+    "eyebrow": "Ulazni zapisnik",
+    "title": "Započni s izvorom sastanka",
+    "description": "Dodaj naziv sastanka i transkript ispod. Kada pokreneš generiranje, radni prostor s analizom pojavit će se ispod kartice prvo s učitavanjem, a zatim sa strukturiranim rezultatom."
+  },
   "fields": {
     "meetingTitle": "Naziv sastanka",
     "transcript": "Transkript ili bilješke"
@@ -11,11 +19,13 @@
   },
   "buttons": {
     "uploadFile": "Učitaj datoteku",
+    "loadExample": "Učitaj primjer",
     "generateReport": "Generiraj strukturirani izvještaj"
   },
   "helper": {
     "supportedFiles": "Podržani su PDF, DOCX, TXT i MD do 5 MB",
-    "loadedFile": "Učitana datoteka: {{fileName}}"
+    "loadedFile": "Učitana datoteka: {{fileName}}",
+    "examplePrompt": "Učitaj primjer sastanka ako želiš isprobati tijek rada prije lijepljenja stvarnog transkripta."
   },
   "sourceTypes": {
     "pasted_notes": "zalijepljene bilješke",

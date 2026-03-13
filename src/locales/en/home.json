@@ -1,6 +1,14 @@
 {
-  "eyebrow": "Input transcript",
-  "title": "Build a project-ready report from raw meeting notes",
+  "hero": {
+    "eyebrow": "Meeting Brain",
+    "title": "Turn meeting notes into structured actions",
+    "subtitle": "Paste a transcript, upload notes, or try an example meeting. Meeting Brain extracts the summary, owners, risks, and next steps into a project-ready report."
+  },
+  "card": {
+    "eyebrow": "Input transcript",
+    "title": "Start with the meeting source",
+    "description": "Add the meeting title and transcript below. When you generate the report, the analysis workspace appears underneath with loading progress first and structured output after."
+  },
   "fields": {
     "meetingTitle": "Meeting title",
     "transcript": "Transcript or notes"
@@ -11,11 +19,13 @@
   },
   "buttons": {
     "uploadFile": "Upload file",
+    "loadExample": "Load example",
     "generateReport": "Generate structured report"
   },
   "helper": {
     "supportedFiles": "Supports PDF, DOCX, TXT, MD up to 5MB",
-    "loadedFile": "Loaded file: {{fileName}}"
+    "loadedFile": "Loaded file: {{fileName}}",
+    "examplePrompt": "Use the example meeting if you want to preview the workflow before pasting a real transcript."
   },
   "sourceTypes": {
     "pasted_notes": "pasted notes",

@@ -4,6 +4,40 @@ import { Button } from "../ui/Button";
 import { EmailPanel } from "../email/EmailPanel";
 import { formatDateTime } from "../../lib/locale";
 
+function LoadingState({ title, body }) {
+  return (
+    <div className="rounded-[--radius-panel] border border-[--color-border] bg-[linear-gradient(180deg,_rgba(255,255,255,0.96),_rgba(240,247,250,0.9))] p-6 sm:p-8">
+      <div className="max-w-2xl">
+        <h2 className="text-3xl font-semibold text-[--color-ink]">{title}</h2>
+        <p className="mt-3 text-sm leading-7 text-[--color-muted]">{body}</p>
+      </div>
+
+      <div className="mt-8 space-y-6">
+        <div className="grid gap-4 lg:grid-cols-[1.2fr_0.8fr]">
+          <div className="space-y-3 rounded-[--radius-panel] border border-[--color-border] bg-white/80 p-5">
+            <div className="h-3 w-32 animate-pulse rounded-full bg-[--color-border]" />
+            <div className="h-4 w-full animate-pulse rounded-full bg-[--color-panel]" />
+            <div className="h-4 w-11/12 animate-pulse rounded-full bg-[--color-panel]" />
+            <div className="h-4 w-3/4 animate-pulse rounded-full bg-[--color-panel]" />
+          </div>
+          <div className="space-y-3 rounded-[--radius-panel] border border-[--color-border] bg-white/80 p-5">
+            <div className="h-3 w-28 animate-pulse rounded-full bg-[--color-border]" />
+            <div className="h-16 w-full animate-pulse rounded-[--radius-button] bg-[--color-panel]" />
+            <div className="h-16 w-full animate-pulse rounded-[--radius-button] bg-[--color-panel]" />
+          </div>
+        </div>
+
+        <div className="space-y-3 rounded-[--radius-panel] border border-[--color-border] bg-white/80 p-5">
+          <div className="h-3 w-36 animate-pulse rounded-full bg-[--color-border]" />
+          <div className="h-20 w-full animate-pulse rounded-[--radius-button] bg-[--color-panel]" />
+          <div className="h-20 w-full animate-pulse rounded-[--radius-button] bg-[--color-panel]" />
+          <div className="h-20 w-5/6 animate-pulse rounded-[--radius-button] bg-[--color-panel]" />
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function PlaceholderState({ icon: Icon, title, body }) {
   return (
     <div className="flex min-h-[520px] flex-col items-center justify-center rounded-[--radius-panel] border border-dashed border-[--color-border] bg-[linear-gradient(180deg,_rgba(255,255,255,0.96),_rgba(240,247,250,0.9))] px-8 text-center">
@@ -45,9 +79,8 @@ export function ReportWorkspace({
   function renderState() {
     if (status === "loading") {
       return (
-        <PlaceholderState
+        <LoadingState
           body={t("report:loading.body")}
-          icon={FileText}
           title={t("report:loading.title")}
         />
       );
@@ -73,7 +106,7 @@ export function ReportWorkspace({
   }
 
   return (
-    <section className="rounded-[--radius-panel] border border-white/80 bg-white/92 p-5 shadow-[var(--shadow-card)] backdrop-blur-xl">
+    <section className="rounded-[--radius-panel] border border-white/80 bg-white/92 p-5 shadow-[var(--shadow-card)] backdrop-blur-xl sm:p-7">
       <div className="flex flex-col gap-4 border-b border-[--color-border] pb-5 xl:flex-row xl:items-start xl:justify-between">
         <div>
           <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[--color-warning]">
