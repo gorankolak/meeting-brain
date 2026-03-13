@@ -35,6 +35,10 @@
   },
   "errors": {
     "reportFailed": "Generiranje izvještaja nije uspjelo.",
+    "reportTimeout": "Zahtjev za izvještaj je istekao. Pokušajte ponovno.",
+    "reportNetwork": "Zahtjev za izvještaj nije uspio jer mreža nije dostupna.",
+    "reportInvalidResponse": "Servis za izvještaj vratio je nečitljiv odgovor.",
+    "reportSchemaInvalid": "Generirani izvještaj ne odgovara očekivanoj shemi.",
     "emailFailed": "Slanje e-pošte nije uspjelo.",
     "fileReadFailed": "Učitavanje datoteke nije uspjelo.",
     "fileTooLarge": "Datoteka prelazi MVP ograničenje od 5 MB.",

@@ -1,7 +1,8 @@
 {
   "generatedReport": "Generirani izvještaj",
   "structuredMeetingIntelligence": "Strukturirana inteligencija sastanka",
-  "meta": "{{mode}} način rada • {{timestamp}}",
+  "meta": "{{mode}} način rada • {{timestamp}} • Pokušaj {{attempts}}",
+  "fallbackNotice": "Koristi se rezervno generiranje jer live AI servis nije dostupan.",
   "sections": {
     "summary": "Sažetak sastanka",
     "decisions": "Ključne odluke",
@@ -33,6 +34,13 @@
   "loading": {
     "title": "Generiram strukturirani izvještaj",
     "body": "Analiziram transkript i pripremam sažetak, odluke i akcijske stavke."
+  },
+  "progress": {
+    "queued": "Pripremam zahtjev",
+    "analyzing": "Analiziram transkript",
+    "structuring": "Strukturiram izvještaj",
+    "validating": "Validiram shemu",
+    "complete": "Dovršeno"
   },
   "error": {
     "title": "Generiranje izvještaja nije uspjelo",

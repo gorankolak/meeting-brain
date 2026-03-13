@@ -4,12 +4,24 @@ import { Button } from "../ui/Button";
 import { EmailPanel } from "../email/EmailPanel";
 import { formatDateTime } from "../../lib/locale";
 
-function LoadingState({ title, body }) {
+function LoadingState({ title, body, progress, t }) {
   return (
     <div className="rounded-[--radius-panel] border border-[--color-border] bg-[linear-gradient(180deg,_rgba(255,255,255,0.96),_rgba(240,247,250,0.9))] p-6 sm:p-8">
       <div className="max-w-2xl">
         <h2 className="text-3xl font-semibold text-[--color-ink]">{title}</h2>
         <p className="mt-3 text-sm leading-7 text-[--color-muted]">{body}</p>
+        <div className="mt-5 rounded-[--radius-button] border border-[--color-border] bg-white/80 p-4">
+          <div className="flex items-center justify-between gap-3 text-xs font-semibold uppercase tracking-[0.16em] text-[--color-muted]">
+            <span>{t(`report:progress.${progress.currentStage}`)}</span>
+            <span>{progress.percent}%</span>
+          </div>
+          <div className="mt-3 h-2 overflow-hidden rounded-full bg-[--color-panel]">
+            <div
+              className="h-full rounded-full bg-[--color-accent] transition-[width] duration-500"
+              style={{ width: `${progress.percent}%` }}
+            />
+          </div>
+        </div>
       </div>
 
       <div className="mt-8 space-y-6">
@@ -38,7 +50,7 @@ function LoadingState({ title, body }) {
   );
 }
 
-function PlaceholderState({ icon: Icon, title, body }) {
+function PlaceholderState({ icon: Icon, title, body, actions = null }) {
   return (
     <div className="flex min-h-[520px] flex-col items-center justify-center rounded-[--radius-panel] border border-dashed border-[--color-border] bg-[linear-gradient(180deg,_rgba(255,255,255,0.96),_rgba(240,247,250,0.9))] px-8 text-center">
       <div className="flex size-18 items-center justify-center rounded-full bg-[--color-panel] text-[--color-accent]">
@@ -46,6 +58,7 @@ function PlaceholderState({ icon: Icon, title, body }) {
       </div>
       <h2 className="mt-6 text-3xl font-semibold text-[--color-ink]">{title}</h2>
       <p className="mt-3 max-w-md text-sm leading-7 text-[--color-muted]">{body}</p>
+      {actions ? <div className="mt-6 flex flex-wrap justify-center gap-3">{actions}</div> : null}
     </div>
   );
 }
@@ -68,6 +81,9 @@ export function ReportWorkspace({
   report,
   status,
   generationMeta,
+  generationProgress,
+  generationError,
+  onRetryGeneration,
   exportActions,
   emailFeedback,
   setEmailFeedback
@@ -81,6 +97,8 @@ export function ReportWorkspace({
       return (
         <LoadingState
           body={t("report:loading.body")}
+          progress={generationProgress}
+          t={t}
           title={t("report:loading.title")}
         />
       );
@@ -89,7 +107,12 @@ export function ReportWorkspace({
     if (status === "error") {
       return (
         <PlaceholderState
-          body={t("report:error.body")}
+          actions={
+            <Button onClick={onRetryGeneration} tone="secondary">
+              {t("common:actions.retry")}
+            </Button>
+          }
+          body={generationError || t("report:error.body")}
           icon={TriangleAlert}
           title={t("report:error.title")}
         />
@@ -123,10 +146,16 @@ export function ReportWorkspace({
                       ? "common:generationMode.fallback"
                       : "common:generationMode.llm"
                   ),
-                  timestamp: formatDateTime(generationMeta.generatedAt, language)
+                  timestamp: formatDateTime(generationMeta.generatedAt, language),
+                  attempts: generationMeta.attempts
                 })
               : t("common:states.readyToAnalyze")}
           </p>
+          {generationMeta?.mode === "mock" ? (
+            <p className="mt-2 text-xs uppercase tracking-[0.16em] text-[--color-warning]">
+              {t("report:fallbackNotice")}
+            </p>
+          ) : null}
         </div>
         <div className="flex flex-wrap gap-2">
           <Button disabled={!isReady} onClick={exportActions.copyMarkdown} tone="ghost">

@@ -35,6 +35,10 @@
   },
   "errors": {
     "reportFailed": "Report generation failed.",
+    "reportTimeout": "The report request timed out. Retry to try again.",
+    "reportNetwork": "The report request failed because the network is unavailable.",
+    "reportInvalidResponse": "The report service returned an unreadable response.",
+    "reportSchemaInvalid": "The generated report did not match the expected schema.",
     "emailFailed": "Email send failed.",
     "fileReadFailed": "Unable to read the uploaded file.",
     "fileTooLarge": "File exceeds the 5MB MVP limit.",
