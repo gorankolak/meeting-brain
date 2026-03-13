@@ -1,7 +1,7 @@
 {
   "hero": {
     "eyebrow": "Meeting Brain",
-    "title": "Turn meeting notes into structured actions",
+    "title": "Convert discussions into clear actions",
     "subtitle": "Paste a transcript, upload notes, or try an example meeting. Meeting Brain extracts the summary, owners, risks, and next steps into a project-ready report."
   },
   "card": {
@@ -11,7 +11,7 @@
   },
   "fields": {
     "meetingTitle": "Meeting title",
-    "transcript": "Transcript or notes"
+    "transcript": "Paste transcript or notes"
   },
   "placeholders": {
     "meetingTitle": "Sprint review, rollout sync, vendor coordination...",
@@ -25,9 +25,7 @@
   "helper": {
     "supportedFiles": "Supported uploads: PDF, DOCX, TXT, MD up to 5MB",
     "loadedFile": "Loaded file: {{fileName}}",
-    "examplePrompt": "Use the example meeting if you want to preview the workflow before pasting a real transcript.",
-    "transcriptFormats": "Paste timestamped transcripts, speaker notes, or plain meeting minutes.",
-    "transcriptLength": "{{current}} chars · min {{min}} · max {{max}}"
+    "examplePrompt": "Use the example meeting if you want to preview the workflow before pasting a real transcript."
   },
   "sourceTypes": {
     "pasted_notes": "pasted notes",

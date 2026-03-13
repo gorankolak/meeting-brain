@@ -11,7 +11,7 @@
   },
   "fields": {
     "meetingTitle": "Naziv sastanka",
-    "transcript": "Transkript ili bilješke"
+    "transcript": "Zalijepi transkript ili bilješke"
   },
   "placeholders": {
     "meetingTitle": "Pregled sprinta, rollout sinkronizacija, koordinacija s dobavljačem...",
@@ -25,9 +25,7 @@
   "helper": {
     "supportedFiles": "Podržani prijenosi: PDF, DOCX, TXT i MD do 5 MB",
     "loadedFile": "Učitana datoteka: {{fileName}}",
-    "examplePrompt": "Učitaj primjer sastanka ako želiš isprobati tijek rada prije lijepljenja stvarnog transkripta.",
-    "transcriptFormats": "Zalijepi transkript s vremenskim oznakama, bilješke govornika ili običan zapisnik sastanka.",
-    "transcriptLength": "{{current}} znakova · min {{min}} · max {{max}}"
+    "examplePrompt": "Učitaj primjer sastanka ako želiš isprobati tijek rada prije lijepljenja stvarnog transkripta."
   },
   "sourceTypes": {
     "pasted_notes": "zalijepljene bilješke",

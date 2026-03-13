@@ -6,7 +6,7 @@ import { useGenerateReport } from "../hooks/useGenerateReport";
 import { useReportActions } from "../hooks/useReportActions";
 
 export function HomePage() {
-  const { t } = useTranslation(["home", "example", "report", "common"]);
+  const { t } = useTranslation(["home", "example", "report"]);
   const meetingInput = useMeetingInput();
   const reportGeneration = useGenerateReport();
   const reportActions = useReportActions(reportGeneration.report);
@@ -26,23 +26,20 @@ export function HomePage() {
   }[reportGeneration.status] || "";
 
   return (
-    <main className="mx-auto flex w-full max-w-[1440px] flex-col gap-8 px-4 pb-12 pt-6 lg:gap-10 lg:px-8 lg:pt-8">
+    <main className="mx-auto flex w-full max-w-[1440px] flex-col gap-6 px-4 pb-12 pt-6 lg:gap-8 lg:px-8">
       <div aria-atomic="true" aria-live="polite" className="sr-only">
         {generationAnnouncement}
       </div>
 
-      <section className="mx-auto flex w-full max-w-[900px] flex-col items-center text-center">
-        <p className="text-xs font-semibold uppercase tracking-[0.24em] text-[--color-warning]">
-          {t("common:appTagline")}
-        </p>
-        <h1 className="mt-4 max-w-3xl whitespace-pre-line font-display text-4xl font-semibold leading-tight text-[--color-ink] sm:text-5xl lg:text-6xl">
+      <section className="mx-auto flex w-full max-w-[900px] flex-col items-center gap-4 text-center lg:gap-6">
+        <h1 className="max-w-3xl whitespace-pre-line font-display text-4xl font-semibold leading-tight text-[--color-ink] sm:text-5xl lg:text-6xl">
           {t("home:hero.title")}
         </h1>
-        <p className="mt-4 max-w-2xl text-base leading-8 text-[--color-muted] sm:text-lg">
+        <p className="max-w-2xl text-base leading-7 text-[--color-muted] sm:text-lg sm:leading-8">
           {t("home:hero.subtitle")}
         </p>
         <button
-          className="mt-4 text-sm font-semibold text-[--color-panel-strong] underline decoration-[--color-accent] decoration-2 underline-offset-4 transition hover:text-[--color-accent]"
+          className="mt-3 text-sm font-semibold text-[--color-panel-strong] underline decoration-[--color-accent] decoration-2 underline-offset-4 transition hover:text-[--color-accent]"
           onClick={meetingInput.loadExample}
           type="button"
         >

@@ -1,10 +1,6 @@
 import { useEffect, useRef } from "react";
 import { FileUp, Sparkles, WandSparkles } from "lucide-react";
 import { useTranslation } from "react-i18next";
-import {
-  MAX_TRANSCRIPT_LENGTH,
-  MIN_TRANSCRIPT_LENGTH
-} from "../../lib/transcriptInput";
 import { ErrorBanner } from "../ui/ErrorBanner";
 import { Button } from "../ui/Button";
 
@@ -14,23 +10,19 @@ export function MeetingInputPanel({
   isGenerating,
   error
 }) {
-  const { t } = useTranslation(["home", "common", "example", "report"]);
+  const { t } = useTranslation(["home", "report"]);
   const textareaRef = useRef(null);
   const {
     inputText,
     fileName,
     transcriptError,
     isTranscriptValid,
-    exampleMeetings,
-    activeExampleId,
     setInputText,
     markTranscriptTouched,
     handleFileUpload,
     loadExample
   } = meetingInput;
-  const helperId = "transcript-helper";
   const errorId = "transcript-error";
-  const currentLength = inputText.trim().length;
   const isGenerateDisabled = isGenerating || !isTranscriptValid;
   const displayError = transcriptError || error;
 
@@ -48,16 +40,16 @@ export function MeetingInputPanel({
   }, [inputText]);
 
   return (
-    <section className="rounded-[--radius-panel] border border-white/80 bg-white/92 p-5 shadow-[var(--shadow-card)] backdrop-blur-xl sm:p-6 lg:p-6">
-      <div className="space-y-4 lg:space-y-3.5">
+    <section className="rounded-[--radius-panel] border border-white/80 bg-white/92 p-6 shadow-[var(--shadow-card)] backdrop-blur-xl focus-within:ring-2 focus-within:ring-sky-200">
+      <div className="flex flex-col gap-4">
         <label className="block">
-          <span className="mb-3 block text-sm font-semibold uppercase tracking-[0.14em] text-[--color-muted]">
+          <span className="mb-3 block text-xs font-medium uppercase tracking-wider text-gray-600">
             {t("home:fields.transcript")}
           </span>
           <textarea
-            aria-describedby={displayError ? `${helperId} ${errorId}` : helperId}
+            aria-describedby={displayError ? errorId : undefined}
             aria-invalid={displayError ? "true" : "false"}
-            className={`min-h-[132px] max-h-[300px] w-full resize-none overflow-y-auto rounded-[--radius-panel] border bg-[--color-panel] px-4 py-3.5 font-mono text-sm leading-6 text-[--color-ink] outline-none transition focus:border-[--color-accent] lg:min-h-[120px] ${displayError ? "border-red-300" : "border-[--color-border]"}`}
+            className={`min-h-[120px] max-h-[300px] w-full resize-none overflow-y-auto rounded-[--radius-panel] border bg-[--color-panel] px-4 py-3 font-mono text-sm leading-6 text-[--color-ink] outline-none transition focus:border-[--color-accent] ${displayError ? "border-red-300" : "border-[--color-border]"}`}
             id="meeting-transcript"
             onBlur={markTranscriptTouched}
             onChange={(event) => setInputText(event.target.value)}
@@ -67,21 +59,9 @@ export function MeetingInputPanel({
             rows={1}
             value={inputText}
           />
-          <div className="mt-2 flex flex-wrap items-end justify-between gap-x-3 gap-y-1 px-1 text-xs leading-5 text-[--color-muted]">
-            <p className="max-w-[36rem]" id={helperId}>
-              {t("home:helper.transcriptFormats")}
-            </p>
-            <p className="shrink-0 whitespace-nowrap">
-              {t("home:helper.transcriptLength", {
-                current: currentLength,
-                min: MIN_TRANSCRIPT_LENGTH,
-                max: MAX_TRANSCRIPT_LENGTH
-              })}
-            </p>
-          </div>
         </label>
 
-        <div className="grid gap-3 sm:grid-cols-2">
+        <div className="grid grid-cols-2 gap-3">
           <label className="flex min-h-12 cursor-pointer items-center justify-center gap-2 rounded-[--radius-button] border border-[--color-border] bg-white/92 px-4 py-3 text-sm font-semibold text-[--color-ink] transition hover:bg-[--color-panel]">
             <FileUp size={16} />
             {t("home:buttons.uploadFile")}
@@ -103,36 +83,17 @@ export function MeetingInputPanel({
           </Button>
         </div>
 
-        <div className="space-y-2">
-          <p className="px-1 text-[11px] font-medium uppercase tracking-[0.16em] text-[--color-muted]">
-            {t("example:scenarioLabel")}
+        <div className="flex flex-col gap-3">
+          {fileName ? (
+            <div className="rounded-[--radius-button] bg-[--color-panel] px-3 py-2 text-xs text-[--color-muted]">
+              {t("home:helper.loadedFile", { fileName })}
+            </div>
+          ) : null}
+
+          <p className="px-1 text-xs leading-5 text-gray-500">
+            {t("home:helper.supportedFiles")}
           </p>
-          <div className="grid gap-2 lg:grid-cols-3">
-            {exampleMeetings.map((meeting) => (
-              <Button
-                aria-label={meeting.title}
-                className={`w-full justify-start text-left lg:min-h-0 lg:px-3 lg:py-2.5 ${activeExampleId === meeting.id ? "border-[--color-accent] bg-[--color-panel]" : ""}`}
-                key={meeting.id}
-                onClick={() => loadExample(meeting.id)}
-                size="sm"
-                tone="ghost"
-              >
-                <Sparkles size={16} />
-                {meeting.title}
-              </Button>
-            ))}
-          </div>
         </div>
-
-        {fileName ? (
-          <div className="rounded-[--radius-button] bg-[--color-panel] px-3 py-2 text-xs text-[--color-muted]">
-            {t("home:helper.loadedFile", { fileName })}
-          </div>
-        ) : null}
-
-        <p className="px-1 text-xs leading-5 text-[--color-muted]">
-          {t("home:helper.supportedFiles")}
-        </p>
 
         {displayError ? (
           <ErrorBanner id={errorId}>{displayError}</ErrorBanner>
