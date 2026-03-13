@@ -16,6 +16,9 @@ function toPdfUppercase(text, language) {
   return String(text || "").toLocaleUpperCase(language === "en" ? "en" : "hr");
 }
 
+const DEFAULT_SECTION_MIN_PRESENCE_AHEAD = 96;
+const LIST_SECTION_MIN_PRESENCE_AHEAD = 140;
+
 const styles = StyleSheet.create({
   page: {
     backgroundColor: "#f5f8fb",
@@ -90,9 +93,9 @@ const styles = StyleSheet.create({
   }
 });
 
-function Section({ title, children }) {
+function Section({ title, children, minPresenceAhead = DEFAULT_SECTION_MIN_PRESENCE_AHEAD, wrap = true }) {
   return (
-    <View style={styles.section}>
+    <View minPresenceAhead={minPresenceAhead} style={styles.section} wrap={wrap}>
       <Text style={styles.sectionTitle}>{title}</Text>
       {children}
     </View>
@@ -101,7 +104,7 @@ function Section({ title, children }) {
 
 function Card({ title, body, meta }) {
   return (
-    <View style={styles.itemCard}>
+    <View style={styles.itemCard} wrap={false}>
       <Text style={styles.itemTitle}>{title}</Text>
       {body ? <Text style={styles.itemBody}>{body}</Text> : null}
       {meta ? <Text style={styles.itemMeta}>{meta}</Text> : null}
@@ -113,7 +116,7 @@ function ReportPdfDocument({ report, t, language }) {
   return (
     <Document author="Meeting Brain" title={report.meeting_title}>
       <Page size="A4" style={styles.page}>
-        <View style={styles.headerCard}>
+        <View style={styles.headerCard} wrap={false}>
           <Text style={styles.eyebrow}>{toPdfUppercase(t("report:generatedReport"), language)}</Text>
           <Text style={styles.title}>{report.meeting_title}</Text>
           <Text style={styles.meta}>
@@ -185,7 +188,11 @@ function ReportPdfDocument({ report, t, language }) {
           )}
         </Section>
 
-        <Section title={toPdfUppercase(t("report:sections.nextSteps"), language)}>
+        <Section
+          minPresenceAhead={LIST_SECTION_MIN_PRESENCE_AHEAD}
+          title={toPdfUppercase(t("report:sections.nextSteps"), language)}
+          wrap={false}
+        >
           {report.next_steps.length ? (
             report.next_steps.map((step) => (
               <Text key={step} style={styles.listItem}>
