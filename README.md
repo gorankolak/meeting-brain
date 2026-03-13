@@ -21,6 +21,8 @@ Meeting Brain is a React + Netlify Functions MVP that converts messy meeting not
 
 Without provider keys, the app still works in fallback/mock mode for local evaluation.
 
+In local development, Vite now bridges `/api/generate-report` and `/api/send-report-email` directly to the Netlify function handlers, so `npm run dev` is sufficient for end-to-end testing.
+
 ## Deploy
 
 1. Connect the repo to Netlify.

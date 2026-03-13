@@ -1,9 +1,9 @@
-# Implementation Backlog
+# Meeting Brain — Implementation Backlog
 
 Product: Meeting Brain  
 Phase: 5 — MVP Stabilization & Production Readiness
 
-This backlog assumes the current repository already implements the MVP core flows.
+This backlog assumes the core MVP flows are already implemented.
 
 Goals of Phase 5:
 
@@ -11,15 +11,32 @@ Goals of Phase 5:
 - improve reliability
 - improve UX
 - add professional export formats
-- improve architecture quality
 - prepare project for production deployment
 - improve developer experience
 
-Each task should be executable in **1–4 hours maximum**.
+---
+
+# EPIC 0 — Internationalization (Completed)
+
+Internationalization support is already implemented.
+
+Completed features:
+
+- [x] HR / EN translation system implemented
+- [x] `LanguageSwitcher` component implemented
+- [x] Translation files created (`locales/hr`, `locales/en`)
+- [x] App loads with Croatian as default language
+- [x] UI language toggle implemented
+
+Remaining improvements (optional future work):
+
+- [ ] Persist language selection in localStorage
+- [ ] Ensure all error messages are translated
+- [ ] Ensure export labels are translated
 
 ---
 
-# EPIC: Transcript Input Experience
+# EPIC 1 — Transcript Input Experience
 
 ## Feature: Input validation
 
@@ -44,30 +61,30 @@ Each task should be executable in **1–4 hours maximum**.
 
 ---
 
-# EPIC: Report Generation Reliability
+# EPIC 2 — Report Generation Reliability (Completed)
 
 ## Feature: API request lifecycle
 
-- [ ] Add loading state during report generation
-- [ ] Add timeout handling for LLM request
-- [ ] Add retry mechanism for failed report generation
-- [ ] Display generation progress indicator
+- [x] Add loading state during report generation
+- [x] Add timeout handling for LLM request
+- [x] Add retry mechanism for failed report generation
+- [x] Display generation progress indicator
 
 ## Feature: Response validation
 
-- [ ] Validate API response against report schema
-- [ ] Show error UI if schema validation fails
-- [ ] Log schema mismatch to console for debugging
+- [x] Validate API response against report schema
+- [x] Show error UI if schema validation fails
+- [x] Log schema mismatch to console for debugging
 
 ## Feature: Service layer improvements
 
-- [ ] Separate API request logic into dedicated service module
-- [ ] Add environment variable validation for API keys
-- [ ] Implement graceful fallback when API is unavailable
+- [x] Separate API request logic into dedicated service module
+- [x] Add environment variable validation for API keys
+- [x] Implement graceful fallback when API is unavailable
 
 ---
 
-# EPIC: Report Workspace UI
+# EPIC 3 — Report Workspace UI
 
 ## Feature: Report layout
 
@@ -90,7 +107,7 @@ Each task should be executable in **1–4 hours maximum**.
 
 ---
 
-# EPIC: Email Sending UX
+# EPIC 4 — Email Sending UX
 
 ## Feature: Email form
 
@@ -112,7 +129,7 @@ Each task should be executable in **1–4 hours maximum**.
 
 ---
 
-# EPIC: Error Handling
+# EPIC 5 — Error Handling
 
 ## Feature: Global error UI
 
@@ -128,122 +145,7 @@ Each task should be executable in **1–4 hours maximum**.
 
 ---
 
-# EPIC: Edge Case Handling
-
-## Feature: Empty states
-
-- [ ] Add empty state UI before first report generation
-- [ ] Add empty state when transcript parsing fails
-
-## Feature: Large transcript handling
-
-- [ ] Add warning for transcripts exceeding recommended length
-- [ ] Prevent generation if transcript exceeds maximum allowed length
-
-## Feature: Input resets
-
-- [ ] Add "Clear Transcript" button
-- [ ] Reset report workspace when transcript is cleared
-
----
-
-# EPIC: Accessibility Improvements
-
-## Feature: Form accessibility
-
-- [ ] Add accessible labels to transcript input
-- [ ] Add ARIA attributes for validation errors
-- [ ] Ensure form fields are keyboard navigable
-
-## Feature: Button accessibility
-
-- [ ] Add aria-label attributes for action buttons
-- [ ] Ensure focus styles are visible
-
-## Feature: Screen reader support
-
-- [ ] Add aria-live region for generation status
-- [ ] Announce report generation completion
-
----
-
-# EPIC: Performance Improvements
-
-## Feature: React rendering optimization
-
-- [ ] Memoize heavy components where needed
-- [ ] Prevent unnecessary re-renders of report workspace
-
-## Feature: Input performance
-
-- [ ] Debounce transcript input updates if needed
-- [ ] Optimize large transcript rendering
-
----
-
-# EPIC: Analytics Integration
-
-## Feature: Event tracking
-
-- [ ] Integrate Google Analytics (GA4)
-- [ ] Track report generation event
-- [ ] Track example meeting usage
-- [ ] Track report email sending
-
-## Feature: Debug mode
-
-- [ ] Add analytics debug logging for development mode
-
----
-
-# EPIC: Deployment & Environment
-
-## Feature: Environment configuration
-
-- [ ] Add environment variable documentation
-- [ ] Add `.env.example` file
-
-## Feature: Netlify deployment
-
-- [ ] Validate Netlify serverless functions configuration
-- [ ] Ensure environment variables are available in Netlify
-- [ ] Test production deployment build
-
----
-
-# EPIC: Developer Experience
-
-## Feature: Code quality
-
-- [ ] Run ESLint across entire project
-- [ ] Fix lint issues
-- [ ] Run Prettier formatting
-
-## Feature: Documentation
-
-- [ ] Update README with setup instructions
-- [ ] Add architecture summary to README
-- [ ] Add local development instructions
-
----
-
-# EPIC: UI Polish
-
-## Feature: Visual consistency
-
-- [ ] Standardize button styles across app
-- [ ] Standardize spacing between sections
-- [ ] Improve typography hierarchy
-
-## Feature: Responsive layout
-
-- [ ] Test layout on tablet breakpoints
-- [ ] Improve mobile layout for report workspace
-- [ ] Ensure email form works on small screens
-
----
-
-# EPIC: Report Export Formats
+# EPIC 6 — Report Export Formats
 
 This epic enables practical report sharing and task extraction for PMO assistants and project coordinators.
 
@@ -308,34 +210,69 @@ Due date
 
 ---
 
-# EPIC: Architecture Improvements
+# EPIC 7 — Accessibility Improvements
 
-These tasks improve long-term maintainability and code organization.
+## Feature: Form accessibility
 
----
+- [ ] Add accessible labels to transcript input
+- [ ] Add ARIA attributes for validation errors
+- [ ] Ensure form fields are keyboard navigable
 
-## Feature: Feature-based project structure
+## Feature: Button accessibility
 
-- [ ] Create `/src/features` directory
-- [ ] Move meeting input logic into `features/meeting-input`
-- [ ] Move report generation logic into `features/report-generation`
-- [ ] Move email sending logic into `features/email-delivery`
+- [ ] Add aria-label attributes for action buttons
+- [ ] Ensure focus styles are visible
 
----
+## Feature: Screen reader support
 
-## Feature: API client abstraction
-
-- [ ] Create centralized API client (`src/lib/apiClient.js`)
-- [ ] Refactor services to use API client
-- [ ] Standardize API error handling
+- [ ] Add aria-live region for generation status
+- [ ] Announce report generation completion
 
 ---
 
-## Feature: Async data strategy
+# EPIC 8 — Analytics Integration
 
-- [ ] Evaluate React Query integration
-- [ ] Implement React Query for report generation mutation
-- [ ] Implement loading and error states via React Query
+## Feature: Event tracking
+
+- [ ] Integrate Google Analytics (GA4)
+- [ ] Track report generation event
+- [ ] Track example meeting usage
+- [ ] Track report email sending
+
+## Feature: Debug mode
+
+- [ ] Add analytics debug logging for development mode
+
+---
+
+# EPIC 9 — Deployment & Environment
+
+## Feature: Environment configuration
+
+- [ ] Add environment variable documentation
+- [ ] Add `.env.example` file
+
+## Feature: Netlify deployment
+
+- [ ] Validate Netlify serverless functions configuration
+- [ ] Ensure environment variables are available in Netlify
+- [ ] Test production deployment build
+
+---
+
+# EPIC 10 — UI Polish
+
+## Feature: Visual consistency
+
+- [ ] Standardize button styles across app
+- [ ] Standardize spacing between sections
+- [ ] Improve typography hierarchy
+
+## Feature: Responsive layout
+
+- [ ] Test layout on tablet breakpoints
+- [ ] Improve mobile layout for report workspace
+- [ ] Ensure email form works on small screens
 
 ---
 
@@ -348,4 +285,4 @@ These tasks improve long-term maintainability and code organization.
 - Errors handled gracefully
 - UI responsive and accessible
 - Deployment verified
-- Architecture improvements implemented
+- Analytics operational
