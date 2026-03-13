@@ -1,3 +1,4 @@
+import { useEffect, useRef } from "react";
 import { AlertCircle, FileUp, Sparkles, WandSparkles } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { Button } from "../ui/Button";
@@ -9,50 +10,40 @@ export function MeetingInputPanel({
   error
 }) {
   const { t } = useTranslation(["home", "common", "example"]);
+  const textareaRef = useRef(null);
   const {
-    meetingTitle,
     inputText,
-    sourceType,
     fileName,
-    setMeetingTitle,
     setInputText,
     handleFileUpload,
     loadExample
   } = meetingInput;
 
+  function autoResizeTextarea() {
+    const textarea = textareaRef.current;
+    if (!textarea) return;
+
+    textarea.style.height = "auto";
+    textarea.style.height = `${Math.max(120, Math.min(textarea.scrollHeight, 300))}px`;
+  }
+
+  useEffect(() => {
+    const frame = requestAnimationFrame(autoResizeTextarea);
+    return () => cancelAnimationFrame(frame);
+  }, [inputText]);
+
   return (
-    <section className="rounded-[--radius-panel] border border-white/80 bg-white/90 p-5 shadow-[var(--shadow-card)] backdrop-blur-xl">
-      <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between sm:gap-4">
-        <div className="min-w-0 flex-1">
-          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[--color-accent]">
-            {t("home:eyebrow")}
-          </p>
-          <h1 className="mt-2 font-display text-3xl font-semibold leading-tight text-[--color-ink]">
-            {t("home:title")}
-          </h1>
-        </div>
-        <span className="self-start rounded-full bg-[--color-panel] px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.16em] text-[--color-muted] sm:shrink-0">
-          {t(`home:sourceTypes.${sourceType}`)}
-        </span>
-      </div>
-
-      <div className="mt-6 space-y-4">
-        <label className="block">
-          <span className="mb-2 block text-sm font-medium text-[--color-ink]">{t("home:fields.meetingTitle")}</span>
-          <input
-            className="w-full rounded-[--radius-button] border border-[--color-border] bg-[--color-panel] px-4 py-3 text-sm outline-none transition focus:border-[--color-accent]"
-            onChange={(event) => setMeetingTitle(event.target.value)}
-            placeholder={t("home:placeholders.meetingTitle")}
-            value={meetingTitle}
-          />
-        </label>
-
+    <section className="rounded-[--radius-panel] border border-white/80 bg-white/92 p-4 shadow-[var(--shadow-card)] backdrop-blur-xl sm:p-5">
+      <div className="space-y-3">
         <label className="block">
           <span className="mb-2 block text-sm font-medium text-[--color-ink]">{t("home:fields.transcript")}</span>
           <textarea
-            className="min-h-[340px] w-full rounded-[--radius-panel] border border-[--color-border] bg-[--color-panel] px-4 py-4 font-mono text-sm leading-6 text-[--color-ink] outline-none transition focus:border-[--color-accent]"
+            className="min-h-[120px] max-h-[300px] w-full resize-none overflow-y-auto rounded-[--radius-panel] border border-[--color-border] bg-[--color-panel] px-4 py-4 font-mono text-sm leading-6 text-[--color-ink] outline-none transition focus:border-[--color-accent]"
             onChange={(event) => setInputText(event.target.value)}
+            onInput={() => requestAnimationFrame(autoResizeTextarea)}
             placeholder={t("home:placeholders.transcript")}
+            ref={textareaRef}
+            rows={1}
             value={inputText}
           />
         </label>
@@ -74,15 +65,19 @@ export function MeetingInputPanel({
             tone="ghost"
           >
             <Sparkles size={16} />
-            {t("example:loadExampleMeeting")}
+            {t("home:buttons.loadExample")}
           </Button>
         </div>
 
-        <div className="rounded-[--radius-button] border border-dashed border-[--color-border] bg-[--color-panel] px-4 py-3 text-xs uppercase tracking-[0.16em] text-[--color-muted]">
-          {fileName ? t("home:helper.loadedFile", { fileName }) : t("home:helper.supportedFiles")}
-        </div>
-
-        <p className="text-xs leading-6 text-[--color-muted]">{t("example:helperText")}</p>
+        {fileName ? (
+          <div className="rounded-[--radius-button] bg-[--color-panel] px-3 py-2 text-xs text-[--color-muted]">
+            {t("home:helper.loadedFile", { fileName })}
+          </div>
+        ) : (
+          <p className="px-1 text-xs leading-5 text-[--color-muted]">
+            {t("home:helper.supportedFiles")}
+          </p>
+        )}
 
         {error ? (
           <div className="flex items-start gap-2 rounded-[--radius-button] border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
