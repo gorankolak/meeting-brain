@@ -8,11 +8,11 @@ export function Button({
 }) {
   const tones = {
     primary:
-      "border border-transparent bg-[--color-accent] text-[--color-panel-strong] shadow-[var(--shadow-soft)] hover:brightness-95",
+      "border border-[--color-panel-strong] bg-[linear-gradient(135deg,_#17c8e3_0%,_#5ee6f2_100%)] text-[--color-panel-strong] shadow-[0_18px_36px_rgba(23,200,227,0.24)] ring-1 ring-white/70 hover:-translate-y-0.5 hover:shadow-[0_22px_42px_rgba(23,200,227,0.3)]",
     secondary:
-      "border border-transparent bg-[--color-panel-strong] text-white shadow-[var(--shadow-soft)] hover:bg-[#111f33]",
+      "border border-[--color-border] bg-white/92 text-[--color-ink] hover:bg-[--color-panel]",
     ghost:
-      "border border-[--color-border] bg-white/92 text-[--color-ink] hover:bg-[--color-panel]"
+      "border border-transparent bg-transparent text-[--color-muted] hover:border-[--color-border] hover:bg-[--color-panel] hover:text-[--color-ink]"
   };
   const sizes = {
     md: "min-h-12 px-4 py-3 text-sm",

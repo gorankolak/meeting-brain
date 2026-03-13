@@ -1,12 +1,26 @@
 import React from "react";
-import { Document, Page, StyleSheet, Text, View, pdf } from "@react-pdf/renderer";
+import { Document, Font, Page, StyleSheet, Text, View, pdf } from "@react-pdf/renderer";
 import { formatDateTime } from "../../lib/locale";
+import liberationSansRegular from "pdfjs-dist/standard_fonts/LiberationSans-Regular.ttf";
+import liberationSansBold from "pdfjs-dist/standard_fonts/LiberationSans-Bold.ttf";
+
+Font.register({
+  family: "Liberation Sans",
+  fonts: [
+    { src: liberationSansRegular, fontWeight: 400 },
+    { src: liberationSansBold, fontWeight: 700 }
+  ]
+});
+
+function toPdfUppercase(text, language) {
+  return String(text || "").toLocaleUpperCase(language === "en" ? "en" : "hr");
+}
 
 const styles = StyleSheet.create({
   page: {
     backgroundColor: "#f5f8fb",
     color: "#172033",
-    fontFamily: "Helvetica",
+    fontFamily: "Liberation Sans",
     fontSize: 11,
     lineHeight: 1.5,
     paddingTop: 32,
@@ -25,8 +39,7 @@ const styles = StyleSheet.create({
     fontSize: 9,
     fontWeight: 700,
     letterSpacing: 1.6,
-    marginBottom: 8,
-    textTransform: "uppercase"
+    marginBottom: 8
   },
   title: {
     fontSize: 22,
@@ -49,8 +62,7 @@ const styles = StyleSheet.create({
     fontSize: 10,
     fontWeight: 700,
     letterSpacing: 1.2,
-    marginBottom: 10,
-    textTransform: "uppercase"
+    marginBottom: 10
   },
   itemCard: {
     backgroundColor: "#f4f8fb",
@@ -102,18 +114,18 @@ function ReportPdfDocument({ report, t, language }) {
     <Document author="Meeting Brain" title={report.meeting_title}>
       <Page size="A4" style={styles.page}>
         <View style={styles.headerCard}>
-          <Text style={styles.eyebrow}>{t("report:generatedReport")}</Text>
+          <Text style={styles.eyebrow}>{toPdfUppercase(t("report:generatedReport"), language)}</Text>
           <Text style={styles.title}>{report.meeting_title}</Text>
           <Text style={styles.meta}>
             {t("report:fields.generated")}: {formatDateTime(report.generated_at, language)}
           </Text>
         </View>
 
-        <Section title={t("report:sections.summary")}>
+        <Section title={toPdfUppercase(t("report:sections.summary"), language)}>
           <Text>{report.summary}</Text>
         </Section>
 
-        <Section title={t("report:sections.decisions")}>
+        <Section title={toPdfUppercase(t("report:sections.decisions"), language)}>
           {report.decisions.length ? (
             report.decisions.map((item) => (
               <Card
@@ -128,7 +140,7 @@ function ReportPdfDocument({ report, t, language }) {
           )}
         </Section>
 
-        <Section title={t("report:sections.actionItems")}>
+        <Section title={toPdfUppercase(t("report:sections.actionItems"), language)}>
           {report.action_items.length ? (
             report.action_items.map((item) => (
               <Card
@@ -143,7 +155,7 @@ function ReportPdfDocument({ report, t, language }) {
           )}
         </Section>
 
-        <Section title={t("report:sections.risks")}>
+        <Section title={toPdfUppercase(t("report:sections.risks"), language)}>
           {report.risks.length ? (
             report.risks.map((item) => (
               <Card
@@ -158,7 +170,7 @@ function ReportPdfDocument({ report, t, language }) {
           )}
         </Section>
 
-        <Section title={t("report:sections.openQuestions")}>
+        <Section title={toPdfUppercase(t("report:sections.openQuestions"), language)}>
           {report.open_questions.length ? (
             report.open_questions.map((item) => (
               <Card
@@ -173,7 +185,7 @@ function ReportPdfDocument({ report, t, language }) {
           )}
         </Section>
 
-        <Section title={t("report:sections.nextSteps")}>
+        <Section title={toPdfUppercase(t("report:sections.nextSteps"), language)}>
           {report.next_steps.length ? (
             report.next_steps.map((step) => (
               <Text key={step} style={styles.listItem}>

@@ -5,8 +5,13 @@
   "fallbackNotice": "Using fallback generation because the live AI service is unavailable.",
   "actions": {
     "regenerate": "Regenerate report",
+    "copy": "Copy",
+    "copied": "Copied",
     "show": "Show",
     "hide": "Hide"
+  },
+  "status": {
+    "generated": "Report generated successfully"
   },
   "sections": {
     "summary": "Meeting summary",
@@ -22,7 +27,8 @@
     "confidence": "Confidence",
     "mitigation": "Mitigation",
     "priority": "Priority",
-    "generated": "Generated"
+    "generated": "Generated",
+    "source": "Source"
   },
   "empty": {
     "title": "No report generated yet",

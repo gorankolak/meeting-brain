@@ -4,6 +4,7 @@ import {
   CheckCircle2,
   ChevronDown,
   FileText,
+  Copy,
   RotateCcw
 } from "lucide-react";
 import { useTranslation } from "react-i18next";
@@ -11,7 +12,6 @@ import { Button } from "../ui/Button";
 import { ErrorBanner } from "../ui/ErrorBanner";
 import { ReportExportToolbar } from "./ReportExportToolbar";
 import { formatDateTime } from "../../lib/locale";
-import { EmailPanel } from "../email/EmailPanel";
 
 function LoadingState({ title, body, progress, t }) {
   return (
@@ -75,23 +75,31 @@ function PlaceholderState({ icon: Icon, title, body, actions = null }) {
 function ReportSection({
   title,
   children,
-  tone = "default",
+  tone = "secondary",
   collapsible = false,
   defaultOpen = true,
-  badge = null
+  badge = null,
+  onCopy = null,
+  isCopied = false
 }) {
   const { t } = useTranslation("report");
   const [isOpen, setIsOpen] = useState(defaultOpen);
   const tones = {
-    default: "bg-white",
+    primary: "bg-white shadow-[0_10px_24px_rgba(15,23,42,0.05)] ring-1 ring-sky-100/80",
+    secondary: "bg-white",
     warning: "bg-[#fff8ec] border-[#f5d39a]"
+  };
+  const titleTones = {
+    primary: "text-base font-semibold tracking-[0.12em] text-[--color-ink]",
+    secondary: "text-xs font-semibold tracking-[0.18em] text-[--color-muted]",
+    warning: "text-xs font-semibold tracking-[0.18em] text-[--color-muted]"
   };
 
   return (
-    <section className={`rounded-[--radius-panel] border border-[--color-border] p-5 sm:p-6 ${tones[tone]}`}>
+    <section className={`rounded-[--radius-panel] border border-[--color-border] p-4 sm:p-5 ${tones[tone]}`}>
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div className="flex items-center gap-3">
-          <h3 className="text-sm font-semibold uppercase tracking-[0.18em] text-[--color-muted]">{title}</h3>
+          <h3 className={`uppercase ${titleTones[tone]}`}>{title}</h3>
           {badge ? (
             <span className="rounded-full bg-[--color-panel] px-2.5 py-1 text-[11px] font-semibold uppercase tracking-[0.12em] text-[--color-muted]">
               {badge}
@@ -99,20 +107,34 @@ function ReportSection({
           ) : null}
         </div>
 
-        {collapsible ? (
-          <button
-            aria-label={isOpen ? t("report:actions.hide") : t("report:actions.show")}
-            aria-expanded={isOpen}
-            className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.14em] text-[--color-muted] transition hover:text-[--color-ink]"
-            onClick={() => setIsOpen((current) => !current)}
-            type="button"
-          >
-            {isOpen ? t("report:actions.hide") : t("report:actions.show")}
-            <ChevronDown className={`transition ${isOpen ? "rotate-180" : ""}`} size={16} />
-          </button>
-        ) : null}
+        <div className="flex items-center gap-2">
+          {onCopy ? (
+            <Button
+              aria-label={t("report:actions.copy")}
+              className="min-h-8 px-3 py-1.5 text-xs"
+              onClick={onCopy}
+              size="sm"
+              tone="ghost"
+            >
+              <Copy size={14} />
+              {isCopied ? t("report:actions.copied") : t("report:actions.copy")}
+            </Button>
+          ) : null}
+          {collapsible ? (
+            <button
+              aria-label={isOpen ? t("report:actions.hide") : t("report:actions.show")}
+              aria-expanded={isOpen}
+              className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.14em] text-[--color-muted] transition hover:text-[--color-ink]"
+              onClick={() => setIsOpen((current) => !current)}
+              type="button"
+            >
+              {isOpen ? t("report:actions.hide") : t("report:actions.show")}
+              <ChevronDown className={`transition ${isOpen ? "rotate-180" : ""}`} size={16} />
+            </button>
+          ) : null}
+        </div>
       </div>
-      {(!collapsible || isOpen) ? <div className="mt-5">{children}</div> : null}
+      {(!collapsible || isOpen) ? <div className="mt-4">{children}</div> : null}
     </section>
   );
 }
@@ -127,10 +149,11 @@ export function ReportWorkspace({
   isRegenerating,
   exportActions
 }) {
-  const { t, i18n } = useTranslation(["common", "report", "export"]);
-  const [emailFeedback, setEmailFeedback] = useState(null);
+  const { t, i18n } = useTranslation(["common", "home", "report", "export"]);
   const isReady = status === "success" && report;
   const language = i18n.resolvedLanguage || i18n.language;
+  const generatedAt = generationMeta?.generatedAt || report?.generated_at;
+  const sourceLabel = generationMeta?.sourceType ? t(`home:sourceTypes.${generationMeta.sourceType}`) : null;
 
   function renderState() {
     if (status === "loading") {
@@ -170,7 +193,14 @@ export function ReportWorkspace({
 
   return (
     <section className="rounded-[--radius-panel] border border-white/80 bg-white/92 p-5 shadow-[var(--shadow-card)] backdrop-blur-xl sm:p-6 lg:p-7">
-      <div className="flex flex-col gap-4 border-b border-[--color-border] pb-6 xl:flex-row xl:items-start xl:justify-between">
+      {isReady ? (
+        <div className="mb-4 inline-flex items-center gap-2 text-sm font-medium text-[--color-accent]">
+          <CheckCircle2 size={16} />
+          <span>{t("report:status.generated")}</span>
+        </div>
+      ) : null}
+
+      <div className="flex flex-col gap-4 border-b border-[--color-border] pb-5 xl:flex-row xl:items-start xl:justify-between">
         <div>
           <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[--color-warning]">
             {t("report:generatedReport")}
@@ -191,6 +221,20 @@ export function ReportWorkspace({
                 })
               : t("common:states.readyToAnalyze")}
           </p>
+          {(generatedAt || sourceLabel) ? (
+            <div className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-2 text-xs text-[--color-muted]">
+              {generatedAt ? (
+                <span>
+                  {t("report:fields.generated")}: {formatDateTime(generatedAt, language)}
+                </span>
+              ) : null}
+              {sourceLabel ? (
+                <span>
+                  {t("report:fields.source")}: {sourceLabel}
+                </span>
+              ) : null}
+            </div>
+          ) : null}
           {generationMeta?.mode === "mock" ? (
             <p className="mt-2 text-xs uppercase tracking-[0.16em] text-[--color-warning]">
               {t("report:fallbackNotice")}
@@ -210,7 +254,7 @@ export function ReportWorkspace({
         </div>
       </div>
 
-      <div className="mt-8 space-y-8">
+      <div className="mt-6 space-y-5">
         {generationError && status === "error" ? (
           <ErrorBanner>{generationError}</ErrorBanner>
         ) : null}
@@ -220,14 +264,13 @@ export function ReportWorkspace({
         {isReady ? (
           <>
             <ReportSection title={t("export:toolbarTitle")}>
-              <div className="space-y-5">
+              <div className="space-y-4">
                 <p className="text-sm text-[--color-muted]">{t("export:toolbarBody")}</p>
                 <ReportExportToolbar
                   disabled={!isReady}
                   isBusy={exportActions.isBusy}
                   onAction={exportActions}
                 />
-                <EmailPanel report={report} setEmailFeedback={setEmailFeedback} />
               </div>
             </ReportSection>
 
@@ -237,29 +280,31 @@ export function ReportWorkspace({
               </ErrorBanner>
             ) : null}
 
-            {emailFeedback ? (
-              <ErrorBanner role="status" tone={emailFeedback.tone}>
-                {emailFeedback.message}
-              </ErrorBanner>
-            ) : null}
-
-            <ReportSection title={t("report:sections.summary")}>
+            <ReportSection
+              isCopied={exportActions.completedAction === "section-summary"}
+              onCopy={() => exportActions.copySection("summary")}
+              title={t("report:sections.summary")}
+              tone="secondary"
+            >
               <p className="max-w-4xl text-sm leading-7 text-[--color-ink] sm:text-[15px]">
                 {report.summary}
               </p>
             </ReportSection>
 
-            <div className="grid gap-6 2xl:grid-cols-[1.2fr_0.8fr]">
+            <div className="grid gap-5 2xl:grid-cols-[1.2fr_0.8fr]">
               <ReportSection
                 badge={report.decisions.length}
                 collapsible={report.decisions.length > 2}
-                defaultOpen={report.decisions.length <= 4}
+                defaultOpen
+                isCopied={exportActions.completedAction === "section-decisions"}
+                onCopy={() => exportActions.copySection("decisions")}
                 title={t("report:sections.decisions")}
+                tone="primary"
               >
                 <div className="space-y-3">
                   {report.decisions.length ? (
                     report.decisions.map((decision) => (
-                      <article key={decision.id} className="rounded-[--radius-button] bg-[--color-panel] p-4">
+                      <article key={decision.id} className="rounded-[--radius-button] bg-[--color-panel] p-3.5">
                         <p className="text-sm font-semibold text-[--color-ink]">{decision.decision}</p>
                         <p className="mt-2 text-sm text-[--color-muted]">{decision.reasoning}</p>
                         <p className="mt-3 text-xs uppercase tracking-[0.14em] text-[--color-muted]">
@@ -278,12 +323,15 @@ export function ReportWorkspace({
                 badge={report.next_steps.length}
                 collapsible={report.next_steps.length > 4}
                 defaultOpen
+                isCopied={exportActions.completedAction === "section-nextSteps"}
+                onCopy={() => exportActions.copySection("nextSteps")}
                 title={t("report:sections.nextSteps")}
+                tone="primary"
               >
                 <ul className="space-y-3 text-sm text-[--color-ink]">
                   {report.next_steps.length ? (
                     report.next_steps.map((step) => (
-                      <li key={step} className="flex gap-3 rounded-[--radius-button] bg-[--color-panel] p-4">
+                      <li key={step} className="flex gap-3 rounded-[--radius-button] bg-[--color-panel] p-3.5">
                         <CheckCircle2 className="mt-0.5 shrink-0 text-[--color-accent]" size={16} />
                         <span>{step}</span>
                       </li>
@@ -298,28 +346,48 @@ export function ReportWorkspace({
             <ReportSection
               badge={report.action_items.length}
               collapsible={report.action_items.length > 3}
-              defaultOpen={report.action_items.length <= 5}
+              defaultOpen
+              isCopied={exportActions.completedAction === "section-actionItems"}
+              onCopy={() => exportActions.copySection("actionItems")}
               title={t("report:sections.actionItems")}
+              tone="primary"
             >
               <div className="space-y-3">
                 {report.action_items.length ? (
                   report.action_items.map((item) => (
-                    <div
+                    <article
                       key={item.id}
-                      className="flex flex-col gap-2 rounded-[--radius-button] border border-[--color-border] bg-[--color-panel] p-4 lg:flex-row lg:items-center lg:justify-between"
+                      className="rounded-[--radius-button] border border-[--color-border] bg-[--color-panel] p-4"
                     >
-                      <div>
-                        <p className="text-sm font-semibold text-[--color-ink]">{item.task}</p>
-                        <p className="mt-1 text-sm text-[--color-muted]">
-                          {item.notes || t("report:empty.notes")}
-                        </p>
+                      <div className="flex flex-col gap-3 lg:flex-row lg:items-start lg:justify-between">
+                        <div className="min-w-0 flex-1">
+                          <p className="text-sm font-semibold text-[--color-ink]">{item.task}</p>
+                          <p className="mt-1.5 text-sm text-[--color-muted]">
+                            {item.notes || t("report:empty.notes")}
+                          </p>
+                        </div>
+                        <dl className="grid grid-cols-2 gap-x-4 gap-y-2 text-xs uppercase tracking-[0.14em] text-[--color-muted] sm:grid-cols-3 lg:min-w-[290px] lg:max-w-[320px]">
+                          <div>
+                            <dt>{t("report:fields.owner")}</dt>
+                            <dd className="mt-1 text-[11px] font-semibold text-[--color-ink] normal-case tracking-normal">
+                              {item.owner}
+                            </dd>
+                          </div>
+                          <div>
+                            <dt>{t("report:fields.deadline")}</dt>
+                            <dd className="mt-1 text-[11px] font-semibold text-[--color-ink] normal-case tracking-normal">
+                              {item.deadline || t("report:empty.deadline")}
+                            </dd>
+                          </div>
+                          <div className="col-span-2 sm:col-span-1">
+                            <dt>{t("report:fields.priority")}</dt>
+                            <dd className="mt-1 text-[11px] font-semibold text-[--color-ink] normal-case tracking-normal">
+                              {t(`report:enums.priority.${item.priority}`)}
+                            </dd>
+                          </div>
+                        </dl>
                       </div>
-                      <div className="text-xs uppercase tracking-[0.14em] text-[--color-muted]">
-                        {t("report:fields.owner")}: {item.owner} • {t("report:fields.deadline")}:{" "}
-                        {item.deadline || t("report:empty.deadline")} • {t("report:fields.priority")}:{" "}
-                        {t(`report:enums.priority.${item.priority}`)}
-                      </div>
-                    </div>
+                    </article>
                   ))
                 ) : (
                   <p className="text-sm text-[--color-muted]">{t("report:empty.actionItems")}</p>
@@ -327,18 +395,18 @@ export function ReportWorkspace({
               </div>
             </ReportSection>
 
-            <div className="grid gap-6 2xl:grid-cols-2">
+            <div className="grid gap-5 2xl:grid-cols-2">
               <ReportSection
                 badge={report.risks.length}
-                collapsible={report.risks.length > 2}
-                defaultOpen
+                collapsible
+                defaultOpen={false}
                 title={t("report:sections.risks")}
                 tone="warning"
               >
                 <div className="space-y-3">
                   {report.risks.length ? (
                     report.risks.map((risk) => (
-                      <div key={risk.id} className="rounded-[--radius-button] border border-[#f2d393] bg-white/70 p-4">
+                      <div key={risk.id} className="rounded-[--radius-button] border border-[#f2d393] bg-white/70 p-3.5">
                         <div className="flex items-start gap-3">
                           <TriangleAlert className="mt-0.5 shrink-0 text-[--color-warning]" size={16} />
                           <div>
@@ -360,14 +428,14 @@ export function ReportWorkspace({
 
               <ReportSection
                 badge={report.open_questions.length}
-                collapsible={report.open_questions.length > 2}
-                defaultOpen
+                collapsible
+                defaultOpen={false}
                 title={t("report:sections.openQuestions")}
               >
                 <div className="space-y-3">
                   {report.open_questions.length ? (
                     report.open_questions.map((question) => (
-                      <article key={question.id} className="rounded-[--radius-button] bg-[--color-panel] p-4">
+                      <article key={question.id} className="rounded-[--radius-button] bg-[--color-panel] p-3.5">
                         <p className="text-sm font-semibold text-[--color-ink]">{question.question}</p>
                         <p className="mt-2 text-sm text-[--color-muted]">
                           {question.notes || t("report:empty.questionNotes")}

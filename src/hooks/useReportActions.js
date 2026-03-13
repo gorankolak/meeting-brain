@@ -1,12 +1,7 @@
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { formatReportAsText } from "../lib/formatters";
-import {
-  exportJson,
-  exportJiraTasksCsv,
-  exportJiraTasksText,
-  exportMarkdown
-} from "../services/export";
+import { formatReportAsText, formatSectionAsText } from "../lib/formatters";
+import { exportJiraTasksCsv } from "../services/export";
 
 function triggerBlobDownload(filename, blob) {
   const url = URL.createObjectURL(blob);
@@ -25,6 +20,7 @@ export function useReportActions(report) {
   const { t, i18n } = useTranslation(["common", "export", "report"]);
   const [feedback, setFeedback] = useState(null);
   const [busyAction, setBusyAction] = useState("");
+  const [completedAction, setCompletedAction] = useState("");
 
   function ensureReport() {
     if (!report) {
@@ -44,12 +40,22 @@ export function useReportActions(report) {
     return () => window.clearTimeout(timeoutId);
   }, [feedback]);
 
+  useEffect(() => {
+    if (!completedAction) {
+      return undefined;
+    }
+
+    const timeoutId = window.setTimeout(() => setCompletedAction(""), 1800);
+    return () => window.clearTimeout(timeoutId);
+  }, [completedAction]);
+
   async function runAction(actionId, callback) {
     ensureReport();
     setBusyAction(actionId);
 
     try {
       const result = await callback();
+      setCompletedAction(actionId);
       if (result?.message) {
         setFeedback({ tone: "success", message: result.message });
       }
@@ -65,34 +71,12 @@ export function useReportActions(report) {
 
   return {
     feedback,
+    completedAction,
     isBusy: (actionId) => busyAction === actionId,
     copyReport: () =>
       runAction("copy", async () => {
         await navigator.clipboard.writeText(formatReportAsText(report, t, exportLanguage));
         return { message: t("export:messages.copySuccess") };
-      }),
-    downloadMarkdown: () =>
-      runAction("markdown", async () => {
-        triggerDownload(
-          `${baseFilename}.md`,
-          exportMarkdown(report, { t, language: exportLanguage }),
-          "text/markdown"
-        );
-        return { message: t("export:messages.downloadReady", { format: "Markdown" }) };
-      }),
-    downloadJson: () =>
-      runAction("json", async () => {
-        triggerDownload(`${baseFilename}.json`, exportJson(report), "application/json");
-        return { message: t("export:messages.downloadReady", { format: "JSON" }) };
-      }),
-    downloadText: () =>
-      runAction("text", async () => {
-        triggerDownload(
-          `${baseFilename}.txt`,
-          formatReportAsText(report, t, exportLanguage),
-          "text/plain"
-        );
-        return { message: t("export:messages.downloadReady", { format: "Text" }) };
       }),
     downloadPdf: () =>
       runAction("pdf", async () => {
@@ -101,19 +85,19 @@ export function useReportActions(report) {
         triggerBlobDownload(`${baseFilename}.pdf`, blob);
         return { message: t("export:messages.downloadReady", { format: "PDF" }) };
       }),
-    downloadJiraCsv: () =>
-      runAction("jiraCsv", async () => {
+    exportForJira: () =>
+      runAction("jira", async () => {
         triggerDownload(
           `${baseFilename}-jira-tasks.csv`,
           exportJiraTasksCsv(report, { t }),
           "text/csv;charset=utf-8"
         );
-        return { message: t("export:messages.downloadReady", { format: "Jira CSV" }) };
+        return { message: t("export:messages.downloadReady", { format: "Jira" }) };
       }),
-    copyJiraTasks: () =>
-      runAction("jiraCopy", async () => {
-        await navigator.clipboard.writeText(exportJiraTasksText(report, { t }));
-        return { message: t("export:messages.jiraCopySuccess") };
+    copySection: (sectionId) =>
+      runAction(`section-${sectionId}`, async () => {
+        await navigator.clipboard.writeText(formatSectionAsText(sectionId, report, t, exportLanguage));
+        return { message: t("export:messages.sectionCopySuccess", { section: t(`report:sections.${sectionId}`) }) };
       })
   };
 }

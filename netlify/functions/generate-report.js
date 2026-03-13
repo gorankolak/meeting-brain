@@ -153,6 +153,10 @@ function buildId(prefix, index) {
   return `${prefix}-${String(index + 1).padStart(3, "0")}`;
 }
 
+function includesAny(text, candidates) {
+  return candidates.some((candidate) => text.includes(candidate));
+}
+
 function extractStructuredSignals({ transcript, language }) {
   const copy = getCopy(language);
   const lines = sentenceList(transcript);
@@ -162,6 +166,93 @@ function extractStructuredSignals({ transcript, language }) {
   const openQuestions = [];
   const nextSteps = [];
   const stakeholders = new Map();
+  const decisionSignals = [
+    "decision taken",
+    "decision:",
+    "agreed",
+    "approved",
+    "we decided",
+    "let's",
+    "drop ie support",
+    "release proceeds only",
+    "odluka:",
+    "odluka je donesena",
+    "slažem se",
+    "slažemo se",
+    "prestanimo",
+    "odobravamo",
+    "objavljujemo tek kada",
+    "ide samo ako"
+  ];
+  const actionSignals = [
+    "i will",
+    "please",
+    "confirm",
+    "notify",
+    "debug",
+    "prepare",
+    "follow up",
+    "schedule",
+    "send",
+    "fix",
+    "resolve",
+    "mogu",
+    "danas ću",
+    "molim te",
+    "potvrdi",
+    "obavijesti",
+    "eskalirat ću",
+    "poslat ću",
+    "dodaj",
+    "zaduži",
+    "tražiti",
+    "tražimo",
+    "odobri",
+    "odobravamo",
+    "objaviti rezultate"
+  ];
+  const riskSignals = [
+    "risk",
+    "blocker",
+    "concern",
+    "issue",
+    "error",
+    "502",
+    "legacy internet explorer",
+    "support is consuming",
+    "rizik",
+    "blokada",
+    "problem",
+    "pogreške",
+    "greške",
+    "greška",
+    "troši puno",
+    "nije prošao",
+    "još čeka"
+  ];
+  const questionSignals = [
+    "question",
+    "unresolved",
+    "whether",
+    "open question",
+    "otvoreno pitanje",
+    "neriješeno pitanje",
+    "otvoreni rizik je"
+  ];
+  const nextStepSignals = [
+    "next week",
+    "proceeds only",
+    "prioritize",
+    "focus on",
+    "drop ie support",
+    "sljedećeg tjedna",
+    "damo prioritet",
+    "fokusirati",
+    "objavljujemo tek kada",
+    "ide samo ako"
+  ];
+  const deadlinePattern =
+    /\b(today|tomorrow|friday|monday|tuesday|wednesday|thursday|saturday|sunday|\d{1,2}\s?(?:am|pm)|danas|sutra|petak|ponedjeljak|utorak|srijeda|četvrtak|subota|nedjelja|\d{1,2}:\d{2})\b/i;
 
   for (const line of lines) {
     const owner = inferOwner(line) || copy.unclear;
@@ -176,40 +267,34 @@ function extractStructuredSignals({ transcript, language }) {
       });
     }
 
-    const decisionMatch =
-      /\b(decision taken|agreed|approved|we decided|let's|drop ie support|release proceeds only)\b/.test(normalized);
+    const decisionMatch = includesAny(normalized, decisionSignals);
     if (decisionMatch) {
       decisions.push({
         id: buildId("DEC", decisions.length),
         decision: content,
         reasoning: copy.derivedFromTranscript,
         owner,
-        confidence: normalized.includes("decision taken") || normalized.includes("agreed") ? "high" : "medium"
+        confidence:
+          includesAny(normalized, ["decision taken", "agreed", "approved", "odluka:", "odluka je donesena", "slažem se", "slažemo se"])
+            ? "high"
+            : "medium"
       });
     }
 
-    const actionMatch =
-      /\b(i will|please|confirm|notify|debug|prepare|follow up|schedule|send|fix|resolve)\b/.test(normalized);
+    const actionMatch = includesAny(normalized, actionSignals);
     if (actionMatch) {
       actionItems.push({
         id: buildId("ACT", actionItems.length),
         task: content,
         owner,
-        deadline: /\b(today|tomorrow|friday|monday|tuesday|wednesday|thursday|saturday|sunday|\d{1,2}\s?(am|pm))\b/.test(
-          normalized
-        )
-          ? content.match(
-              /\b(today|tomorrow|friday|monday|tuesday|wednesday|thursday|saturday|sunday|\d{1,2}\s?(?:am|pm))\b/i
-            )?.[0] || ""
-          : "",
-        priority: /\b(blocker|urgent|today|502|critical)\b/.test(normalized) ? "high" : "medium",
+        deadline: deadlinePattern.test(normalized) ? content.match(deadlinePattern)?.[0] || "" : "",
+        priority: /\b(blocker|urgent|today|502|critical|blokada|danas|prioritet)\b/.test(normalized) ? "high" : "medium",
         status: "open",
         notes: copy.extractedFromTranscript
       });
     }
 
-    const riskMatch =
-      /\b(risk|blocker|concern|issue|error|502|legacy internet explorer|support is consuming)\b/.test(normalized);
+    const riskMatch = includesAny(normalized, riskSignals);
     if (riskMatch) {
       risks.push({
         id: buildId("RSK", risks.length),
@@ -220,7 +305,7 @@ function extractStructuredSignals({ transcript, language }) {
       });
     }
 
-    const questionMatch = /\b(question|unresolved|whether)\b/.test(normalized);
+    const questionMatch = includesAny(normalized, questionSignals);
     if (questionMatch) {
       openQuestions.push({
         id: buildId("Q", openQuestions.length),
@@ -230,7 +315,7 @@ function extractStructuredSignals({ transcript, language }) {
       });
     }
 
-    const nextStepMatch = actionMatch || /\b(next week|proceeds only|prioritize|focus on|drop ie support)\b/.test(normalized);
+    const nextStepMatch = actionMatch || includesAny(normalized, nextStepSignals);
     if (nextStepMatch) {
       nextSteps.push(content);
     }

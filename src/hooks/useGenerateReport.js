@@ -98,7 +98,8 @@ export function useGenerateReport() {
       setMeta({
         mode: response.mode,
         generatedAt: response.report.generated_at,
-        attempts: response.attempts
+        attempts: response.attempts,
+        sourceType: data.sourceType
       });
       setProgress({
         currentStage: "complete",

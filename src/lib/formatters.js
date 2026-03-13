@@ -1,5 +1,9 @@
 import { formatDateTime } from "./locale";
 
+function buildSectionBlock(title, lines) {
+  return [title, "-".repeat(title.length), ...lines].join("\n");
+}
+
 export function formatReportAsMarkdown(report, t, language) {
   const lines = [
     `# ${report.meeting_title}`,
@@ -105,6 +109,43 @@ export function formatReportAsText(report, t, language) {
   ];
 
   return lines.join("\n");
+}
+
+export function formatSectionAsText(sectionId, report, t, language) {
+  const sectionTitle = t(`report:sections.${sectionId}`);
+
+  const sectionLines = {
+    summary: [report.summary],
+    decisions: report.decisions.length
+      ? report.decisions.flatMap((item) => [
+          `• ${item.decision}`,
+          `  ${t("report:fields.owner")}: ${item.owner}`,
+          `  ${t("report:fields.confidence")}: ${t(`report:enums.confidence.${item.confidence}`)}`,
+          `  ${item.reasoning}`,
+          ""
+        ])
+      : [t("report:empty.decisions")],
+    nextSteps: report.next_steps.length
+      ? report.next_steps.map((item) => `• ${item}`)
+      : [t("report:empty.nextSteps")],
+    actionItems: report.action_items.length
+      ? report.action_items.flatMap((item) => [
+          `• ${item.task}`,
+          `  ${t("report:fields.owner")}: ${item.owner}`,
+          `  ${t("report:fields.deadline")}: ${item.deadline || t("report:empty.deadline")}`,
+          `  ${t("report:fields.priority")}: ${t(`report:enums.priority.${item.priority}`)}`,
+          `  ${item.notes || t("report:empty.notes")}`,
+          ""
+        ])
+      : [t("report:empty.actionItems")]
+  }[sectionId];
+
+  return [
+    report.meeting_title,
+    `${t("report:fields.generated")}: ${formatDateTime(report.generated_at, language)}`,
+    "",
+    buildSectionBlock(sectionTitle, sectionLines || [])
+  ].join("\n");
 }
 
 export function formatReportAsEmailHtml(report, t) {

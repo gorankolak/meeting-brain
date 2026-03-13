@@ -62,7 +62,7 @@ export function MeetingInputPanel({
         </label>
 
         <div className="grid grid-cols-2 gap-3">
-          <label className="flex min-h-12 cursor-pointer items-center justify-center gap-2 rounded-[--radius-button] border border-[--color-border] bg-white/92 px-4 py-3 text-sm font-semibold text-[--color-ink] transition hover:bg-[--color-panel]">
+          <label className="flex min-h-12 cursor-pointer items-center justify-center gap-2 rounded-[--radius-button] border border-[--color-border] bg-white/92 px-4 py-3 text-sm font-semibold text-[--color-ink] transition duration-150 hover:bg-[--color-panel] focus-within:outline-3 focus-within:outline-offset-2 focus-within:outline-[--color-accent]">
             <FileUp size={16} />
             {t("home:buttons.uploadFile")}
             <input
@@ -76,7 +76,7 @@ export function MeetingInputPanel({
           <Button
             className="w-full"
             onClick={loadExample}
-            tone="ghost"
+            tone="secondary"
           >
             <Sparkles size={16} />
             {t("home:buttons.loadExample")}
@@ -101,7 +101,7 @@ export function MeetingInputPanel({
 
         <Button
           aria-label={isGenerating ? t("report:loading.title") : t("home:buttons.generateReport")}
-          className="w-full border-[--color-panel-strong] bg-[linear-gradient(135deg,_#17c8e3_0%,_#5ee6f2_100%)] shadow-[0_18px_36px_rgba(23,200,227,0.28)] ring-1 ring-white/70 hover:-translate-y-0.5 hover:shadow-[0_22px_42px_rgba(23,200,227,0.34)]"
+          className="w-full"
           disabled={isGenerateDisabled}
           onClick={onGenerate}
         >

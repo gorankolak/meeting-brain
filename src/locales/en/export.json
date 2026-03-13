@@ -1,17 +1,13 @@
 {
   "buttons": {
     "copyReport": "Copy report",
-    "downloadMarkdown": "Markdown",
-    "downloadText": "Text",
-    "downloadJson": "JSON",
-    "downloadPdf": "PDF",
-    "downloadJiraCsv": "Jira CSV",
-    "copyJiraTasks": "Copy Jira tasks",
-    "sendEmail": "Send via email"
+    "copied": "Copied",
+    "downloadPdf": "Download PDF",
+    "exportForJira": "Export for Jira"
   },
   "toolbarLabel": "Report export actions",
   "toolbarTitle": "Export and share",
-  "toolbarBody": "Download polished report files or copy Jira-ready tasks for downstream project tools.",
+  "toolbarBody": "Use the report directly, save the polished PDF, or export the action items for Jira.",
   "fileBaseName": "meeting-brain-report",
   "jira": {
     "description": "Description",
@@ -20,18 +16,10 @@
     "dueDate": "Due date",
     "unassigned": "Unassigned"
   },
-  "email": {
-    "recipientLabel": "Recipient email",
-    "recipientPlaceholder": "teammates@company.com",
-    "sending": "Sending..."
-  },
   "messages": {
     "copySuccess": "Report copied to clipboard.",
-    "jiraCopySuccess": "Jira-ready tasks copied to clipboard.",
+    "sectionCopySuccess": "{{section}} copied to clipboard.",
     "downloadReady": "{{format}} export is ready.",
-    "actionFailed": "Export action failed.",
-    "emailMock": "Mock email prepared for {{recipient}}. Configure Resend to enable delivery.",
-    "emailSent": "Report sent to {{recipient}}.",
-    "emailError": "Email send failed."
+    "actionFailed": "Export action failed."
   }
 }

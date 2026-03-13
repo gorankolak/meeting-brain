@@ -5,8 +5,13 @@
   "fallbackNotice": "Koristi se rezervno generiranje jer live AI servis nije dostupan.",
   "actions": {
     "regenerate": "Generiraj ponovno",
+    "copy": "Kopiraj",
+    "copied": "Kopirano",
     "show": "Prikaži",
     "hide": "Sakrij"
+  },
+  "status": {
+    "generated": "Izvještaj je uspješno generiran"
   },
   "sections": {
     "summary": "Sažetak sastanka",
@@ -22,7 +27,8 @@
     "confidence": "Pouzdanost",
     "mitigation": "Ublažavanje",
     "priority": "Prioritet",
-    "generated": "Generirano"
+    "generated": "Generirano",
+    "source": "Izvor"
   },
   "empty": {
     "title": "Izvještaj još nije generiran",

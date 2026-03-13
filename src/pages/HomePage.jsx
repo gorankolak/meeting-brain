@@ -57,7 +57,7 @@ export function HomePage() {
       </section>
 
       {reportGeneration.hasStartedGeneration ? (
-        <section className="mx-auto w-full max-w-5xl">
+        <section className="mx-auto w-full max-w-[860px]">
           <ReportWorkspace
             report={reportGeneration.report}
             status={reportGeneration.status}

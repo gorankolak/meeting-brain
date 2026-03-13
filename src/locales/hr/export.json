@@ -1,17 +1,13 @@
 {
   "buttons": {
     "copyReport": "Kopiraj izvještaj",
-    "downloadMarkdown": "Markdown",
-    "downloadText": "Tekst",
-    "downloadJson": "JSON",
-    "downloadPdf": "PDF",
-    "downloadJiraCsv": "Jira CSV",
-    "copyJiraTasks": "Kopiraj Jira zadatke",
-    "sendEmail": "Pošalji e-poštom"
+    "copied": "Kopirano",
+    "downloadPdf": "Preuzmi PDF",
+    "exportForJira": "Izvezi za Jiru"
   },
   "toolbarLabel": "Akcije izvoza izvještaja",
   "toolbarTitle": "Izvoz i dijeljenje",
-  "toolbarBody": "Preuzmite dotjerane report datoteke ili kopirajte Jira-spremne zadatke za daljnje projektne alate.",
+  "toolbarBody": "Koristi izvještaj odmah, spremi dotjerani PDF ili izvezi akcijske stavke za Jiru.",
   "fileBaseName": "meeting-brain-izvjestaj",
   "jira": {
     "description": "Opis",
@@ -20,18 +16,10 @@
     "dueDate": "Rok",
     "unassigned": "Nedodijeljeno"
   },
-  "email": {
-    "recipientLabel": "E-pošta primatelja",
-    "recipientPlaceholder": "tim@tvrtka.com",
-    "sending": "Šaljem..."
-  },
   "messages": {
     "copySuccess": "Izvještaj je kopiran u međuspremnik.",
-    "jiraCopySuccess": "Jira-spremni zadaci su kopirani u međuspremnik.",
+    "sectionCopySuccess": "Odjeljak \"{{section}}\" je kopiran u međuspremnik.",
     "downloadReady": "{{format}} izvoz je spreman.",
-    "actionFailed": "Akcija izvoza nije uspjela.",
-    "emailMock": "Pripremljena je probna e-pošta za {{recipient}}. Konfigurirajte Resend za stvarnu isporuku.",
-    "emailSent": "Izvještaj je poslan na {{recipient}}.",
-    "emailError": "Slanje e-pošte nije uspjelo."
+    "actionFailed": "Akcija izvoza nije uspjela."
   }
 }
