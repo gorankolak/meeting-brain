@@ -100,5 +100,3 @@ export async function handler(event) {
     return json(400, { error: error.message || COPY[getLanguage(payload.language)].unableToSend });
   }
 }
-
-export default handler;
