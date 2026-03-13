@@ -35,6 +35,11 @@ body {
   min-width: 320px;
 }
 
+:focus-visible {
+  outline: 3px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
 a {
   color: inherit;
   text-decoration: none;

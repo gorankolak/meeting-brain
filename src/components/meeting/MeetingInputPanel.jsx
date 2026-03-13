@@ -1,10 +1,11 @@
 import { useEffect, useRef } from "react";
-import { AlertCircle, FileUp, Sparkles, WandSparkles } from "lucide-react";
+import { FileUp, Sparkles, WandSparkles } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import {
   MAX_TRANSCRIPT_LENGTH,
   MIN_TRANSCRIPT_LENGTH
 } from "../../lib/transcriptInput";
+import { ErrorBanner } from "../ui/ErrorBanner";
 import { Button } from "../ui/Button";
 
 export function MeetingInputPanel({
@@ -83,6 +84,7 @@ export function MeetingInputPanel({
             {t("home:buttons.uploadFile")}
             <input
               accept=".pdf,.docx,.txt,.md"
+              aria-label={t("home:buttons.uploadFile")}
               className="hidden"
               onChange={(event) => handleFileUpload(event.target.files?.[0])}
               type="file"
@@ -105,6 +107,7 @@ export function MeetingInputPanel({
           <div className="grid gap-2 sm:grid-cols-3">
             {exampleMeetings.map((meeting) => (
               <Button
+                aria-label={meeting.title}
                 className={`w-full justify-start text-left ${activeExampleId === meeting.id ? "border-[--color-accent] bg-[--color-panel]" : ""}`}
                 key={meeting.id}
                 onClick={() => loadExample(meeting.id)}
@@ -128,16 +131,11 @@ export function MeetingInputPanel({
         </p>
 
         {displayError ? (
-          <div
-            className="flex items-start gap-2 rounded-[--radius-button] border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700"
-            id={errorId}
-          >
-            <AlertCircle className="mt-0.5 shrink-0" size={16} />
-            <span>{displayError}</span>
-          </div>
+          <ErrorBanner id={errorId}>{displayError}</ErrorBanner>
         ) : null}
 
         <Button
+          aria-label={isGenerating ? t("report:loading.title") : t("home:buttons.generateReport")}
           className="w-full"
           disabled={isGenerateDisabled}
           onClick={onGenerate}

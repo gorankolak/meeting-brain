@@ -1,17 +1,15 @@
 import { useState } from "react";
 import {
-  Mail,
-  Copy,
-  FileJson,
-  FileText,
   TriangleAlert,
   CheckCircle2,
   ChevronDown,
+  FileText,
   RotateCcw
 } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { Button } from "../ui/Button";
-import { EmailPanel } from "../email/EmailPanel";
+import { ErrorBanner } from "../ui/ErrorBanner";
+import { ReportExportToolbar } from "./ReportExportToolbar";
 import { formatDateTime } from "../../lib/locale";
 
 function LoadingState({ title, body, progress, t }) {
@@ -102,6 +100,7 @@ function ReportSection({
 
         {collapsible ? (
           <button
+            aria-label={isOpen ? t("report:actions.hide") : t("report:actions.show")}
             aria-expanded={isOpen}
             className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.14em] text-[--color-muted] transition hover:text-[--color-ink]"
             onClick={() => setIsOpen((current) => !current)}
@@ -125,9 +124,7 @@ export function ReportWorkspace({
   generationError,
   onRetryGeneration,
   isRegenerating,
-  exportActions,
-  emailFeedback,
-  setEmailFeedback
+  exportActions
 }) {
   const { t, i18n } = useTranslation(["common", "report", "export"]);
   const isReady = status === "success" && report;
@@ -199,41 +196,44 @@ export function ReportWorkspace({
           ) : null}
         </div>
         <div className="flex flex-wrap gap-2">
-          <Button disabled={!isReady || isRegenerating} onClick={onRetryGeneration} tone="secondary">
+          <Button
+            aria-label={t("report:actions.regenerate")}
+            disabled={!isReady || isRegenerating}
+            onClick={onRetryGeneration}
+            tone="secondary"
+          >
             <RotateCcw size={16} />
             {t("report:actions.regenerate")}
-          </Button>
-          <Button disabled={!isReady} onClick={exportActions.copyReport} tone="ghost">
-            <Copy size={16} />
-            {t("export:buttons.copyReport")}
-          </Button>
-          <Button disabled={!isReady} onClick={exportActions.downloadMarkdown} tone="ghost">
-            <FileText size={16} />
-            {t("export:buttons.downloadMarkdown")}
-          </Button>
-          <Button disabled={!isReady} onClick={exportActions.downloadText} tone="ghost">
-            <FileText size={16} />
-            {t("export:buttons.downloadText")}
-          </Button>
-          <Button disabled={!isReady} onClick={exportActions.downloadJson} tone="ghost">
-            <FileJson size={16} />
-            {t("export:buttons.downloadJson")}
           </Button>
         </div>
       </div>
 
       <div className="mt-6 space-y-6">
-        {exportActions.copyFeedback ? (
-          <div className="flex items-start gap-2 rounded-[--radius-button] border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-800">
-            <CheckCircle2 className="mt-0.5 shrink-0" size={16} />
-            <span>{exportActions.copyFeedback}</span>
-          </div>
+        {generationError && status === "error" ? (
+          <ErrorBanner>{generationError}</ErrorBanner>
         ) : null}
 
         {!isReady ? renderState() : null}
 
         {isReady ? (
           <>
+            <ReportSection title={t("export:toolbarTitle")}>
+              <div className="space-y-4">
+                <p className="text-sm text-[--color-muted]">{t("export:toolbarBody")}</p>
+                <ReportExportToolbar
+                  disabled={!isReady}
+                  isBusy={exportActions.isBusy}
+                  onAction={exportActions}
+                />
+              </div>
+            </ReportSection>
+
+            {exportActions.feedback ? (
+              <ErrorBanner role="status" tone={exportActions.feedback.tone}>
+                {exportActions.feedback.message}
+              </ErrorBanner>
+            ) : null}
+
             <ReportSection title={t("report:sections.summary")}>
               <p className="text-sm leading-7 text-[--color-ink]">{report.summary}</p>
             </ReportSection>
@@ -372,16 +372,7 @@ export function ReportWorkspace({
                 </div>
               </ReportSection>
             </div>
-
-            <EmailPanel report={report} setEmailFeedback={setEmailFeedback} />
           </>
-        ) : null}
-
-        {emailFeedback ? (
-          <div className="flex items-start gap-2 rounded-[--radius-button] border border-[--color-border] bg-[--color-panel] px-4 py-3 text-sm text-[--color-ink]">
-            <Mail className="mt-0.5 shrink-0 text-[--color-accent]" size={16} />
-            <span>{emailFeedback}</span>
-          </div>
         ) : null}
       </div>
     </section>

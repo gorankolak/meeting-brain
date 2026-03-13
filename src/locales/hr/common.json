@@ -61,5 +61,11 @@
   "notFound": {
     "title": "Stranica nije pronađena",
     "body": "Ruta ne postoji u ovom MVP-u. Glavna funkcionalnost nalazi se u glavnom radnom prostoru."
+  },
+  "errorBoundary": {
+    "eyebrow": "Greška aplikacije",
+    "title": "Došlo je do pogreške pri prikazu radne površine.",
+    "body": "Ponovno učitajte stranicu za oporavak. Ako se problem ponavlja, pregledajte zadnje izmjene prije nastavka.",
+    "reload": "Ponovno učitaj stranicu"
   }
 }

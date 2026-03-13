@@ -4,9 +4,22 @@
     "downloadMarkdown": "Markdown",
     "downloadText": "Tekst",
     "downloadJson": "JSON",
+    "downloadPdf": "PDF",
+    "downloadJiraCsv": "Jira CSV",
+    "copyJiraTasks": "Kopiraj Jira zadatke",
     "sendEmail": "Pošalji e-poštom"
   },
+  "toolbarLabel": "Akcije izvoza izvještaja",
+  "toolbarTitle": "Izvoz i dijeljenje",
+  "toolbarBody": "Preuzmite dotjerane report datoteke ili kopirajte Jira-spremne zadatke za daljnje projektne alate.",
   "fileBaseName": "meeting-brain-izvjestaj",
+  "jira": {
+    "description": "Opis",
+    "assignee": "Dodijeljeno",
+    "priority": "Prioritet",
+    "dueDate": "Rok",
+    "unassigned": "Nedodijeljeno"
+  },
   "email": {
     "recipientLabel": "E-pošta primatelja",
     "recipientPlaceholder": "tim@tvrtka.com",
@@ -14,6 +27,9 @@
   },
   "messages": {
     "copySuccess": "Izvještaj je kopiran u međuspremnik.",
+    "jiraCopySuccess": "Jira-spremni zadaci su kopirani u međuspremnik.",
+    "downloadReady": "{{format}} izvoz je spreman.",
+    "actionFailed": "Akcija izvoza nije uspjela.",
     "emailMock": "Pripremljena je probna e-pošta za {{recipient}}. Konfigurirajte Resend za stvarnu isporuku.",
     "emailSent": "Izvještaj je poslan na {{recipient}}.",
     "emailError": "Slanje e-pošte nije uspjelo."

@@ -61,5 +61,11 @@
   "notFound": {
     "title": "Page not found",
     "body": "The route does not exist in this MVP. Core functionality lives on the main workspace."
+  },
+  "errorBoundary": {
+    "eyebrow": "Application error",
+    "title": "Something went wrong while rendering the workspace.",
+    "body": "Reload the page to recover. If the issue persists, review the latest changes before continuing.",
+    "reload": "Reload page"
   }
 }

@@ -4,9 +4,22 @@
     "downloadMarkdown": "Markdown",
     "downloadText": "Text",
     "downloadJson": "JSON",
+    "downloadPdf": "PDF",
+    "downloadJiraCsv": "Jira CSV",
+    "copyJiraTasks": "Copy Jira tasks",
     "sendEmail": "Send via email"
   },
+  "toolbarLabel": "Report export actions",
+  "toolbarTitle": "Export and share",
+  "toolbarBody": "Download polished report files or copy Jira-ready tasks for downstream project tools.",
   "fileBaseName": "meeting-brain-report",
+  "jira": {
+    "description": "Description",
+    "assignee": "Assignee",
+    "priority": "Priority",
+    "dueDate": "Due date",
+    "unassigned": "Unassigned"
+  },
   "email": {
     "recipientLabel": "Recipient email",
     "recipientPlaceholder": "teammates@company.com",
@@ -14,6 +27,9 @@
   },
   "messages": {
     "copySuccess": "Report copied to clipboard.",
+    "jiraCopySuccess": "Jira-ready tasks copied to clipboard.",
+    "downloadReady": "{{format}} export is ready.",
+    "actionFailed": "Export action failed.",
     "emailMock": "Mock email prepared for {{recipient}}. Configure Resend to enable delivery.",
     "emailSent": "Report sent to {{recipient}}.",
     "emailError": "Email send failed."

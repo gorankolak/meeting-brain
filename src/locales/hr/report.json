@@ -40,6 +40,11 @@
     "title": "Generiram strukturirani izvještaj",
     "body": "Analiziram transkript i pripremam sažetak, odluke i akcijske stavke."
   },
+  "announcements": {
+    "generationStarted": "Generiranje izvještaja je pokrenuto.",
+    "generationComplete": "Generiranje izvještaja je uspješno dovršeno.",
+    "generationFailed": "Generiranje izvještaja nije uspjelo."
+  },
   "progress": {
     "queued": "Pripremam zahtjev",
     "analyzing": "Analiziram transkript",

@@ -40,6 +40,11 @@
     "title": "Generating structured report",
     "body": "Analyzing the transcript and preparing the summary, decisions, and action items."
   },
+  "announcements": {
+    "generationStarted": "Report generation started.",
+    "generationComplete": "Report generation completed successfully.",
+    "generationFailed": "Report generation failed."
+  },
   "progress": {
     "queued": "Queueing request",
     "analyzing": "Analyzing transcript",

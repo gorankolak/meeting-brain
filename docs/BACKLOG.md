@@ -109,6 +109,8 @@ Remaining improvements (optional future work):
 
 # EPIC 4 — Email Sending UX
 
+Status: Deferred after MVP scope trim. Existing email code can remain as a future enhancement, but these tasks are intentionally paused.
+
 ## Feature: Email form
 
 - [ ] Add email format validation
@@ -133,15 +135,15 @@ Remaining improvements (optional future work):
 
 ## Feature: Global error UI
 
-- [ ] Implement reusable ErrorBanner component
-- [ ] Display API errors in report workspace
-- [ ] Display file parsing errors in input panel
+- [x] Implement reusable ErrorBanner component
+- [x] Display API errors in report workspace
+- [x] Display file parsing errors in input panel
 
 ## Feature: Error boundaries
 
-- [ ] Implement React error boundary component
-- [ ] Wrap main app layout with error boundary
-- [ ] Add fallback UI for rendering errors
+- [x] Implement React error boundary component
+- [x] Wrap main app layout with error boundary
+- [x] Add fallback UI for rendering errors
 
 ---
 
@@ -160,23 +162,23 @@ Supported export formats:
 
 ## Feature: Export service layer
 
-- [ ] Create `src/services/export/` directory
-- [ ] Implement `exportMarkdown.js`
-- [ ] Implement `exportJson.js`
-- [ ] Implement `exportPdf.js`
-- [ ] Implement `exportJiraTasks.js`
+- [x] Create `src/services/export/` directory
+- [x] Implement `exportMarkdown.js`
+- [x] Implement `exportJson.js`
+- [x] Implement `exportPdf.js`
+- [x] Implement `exportJiraTasks.js`
 
 ---
 
 ## Feature: PDF report export
 
-- [ ] Install PDF generation library (`jspdf` or `react-pdf`)
-- [ ] Create `generatePdfReport()` utility
-- [ ] Convert report JSON into PDF layout
-- [ ] Add "Download PDF" button in report toolbar
-- [ ] Implement PDF download action
-- [ ] Test export with long reports
-- [ ] Ensure section hierarchy preserved in PDF
+- [x] Install PDF generation library (`jspdf` or `react-pdf`)
+- [x] Create `generatePdfReport()` utility
+- [x] Convert report JSON into PDF layout
+- [x] Add "Download PDF" button in report toolbar
+- [x] Implement PDF download action
+- [x] Test export with long reports
+- [x] Ensure section hierarchy preserved in PDF
 
 ---
 
@@ -190,23 +192,23 @@ Assignee
 Priority  
 Due date
 
-- [ ] Define Jira-style task schema
-- [ ] Create `extractTasksFromReport()` utility
-- [ ] Map report action items to Jira task structure
-- [ ] Create CSV/text export formatter
-- [ ] Add "Export Jira Tasks" button
-- [ ] Implement clipboard copy action
-- [ ] Test export with multiple action items
+- [x] Define Jira-style task schema
+- [x] Create `extractTasksFromReport()` utility
+- [x] Map report action items to Jira task structure
+- [x] Create CSV/text export formatter
+- [x] Add "Export Jira Tasks" button
+- [x] Implement clipboard copy action
+- [x] Test export with multiple action items
 
 ---
 
 ## Feature: Export UI integration
 
-- [ ] Create `ReportExportToolbar` component
-- [ ] Refactor export buttons into toolbar
-- [ ] Add loading state for export operations
-- [ ] Add success notifications after export
-- [ ] Ensure responsive toolbar layout
+- [x] Create `ReportExportToolbar` component
+- [x] Refactor export buttons into toolbar
+- [x] Add loading state for export operations
+- [x] Add success notifications after export
+- [x] Ensure responsive toolbar layout
 
 ---
 
@@ -214,23 +216,25 @@ Due date
 
 ## Feature: Form accessibility
 
-- [ ] Add accessible labels to transcript input
-- [ ] Add ARIA attributes for validation errors
-- [ ] Ensure form fields are keyboard navigable
+- [x] Add accessible labels to transcript input
+- [x] Add ARIA attributes for validation errors
+- [x] Ensure form fields are keyboard navigable
 
 ## Feature: Button accessibility
 
-- [ ] Add aria-label attributes for action buttons
-- [ ] Ensure focus styles are visible
+- [x] Add aria-label attributes for action buttons
+- [x] Ensure focus styles are visible
 
 ## Feature: Screen reader support
 
-- [ ] Add aria-live region for generation status
-- [ ] Announce report generation completion
+- [x] Add aria-live region for generation status
+- [x] Announce report generation completion
 
 ---
 
 # EPIC 8 — Analytics Integration
+
+Status: Deferred for the MVP. Analytics can be added later once usage tracking is needed.
 
 ## Feature: Event tracking
 
@@ -249,14 +253,14 @@ Due date
 
 ## Feature: Environment configuration
 
-- [ ] Add environment variable documentation
-- [ ] Add `.env.example` file
+- [x] Add environment variable documentation
+- [x] Add `.env.example` file
 
 ## Feature: Netlify deployment
 
-- [ ] Validate Netlify serverless functions configuration
-- [ ] Ensure environment variables are available in Netlify
-- [ ] Test production deployment build
+- [x] Validate Netlify serverless functions configuration
+- [x] Ensure environment variables are available in Netlify
+- [x] Test production deployment build
 
 ---
 

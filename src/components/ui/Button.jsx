@@ -16,7 +16,7 @@ export function Button({
 
   return (
     <button
-      className={`inline-flex items-center justify-center gap-2 rounded-[--radius-button] px-4 py-3 text-sm font-semibold transition ${tones[tone]} ${className}`}
+      className={`inline-flex items-center justify-center gap-2 rounded-[--radius-button] px-4 py-3 text-sm font-semibold transition focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-[--color-accent] disabled:cursor-not-allowed disabled:opacity-60 ${tones[tone]} ${className}`}
       type={type}
       {...props}
     >
