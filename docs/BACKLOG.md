@@ -88,22 +88,22 @@ Remaining improvements (optional future work):
 
 ## Feature: Report layout
 
-- [ ] Improve report readability using section spacing
-- [ ] Add section headers for key report parts
-- [ ] Add collapsible sections for long reports
+- [x] Improve report readability using section spacing
+- [x] Add section headers for key report parts
+- [x] Add collapsible sections for long reports
 
 ## Feature: Copy & export actions
 
-- [ ] Implement "Copy Report to Clipboard" action
-- [ ] Add success confirmation after copy action
-- [ ] Add "Download Report as Markdown" option
-- [ ] Add "Download Report as Text" option
+- [x] Implement "Copy Report to Clipboard" action
+- [x] Add success confirmation after copy action
+- [x] Add "Download Report as Markdown" option
+- [x] Add "Download Report as Text" option
 
 ## Feature: Regeneration
 
-- [ ] Add "Regenerate Report" button
-- [ ] Preserve transcript input when regenerating report
-- [ ] Prevent duplicate requests while regeneration is running
+- [x] Add "Regenerate Report" button
+- [x] Preserve transcript input when regenerating report
+- [x] Prevent duplicate requests while regeneration is running
 
 ---
 

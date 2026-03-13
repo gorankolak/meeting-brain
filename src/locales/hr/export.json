@@ -1,7 +1,8 @@
 {
   "buttons": {
-    "copyMarkdown": "Kopiraj Markdown",
+    "copyReport": "Kopiraj izvještaj",
     "downloadMarkdown": "Markdown",
+    "downloadText": "Tekst",
     "downloadJson": "JSON",
     "sendEmail": "Pošalji e-poštom"
   },
@@ -12,6 +13,7 @@
     "sending": "Šaljem..."
   },
   "messages": {
+    "copySuccess": "Izvještaj je kopiran u međuspremnik.",
     "emailMock": "Pripremljena je probna e-pošta za {{recipient}}. Konfigurirajte Resend za stvarnu isporuku.",
     "emailSent": "Izvještaj je poslan na {{recipient}}.",
     "emailError": "Slanje e-pošte nije uspjelo."

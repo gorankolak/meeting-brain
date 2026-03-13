@@ -518,8 +518,18 @@ function serializeError(error) {
 }
 
 function getGeminiConfig() {
+  const forceFallback = process.env.FORCE_FALLBACK?.trim().toLowerCase() === "true";
   const apiKey = process.env.GEMINI_API_KEY?.trim();
   const model = process.env.GEMINI_MODEL?.trim() || "gemini-2.5-flash";
+
+  if (forceFallback) {
+    console.info("Meeting Brain: FORCE_FALLBACK=true. Skipping Gemini and using mock mode.");
+    return {
+      isAvailable: false,
+      model,
+      reason: "force_fallback"
+    };
+  }
 
   if (!apiKey) {
     console.warn("Meeting Brain: GEMINI_API_KEY is not set. Falling back to mock mode.");

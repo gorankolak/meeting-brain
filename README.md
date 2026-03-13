@@ -15,11 +15,12 @@ Meeting Brain is a React + Netlify Functions MVP that converts messy meeting not
 
 1. Install dependencies with `npm install`.
 2. Copy `.env.example` to `.env`.
-3. Fill `GEMINI_API_KEY` to enable live report generation.
-4. Fill `RESEND_API_KEY` and `EMAIL_FROM` to enable live email delivery.
-5. Run `npm run dev`.
+3. Keep `FORCE_FALLBACK=true` to use mock/fallback report generation and avoid Gemini requests during development.
+4. Set `FORCE_FALLBACK=false` and fill `GEMINI_API_KEY` to enable live report generation when needed.
+5. Fill `RESEND_API_KEY` and `EMAIL_FROM` to enable live email delivery.
+6. Run `npm run dev`.
 
-Without provider keys, the app still works in fallback/mock mode for local evaluation.
+With `FORCE_FALLBACK=true`, the app skips Gemini entirely even if a valid API key is present. Without provider keys, the app also works in fallback/mock mode for local evaluation.
 
 In local development, Vite now bridges `/api/generate-report` and `/api/send-report-email` directly to the Netlify function handlers, so `npm run dev` is sufficient for end-to-end testing.
 

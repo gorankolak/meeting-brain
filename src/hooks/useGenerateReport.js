@@ -22,6 +22,7 @@ export function useGenerateReport() {
   });
   const [hasStartedGeneration, setHasStartedGeneration] = useState(false);
   const latestPayloadRef = useRef(null);
+  const inFlightRef = useRef(false);
 
   useEffect(() => {
     if (status !== "loading") {
@@ -69,6 +70,10 @@ export function useGenerateReport() {
   }
 
   async function generate(data) {
+    if (inFlightRef.current) {
+      return;
+    }
+
     const transcriptError = validateTranscript(data.transcript);
     if (transcriptError) {
       setStatus("error");
@@ -82,6 +87,7 @@ export function useGenerateReport() {
     setReport(null);
     setError("");
     setMeta(null);
+    inFlightRef.current = true;
 
     try {
       const response = await generateReport({
@@ -102,6 +108,8 @@ export function useGenerateReport() {
     } catch (requestError) {
       setStatus("error");
       setError(mapGenerationError(requestError));
+    } finally {
+      inFlightRef.current = false;
     }
   }
 
@@ -120,6 +128,7 @@ export function useGenerateReport() {
     meta,
     progress,
     hasStartedGeneration,
+    isGenerating: status === "loading",
     generateReport: generate,
     retryGeneration
   };

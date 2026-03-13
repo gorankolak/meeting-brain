@@ -3,6 +3,11 @@
   "structuredMeetingIntelligence": "Structured meeting intelligence",
   "meta": "{{mode}} mode • {{timestamp}} • Attempt {{attempts}}",
   "fallbackNotice": "Using fallback generation because the live AI service is unavailable.",
+  "actions": {
+    "regenerate": "Regenerate report",
+    "show": "Show",
+    "hide": "Hide"
+  },
   "sections": {
     "summary": "Meeting summary",
     "decisions": "Key decisions",

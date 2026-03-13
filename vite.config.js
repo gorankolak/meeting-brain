@@ -84,7 +84,14 @@ export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, projectRoot, "");
 
   for (const [key, value] of Object.entries(env)) {
-    if (key.startsWith("VITE_") || key === "GEMINI_API_KEY" || key === "GEMINI_MODEL" || key === "RESEND_API_KEY" || key === "EMAIL_FROM") {
+    if (
+      key.startsWith("VITE_") ||
+      key === "GEMINI_API_KEY" ||
+      key === "GEMINI_MODEL" ||
+      key === "RESEND_API_KEY" ||
+      key === "EMAIL_FROM" ||
+      key === "FORCE_FALLBACK"
+    ) {
       process.env[key] = value;
     }
   }

@@ -1,7 +1,8 @@
 {
   "buttons": {
-    "copyMarkdown": "Copy markdown",
+    "copyReport": "Copy report",
     "downloadMarkdown": "Markdown",
+    "downloadText": "Text",
     "downloadJson": "JSON",
     "sendEmail": "Send via email"
   },
@@ -12,6 +13,7 @@
     "sending": "Sending..."
   },
   "messages": {
+    "copySuccess": "Report copied to clipboard.",
     "emailMock": "Mock email prepared for {{recipient}}. Configure Resend to enable delivery.",
     "emailSent": "Report sent to {{recipient}}.",
     "emailError": "Email send failed."

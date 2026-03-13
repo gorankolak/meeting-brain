@@ -1,5 +1,6 @@
+import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { formatReportAsMarkdown } from "../lib/formatters";
+import { formatReportAsMarkdown, formatReportAsText } from "../lib/formatters";
 
 function triggerDownload(filename, content, type) {
   const blob = new Blob([content], { type });
@@ -13,6 +14,7 @@ function triggerDownload(filename, content, type) {
 
 export function useReportActions(report) {
   const { t, i18n } = useTranslation(["common", "export"]);
+  const [copyFeedback, setCopyFeedback] = useState("");
 
   function ensureReport() {
     if (!report) {
@@ -23,10 +25,21 @@ export function useReportActions(report) {
   const exportLanguage = i18n.resolvedLanguage || i18n.language;
   const baseFilename = t("export:fileBaseName");
 
+  useEffect(() => {
+    if (!copyFeedback) {
+      return undefined;
+    }
+
+    const timeoutId = window.setTimeout(() => setCopyFeedback(""), 2500);
+    return () => window.clearTimeout(timeoutId);
+  }, [copyFeedback]);
+
   return {
-    copyMarkdown: async () => {
+    copyFeedback,
+    copyReport: async () => {
       ensureReport();
-      await navigator.clipboard.writeText(formatReportAsMarkdown(report, t, exportLanguage));
+      await navigator.clipboard.writeText(formatReportAsText(report, t, exportLanguage));
+      setCopyFeedback(t("export:messages.copySuccess"));
     },
     downloadMarkdown: () => {
       ensureReport();
@@ -39,6 +52,14 @@ export function useReportActions(report) {
     downloadJson: () => {
       ensureReport();
       triggerDownload(`${baseFilename}.json`, JSON.stringify(report, null, 2), "application/json");
+    },
+    downloadText: () => {
+      ensureReport();
+      triggerDownload(
+        `${baseFilename}.txt`,
+        formatReportAsText(report, t, exportLanguage),
+        "text/plain"
+      );
     }
   };
 }

@@ -58,6 +58,7 @@ export function HomePage() {
             generationProgress={reportGeneration.progress}
             generationError={reportGeneration.error}
             onRetryGeneration={reportGeneration.retryGeneration}
+            isRegenerating={reportGeneration.isGenerating}
             exportActions={reportActions}
             emailFeedback={emailFeedback}
             setEmailFeedback={setEmailFeedback}

@@ -3,6 +3,11 @@
   "structuredMeetingIntelligence": "Strukturirana inteligencija sastanka",
   "meta": "{{mode}} način rada • {{timestamp}} • Pokušaj {{attempts}}",
   "fallbackNotice": "Koristi se rezervno generiranje jer live AI servis nije dostupan.",
+  "actions": {
+    "regenerate": "Generiraj ponovno",
+    "show": "Prikaži",
+    "hide": "Sakrij"
+  },
   "sections": {
     "summary": "Sažetak sastanka",
     "decisions": "Ključne odluke",

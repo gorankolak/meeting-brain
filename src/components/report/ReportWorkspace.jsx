@@ -1,4 +1,14 @@
-import { Mail, Copy, FileJson, FileText, TriangleAlert, CheckCircle2 } from "lucide-react";
+import { useState } from "react";
+import {
+  Mail,
+  Copy,
+  FileJson,
+  FileText,
+  TriangleAlert,
+  CheckCircle2,
+  ChevronDown,
+  RotateCcw
+} from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { Button } from "../ui/Button";
 import { EmailPanel } from "../email/EmailPanel";
@@ -63,7 +73,16 @@ function PlaceholderState({ icon: Icon, title, body, actions = null }) {
   );
 }
 
-function ReportSection({ title, children, tone = "default" }) {
+function ReportSection({
+  title,
+  children,
+  tone = "default",
+  collapsible = false,
+  defaultOpen = true,
+  badge = null
+}) {
+  const { t } = useTranslation("report");
+  const [isOpen, setIsOpen] = useState(defaultOpen);
   const tones = {
     default: "bg-white",
     warning: "bg-[#fff8ec] border-[#f5d39a]"
@@ -71,8 +90,29 @@ function ReportSection({ title, children, tone = "default" }) {
 
   return (
     <section className={`rounded-[--radius-panel] border border-[--color-border] p-5 ${tones[tone]}`}>
-      <h3 className="text-sm font-semibold uppercase tracking-[0.18em] text-[--color-muted]">{title}</h3>
-      <div className="mt-4">{children}</div>
+      <div className="flex items-center justify-between gap-3">
+        <div className="flex items-center gap-3">
+          <h3 className="text-sm font-semibold uppercase tracking-[0.18em] text-[--color-muted]">{title}</h3>
+          {badge ? (
+            <span className="rounded-full bg-[--color-panel] px-2.5 py-1 text-[11px] font-semibold uppercase tracking-[0.12em] text-[--color-muted]">
+              {badge}
+            </span>
+          ) : null}
+        </div>
+
+        {collapsible ? (
+          <button
+            aria-expanded={isOpen}
+            className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.14em] text-[--color-muted] transition hover:text-[--color-ink]"
+            onClick={() => setIsOpen((current) => !current)}
+            type="button"
+          >
+            {isOpen ? t("report:actions.hide") : t("report:actions.show")}
+            <ChevronDown className={`transition ${isOpen ? "rotate-180" : ""}`} size={16} />
+          </button>
+        ) : null}
+      </div>
+      {(!collapsible || isOpen) ? <div className="mt-5">{children}</div> : null}
     </section>
   );
 }
@@ -84,6 +124,7 @@ export function ReportWorkspace({
   generationProgress,
   generationError,
   onRetryGeneration,
+  isRegenerating,
   exportActions,
   emailFeedback,
   setEmailFeedback
@@ -158,13 +199,21 @@ export function ReportWorkspace({
           ) : null}
         </div>
         <div className="flex flex-wrap gap-2">
-          <Button disabled={!isReady} onClick={exportActions.copyMarkdown} tone="ghost">
+          <Button disabled={!isReady || isRegenerating} onClick={onRetryGeneration} tone="secondary">
+            <RotateCcw size={16} />
+            {t("report:actions.regenerate")}
+          </Button>
+          <Button disabled={!isReady} onClick={exportActions.copyReport} tone="ghost">
             <Copy size={16} />
-            {t("export:buttons.copyMarkdown")}
+            {t("export:buttons.copyReport")}
           </Button>
           <Button disabled={!isReady} onClick={exportActions.downloadMarkdown} tone="ghost">
             <FileText size={16} />
             {t("export:buttons.downloadMarkdown")}
+          </Button>
+          <Button disabled={!isReady} onClick={exportActions.downloadText} tone="ghost">
+            <FileText size={16} />
+            {t("export:buttons.downloadText")}
           </Button>
           <Button disabled={!isReady} onClick={exportActions.downloadJson} tone="ghost">
             <FileJson size={16} />
@@ -173,7 +222,14 @@ export function ReportWorkspace({
         </div>
       </div>
 
-      <div className="mt-6 space-y-5">
+      <div className="mt-6 space-y-6">
+        {exportActions.copyFeedback ? (
+          <div className="flex items-start gap-2 rounded-[--radius-button] border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-800">
+            <CheckCircle2 className="mt-0.5 shrink-0" size={16} />
+            <span>{exportActions.copyFeedback}</span>
+          </div>
+        ) : null}
+
         {!isReady ? renderState() : null}
 
         {isReady ? (
@@ -182,8 +238,13 @@ export function ReportWorkspace({
               <p className="text-sm leading-7 text-[--color-ink]">{report.summary}</p>
             </ReportSection>
 
-            <div className="grid gap-5 xl:grid-cols-[1.2fr_0.8fr]">
-              <ReportSection title={t("report:sections.decisions")}>
+            <div className="grid gap-6 xl:grid-cols-[1.2fr_0.8fr]">
+              <ReportSection
+                badge={report.decisions.length}
+                collapsible={report.decisions.length > 2}
+                defaultOpen={report.decisions.length <= 4}
+                title={t("report:sections.decisions")}
+              >
                 <div className="space-y-3">
                   {report.decisions.length ? (
                     report.decisions.map((decision) => (
@@ -202,7 +263,12 @@ export function ReportWorkspace({
                 </div>
               </ReportSection>
 
-              <ReportSection title={t("report:sections.nextSteps")}>
+              <ReportSection
+                badge={report.next_steps.length}
+                collapsible={report.next_steps.length > 4}
+                defaultOpen
+                title={t("report:sections.nextSteps")}
+              >
                 <ul className="space-y-3 text-sm text-[--color-ink]">
                   {report.next_steps.length ? (
                     report.next_steps.map((step) => (
@@ -218,7 +284,12 @@ export function ReportWorkspace({
               </ReportSection>
             </div>
 
-            <ReportSection title={t("report:sections.actionItems")}>
+            <ReportSection
+              badge={report.action_items.length}
+              collapsible={report.action_items.length > 3}
+              defaultOpen={report.action_items.length <= 5}
+              title={t("report:sections.actionItems")}
+            >
               <div className="space-y-3">
                 {report.action_items.length ? (
                   report.action_items.map((item) => (
@@ -245,8 +316,14 @@ export function ReportWorkspace({
               </div>
             </ReportSection>
 
-            <div className="grid gap-5 xl:grid-cols-2">
-              <ReportSection title={t("report:sections.risks")} tone="warning">
+            <div className="grid gap-6 xl:grid-cols-2">
+              <ReportSection
+                badge={report.risks.length}
+                collapsible={report.risks.length > 2}
+                defaultOpen
+                title={t("report:sections.risks")}
+                tone="warning"
+              >
                 <div className="space-y-3">
                   {report.risks.length ? (
                     report.risks.map((risk) => (
@@ -270,7 +347,12 @@ export function ReportWorkspace({
                 </div>
               </ReportSection>
 
-              <ReportSection title={t("report:sections.openQuestions")}>
+              <ReportSection
+                badge={report.open_questions.length}
+                collapsible={report.open_questions.length > 2}
+                defaultOpen
+                title={t("report:sections.openQuestions")}
+              >
                 <div className="space-y-3">
                   {report.open_questions.length ? (
                     report.open_questions.map((question) => (
