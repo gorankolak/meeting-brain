@@ -2,7 +2,9 @@
   "generatedReport": "Generated report",
   "structuredMeetingIntelligence": "Structured meeting intelligence",
   "meta": "{{mode}} mode • {{timestamp}} • Attempt {{attempts}}",
+  "metaAttempt": "Attempt {{attempts}}",
   "fallbackNotice": "Simulation mode is active. Live AI requests are disabled during UX development.",
+  "fallbackNoticeCompact": "Simulation mode active",
   "actions": {
     "regenerate": "Regenerate report",
     "copy": "Copy",

@@ -20,7 +20,7 @@ export function ErrorBanner({ children, tone = "error", id, role = "alert" }) {
 
   return (
     <div
-      className={`flex items-start gap-2 rounded-[--radius-button] border px-4 py-3 text-sm ${className}`}
+      className={`flex items-start gap-2 rounded-[--radius-panel] border px-4 py-3 text-sm ${className}`}
       id={id}
       role={role}
     >

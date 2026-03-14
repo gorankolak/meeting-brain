@@ -2,7 +2,9 @@
   "generatedReport": "Generirani izvještaj",
   "structuredMeetingIntelligence": "Strukturirana inteligencija sastanka",
   "meta": "{{mode}} način rada • {{timestamp}} • Pokušaj {{attempts}}",
+  "metaAttempt": "Pokušaj {{attempts}}",
   "fallbackNotice": "Simulacijski nacin rada je aktivan. Live AI zahtjevi su iskljuceni tijekom UX razvoja.",
+  "fallbackNoticeCompact": "Aktivan je simulacijski način",
   "actions": {
     "regenerate": "Generiraj ponovno",
     "copy": "Kopiraj",

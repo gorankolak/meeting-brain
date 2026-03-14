@@ -5,15 +5,16 @@ import {
   CheckCircle,
   CheckCircle2,
   ChevronDown,
+  CircleHelp,
+  Clock3,
   Copy,
   FileText,
-  HelpCircle,
   ListTodo,
   Loader2,
   Pencil,
   Plus,
-  RotateCcw,
   Save,
+  ShieldAlert,
   Trash2,
   X
 } from "lucide-react";
@@ -25,18 +26,28 @@ import { ReportSkeleton } from "./ReportSkeleton";
 import { useGenerationProgress } from "../../hooks/useGenerationProgress";
 import { formatDateTime } from "../../lib/locale";
 
-const SECTION_REVEAL_DELAY_MS = 150;
-const SECTION_SCROLL_OFFSET_PX = 24;
+const SECTION_REVEAL_DELAY_MS = 120;
+const SECTION_SCROLL_OFFSET_PX = 28;
+const HEADER_SCROLL_DIRECTION_THRESHOLD_PX = 12;
+const HEADER_STICKY_TOP_PX = 16;
+const SECTION_ICON_MAP = {
+  summary: FileText,
+  decisions: CheckCircle,
+  actionItems: ListTodo,
+  risks: ShieldAlert,
+  openQuestions: CircleHelp,
+  nextSteps: ArrowRight
+};
 const REPORT_SECTION_ITEMS = [
-  { id: "summary", titleKey: "report:sections.summary" },
-  { id: "decisions", titleKey: "report:sections.decisions" },
-  { id: "actionItems", titleKey: "report:sections.actionItems" },
-  { id: "risks", titleKey: "report:sections.risks" },
-  { id: "openQuestions", titleKey: "report:sections.openQuestions" },
-  { id: "nextSteps", titleKey: "report:sections.nextSteps" }
+  { id: "summary", titleKey: "report:sections.summary", icon: FileText },
+  { id: "decisions", titleKey: "report:sections.decisions", icon: CheckCircle },
+  { id: "actionItems", titleKey: "report:sections.actionItems", icon: ListTodo },
+  { id: "risks", titleKey: "report:sections.risks", icon: ShieldAlert },
+  { id: "openQuestions", titleKey: "report:sections.openQuestions", icon: CircleHelp },
+  { id: "nextSteps", titleKey: "report:sections.nextSteps", icon: ArrowRight }
 ];
 const INPUT_CLASSNAME =
-  "w-full rounded-[--radius-button] border border-[--color-border] bg-white px-3 py-2 text-sm text-[--color-ink] outline-none transition focus:border-[--color-accent] focus:shadow-[0_0_0_4px_rgba(23,200,227,0.12)]";
+  "w-full rounded-[--radius-button] border border-slate-200 bg-white px-3 py-2 text-sm text-[--color-ink] outline-none transition focus:border-[--color-accent] focus:shadow-[0_0_0_4px_rgba(23,200,227,0.12)]";
 const TEXTAREA_CLASSNAME = `${INPUT_CLASSNAME} min-h-[120px] resize-y leading-6`;
 const PRIORITY_OPTIONS = ["high", "medium", "low", "unclear"];
 
@@ -50,7 +61,7 @@ function SuccessBanner({ report, visible, t }) {
   }
 
   return (
-    <div className="mb-5 rounded-[--radius-button] border border-emerald-200 bg-emerald-50 px-4 py-3 text-emerald-900 transition duration-500">
+    <div className="mb-5 rounded-[--radius-panel] border border-emerald-200/80 bg-emerald-50/90 px-4 py-3 text-emerald-900 transition duration-300 motion-reduce:transition-none">
       <div className="flex items-start gap-3">
         <CheckCircle className="mt-0.5 shrink-0" size={18} />
         <div>
@@ -71,14 +82,14 @@ function SuccessBanner({ report, visible, t }) {
 function ProgressPanel({ progress, progressMessage, t }) {
   return (
     <div className="space-y-5">
-      <div className="rounded-[--radius-button] border border-[--color-border] bg-white p-4">
+      <div className="rounded-xl border border-slate-200 bg-white p-4 shadow-[0_12px_30px_rgba(15,23,42,0.04)]">
         <div className="flex items-center justify-between gap-3 text-xs font-semibold uppercase tracking-[0.16em] text-[--color-muted]">
           <span>{t(`report:progress.${progress.currentStage}`)}</span>
           <span>{progress.percent}%</span>
         </div>
         <div className="mt-3 h-2 overflow-hidden rounded-full bg-surface-200">
           <div
-            className="h-full rounded-full bg-[--color-accent] transition-[width] duration-500"
+            className="h-full rounded-full bg-[--color-accent] transition-[width] duration-500 motion-reduce:transition-none"
             style={{ width: `${progress.percent}%` }}
           />
         </div>
@@ -95,8 +106,8 @@ function ProgressPanel({ progress, progressMessage, t }) {
 
 function PlaceholderState({ icon: Icon, title, body, actions = null }) {
   return (
-    <div className="flex min-h-[420px] flex-col items-center justify-center rounded-[--radius-panel] border border-dashed border-[--color-border] bg-[linear-gradient(180deg,_rgba(255,255,255,0.96),_rgba(240,247,250,0.9))] px-6 py-10 text-center sm:min-h-[520px] sm:px-8">
-      <div className="flex size-18 items-center justify-center rounded-full bg-[--color-panel] text-[--color-accent]">
+    <div className="flex min-h-[420px] flex-col items-center justify-center rounded-xl border border-dashed border-slate-200 bg-white px-6 py-10 text-center sm:min-h-[520px] sm:px-8">
+      <div className="flex size-18 items-center justify-center rounded-[--radius-button] bg-[--color-panel] text-[--color-accent]">
         <Icon size={28} />
       </div>
       <h2 className="mt-6 font-display text-3xl font-semibold text-[--color-ink] sm:text-4xl">{title}</h2>
@@ -106,24 +117,16 @@ function PlaceholderState({ icon: Icon, title, body, actions = null }) {
   );
 }
 
-function OwnerBadge({ owner }) {
-  return (
-    <span className="inline-flex items-center rounded-full bg-cyan-100 px-2 py-0.5 text-xs font-semibold text-cyan-800">
-      {owner}
-    </span>
-  );
-}
-
 function PriorityBadge({ label, priority }) {
   const tones = {
-    high: "bg-red-100 text-red-700",
-    medium: "bg-amber-100 text-amber-700",
-    low: "bg-surface-200 text-surface-700",
-    unclear: "bg-surface-200 text-surface-700"
+    high: "border-red-200 bg-red-50 text-red-700",
+    medium: "border-amber-200 bg-amber-50 text-amber-700",
+    low: "border-surface-200 bg-surface-100 text-surface-700",
+    unclear: "border-surface-200 bg-surface-100 text-surface-700"
   };
 
   return (
-    <span className={`inline-flex items-center rounded-full px-2 py-0.5 text-xs font-semibold ${tones[priority]}`}>
+    <span className={`inline-flex items-center rounded-full border px-2.5 py-1 text-[11px] font-medium ${tones[priority]}`}>
       {label}
     </span>
   );
@@ -141,19 +144,42 @@ function ToastFeedback({ feedback }) {
 
   return (
     <div className="pointer-events-none fixed bottom-5 right-5 z-50">
-      <div className={`rounded-[--radius-button] border px-4 py-3 shadow-[var(--shadow-soft)] ${tone}`}>
+      <div className={`rounded-[--radius-panel] border px-4 py-3 shadow-[var(--shadow-soft)] ${tone}`}>
         <p className="text-sm font-semibold">{feedback.message}</p>
       </div>
     </div>
   );
 }
 
-function SectionHeaderButton({ children, icon: Icon, onClick, tone = "ghost" }) {
+function SectionCopyButton({ isCopied, onClick, t, title }) {
+  const label = isCopied ? t("report:actions.copied") : t("report:actions.copy");
+
   return (
-    <Button className="min-h-8 px-3 py-1.5 text-xs" onClick={onClick} size="sm" tone={tone}>
-      {Icon ? <Icon size={14} /> : null}
-      {children}
+    <Button
+      aria-label={`${label}: ${title}`}
+      className="min-h-8 rounded-lg px-2.5 py-1.5 sm:px-2"
+      onClick={onClick}
+      size="xs"
+      title={`${label}: ${title}`}
+      tone="ghost"
+    >
+      <Copy size={14} />
+      <span className="sm:hidden">{label}</span>
     </Button>
+  );
+}
+
+function SectionToggleButton({ isOpen, onClick, t }) {
+  return (
+    <button
+      aria-expanded={isOpen}
+      className="inline-flex min-h-8 items-center gap-2 rounded-lg px-2.5 py-1.5 text-xs font-medium text-[--color-muted] transition hover:bg-surface-100 hover:text-[--color-ink] focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-[--color-accent] motion-reduce:transition-none"
+      onClick={onClick}
+      type="button"
+    >
+      <span>{isOpen ? t("report:actions.hide") : t("report:actions.show")}</span>
+      <ChevronDown className={`transition motion-reduce:transition-none ${isOpen ? "rotate-180" : ""}`} size={15} />
+    </button>
   );
 }
 
@@ -177,9 +203,9 @@ function ReportSection({
   const { t } = useTranslation("report");
   const [isOpen, setIsOpen] = useState(defaultOpen);
   const tones = {
-    primary: "bg-white shadow-[0_10px_24px_rgba(15,23,42,0.05)] ring-1 ring-sky-100/80",
-    secondary: "bg-white",
-    warning: "bg-[#fff8ec] border-[#f5d39a]"
+    primary: "border-slate-200 bg-slate-50",
+    secondary: "border-slate-200 bg-slate-50",
+    warning: "border-slate-200 bg-slate-50"
   };
 
   useEffect(() => {
@@ -190,81 +216,88 @@ function ReportSection({
     <section
       id={sectionId}
       ref={sectionRef}
-      className={`rounded-[--radius-panel] border border-[--color-border] p-4 transition duration-500 ease-out sm:p-5 ${tones[tone]} ${
-        isVisible ? "translate-y-0 opacity-100" : "translate-y-3 opacity-0"
+      className={`rounded-xl border p-4 shadow-[0_10px_30px_rgba(15,23,42,0.03)] transition duration-300 ease-out motion-reduce:transform-none motion-reduce:transition-none sm:p-5 ${tones[tone]} ${
+        isVisible ? "translate-y-0 opacity-100" : "translate-y-2 opacity-0"
       }`}
       style={{
         scrollMarginTop: scrollMarginTop ? `${scrollMarginTop}px` : undefined,
         transitionDelay: `${revealIndex * SECTION_REVEAL_DELAY_MS}ms`
       }}
     >
-      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-        <div className="flex items-center gap-3">
-          {Icon ? (
-            <span className="flex size-9 items-center justify-center rounded-full bg-surface-100 text-[--color-accent]">
-              <Icon size={18} />
-            </span>
-          ) : null}
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+        <div className="min-w-0">
           <div className="flex items-center gap-3">
-            <h3 className="text-base font-semibold tracking-[0.04em] text-[--color-ink]">{title}</h3>
-            {badge !== null ? (
-              <span className="rounded-full bg-surface-100 px-2.5 py-1 text-[11px] font-semibold uppercase tracking-[0.12em] text-[--color-muted]">
-                {badge}
+            {Icon ? (
+              <span className="flex size-9 shrink-0 items-center justify-center rounded-[--radius-button] bg-surface-100 text-[--color-accent]">
+                <Icon size={17} />
               </span>
             ) : null}
+            <div className="flex min-w-0 items-center gap-2.5">
+              <h3 className="text-base font-semibold text-[--color-ink] sm:text-[17px]">{title}</h3>
+              {badge !== null ? (
+                <span className="inline-flex min-w-7 items-center justify-center rounded-full border border-surface-200 bg-surface-100 px-2 py-0.5 text-[11px] font-medium text-[--color-muted]">
+                  {badge}
+                </span>
+              ) : null}
+            </div>
           </div>
         </div>
 
-        <div className="flex flex-wrap items-center gap-2">
+        <div className="flex flex-wrap items-center gap-1.5">
           {actions}
-          {onCopy ? (
-            <SectionHeaderButton icon={Copy} onClick={onCopy}>
-              {isCopied ? t("report:actions.copied") : t("report:actions.copy")}
-            </SectionHeaderButton>
-          ) : null}
+          {onCopy ? <SectionCopyButton isCopied={isCopied} onClick={onCopy} t={t} title={title} /> : null}
           {collapsible ? (
-            <button
-              aria-expanded={isOpen}
-              className="inline-flex items-center gap-2 rounded-full px-2 py-1 text-xs font-semibold uppercase tracking-[0.14em] text-[--color-muted] hover:bg-surface-100 hover:text-[--color-ink]"
-              onClick={() => setIsOpen((current) => !current)}
-              type="button"
-            >
-              {isOpen ? t("report:actions.hide") : t("report:actions.show")}
-              <ChevronDown className={`transition ${isOpen ? "rotate-180" : ""}`} size={16} />
-            </button>
+            <SectionToggleButton isOpen={isOpen} onClick={() => setIsOpen((current) => !current)} t={t} />
           ) : null}
         </div>
       </div>
+
       {!collapsible || isOpen ? <div className="mt-4">{children}</div> : null}
     </section>
   );
 }
 
-function ReportSectionMiniNav({ activeSectionId, items, onSelect, stickyTop, t }) {
+function ReportSectionNav({ activeSectionId, items, onSelect, stickyTop = 16, t, variant = "desktop" }) {
+  const isDesktop = variant === "desktop";
+
   return (
     <div
-      className="sticky z-10 -mx-5 mb-6 border-b border-surface-200/80 bg-white/95 px-5 py-3 backdrop-blur sm:-mx-6 sm:px-6 lg:-mx-7 lg:px-7"
+      className={
+        isDesktop
+          ? "sticky"
+          : "sticky z-20 -mx-5 border-b border-slate-200 bg-white/90 px-5 py-3 backdrop-blur-md sm:-mx-6 sm:px-6"
+      }
       style={{ top: `${stickyTop}px` }}
     >
       <nav
         aria-label={t("report:generatedReport")}
-        className="flex gap-2 overflow-x-auto pb-1 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+        className={isDesktop ? "space-y-1" : "flex gap-1.5 overflow-x-auto pb-1 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"}
       >
         {items.map((item) => {
           const isActive = item.id === activeSectionId;
+          const Icon = item.icon;
 
           return (
             <button
               key={item.id}
-              className={`shrink-0 rounded-full px-3 py-1.5 text-sm font-medium transition ${
-                isActive
-                  ? "bg-cyan-100 text-cyan-800 shadow-[inset_0_0_0_1px_rgba(8,145,178,0.12)]"
-                  : "text-surface-600 hover:bg-surface-100 hover:text-[--color-ink]"
-              }`}
+              className={
+                isDesktop
+                  ? `flex w-full items-center gap-3 rounded-lg px-3 py-2 text-left text-sm transition duration-200 focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-[--color-accent] motion-reduce:transition-none ${
+                      isActive
+                        ? "bg-cyan-50/90 text-cyan-950 shadow-[inset_0_0_0_1px_rgba(8,145,178,0.14)]"
+                        : "text-[--color-muted] hover:bg-surface-100 hover:text-[--color-ink]"
+                    }`
+                  : `shrink-0 rounded-full px-3 py-1.5 text-xs font-medium transition duration-200 focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-[--color-accent] motion-reduce:transition-none ${
+                      isActive
+                        ? "bg-cyan-50/90 text-cyan-950 shadow-[inset_0_0_0_1px_rgba(8,145,178,0.14)]"
+                        : "text-[--color-muted] hover:bg-surface-100 hover:text-[--color-ink]"
+                    }`
+              }
               onClick={() => onSelect(item.id)}
               type="button"
             >
-              {t(item.titleKey)}
+              <Icon className="shrink-0" size={isDesktop ? 16 : 14} />
+              <span>{t(item.titleKey)}</span>
             </button>
           );
         })}
@@ -278,21 +311,34 @@ function ReviewStatusBadge({ hasUnsavedChanges, reviewStatus, t }) {
     reviewStatus === "reviewed"
       ? {
           label: t("report:review.reviewed"),
-          className: "bg-cyan-100 text-cyan-800"
+          className: "border-cyan-200 bg-cyan-50 text-cyan-800"
         }
       : hasUnsavedChanges
         ? {
             label: t("report:review.unsavedChanges"),
-            className: "bg-amber-100 text-amber-800"
+            className: "border-amber-200 bg-amber-50 text-amber-800"
           }
         : {
             label: t("report:review.draft"),
-            className: "bg-surface-200 text-surface-700"
+            className: "border-surface-200 bg-surface-100 text-surface-700"
           };
 
   return (
-    <span className={`inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold uppercase tracking-[0.12em] ${badge.className}`}>
+    <span className={`inline-flex items-center rounded-full border px-2.5 py-1 text-[11px] font-medium ${badge.className}`}>
       {badge.label}
+    </span>
+  );
+}
+
+function MetaPill({ children, tone = "neutral" }) {
+  const tones = {
+    neutral: "border-surface-200 bg-surface-50 text-[--color-muted]",
+    warning: "border-amber-200 bg-amber-50 text-amber-800"
+  };
+
+  return (
+    <span className={`inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-[11px] font-medium ${tones[tone]}`}>
+      {children}
     </span>
   );
 }
@@ -348,13 +394,14 @@ function SummaryEditor({ isEditingEnabled, report, onSave, onDirty }) {
       {isEditingEnabled ? (
         <div>
           <Button
+            className="min-h-8 rounded-lg px-2.5 py-1.5"
             onClick={() => {
               setIsEditing(true);
             }}
-            size="sm"
-            tone="secondary"
+            size="xs"
+            tone="ghost"
           >
-            <Pencil size={16} />
+            <Pencil size={14} />
             {t("report:editor.edit")}
           </Button>
         </div>
@@ -383,7 +430,7 @@ function DecisionsEditor({ isEditingEnabled, report, onChange, onDirty }) {
           const isEditing = editingId === decision.id;
 
           return (
-            <article key={decision.id} className="rounded-[--radius-button] bg-surface-100 p-3.5">
+            <article key={decision.id} className="rounded-[--radius-panel] border border-slate-200 bg-white p-4">
               {isEditing ? (
                 <div className="space-y-3">
                   <textarea
@@ -425,26 +472,28 @@ function DecisionsEditor({ isEditingEnabled, report, onChange, onDirty }) {
                 <>
                   <div className="flex flex-wrap items-start justify-between gap-3">
                     <p className="text-sm font-semibold text-[--color-ink]">{decision.decision}</p>
-                    <div className="flex flex-wrap gap-2">
+                    <div className="flex flex-wrap gap-1.5">
                       {isEditingEnabled ? (
                         <>
                           <Button
+                            className="min-h-8 rounded-lg px-2.5 py-1.5"
                             onClick={() => {
                               setEditingId(decision.id);
                               setDraftValue(decision.decision);
                             }}
-                            size="sm"
+                            size="xs"
                             tone="ghost"
                           >
                             <Pencil size={14} />
                             {t("report:editor.edit")}
                           </Button>
                           <Button
+                            className="min-h-8 rounded-lg px-2.5 py-1.5"
                             onClick={() => {
                               onChange((current) => current.filter((item) => item.id !== decision.id));
                               onDirty();
                             }}
-                            size="sm"
+                            size="xs"
                             tone="ghost"
                           >
                             <Trash2 size={14} />
@@ -455,10 +504,10 @@ function DecisionsEditor({ isEditingEnabled, report, onChange, onDirty }) {
                     </div>
                   </div>
                   <p className="mt-2 text-sm text-[--color-muted]">{decision.reasoning}</p>
-                  <p className="mt-3 text-xs uppercase tracking-[0.14em] text-[--color-muted]">
-                    {t("report:fields.owner")}: {decision.owner} • {t("report:fields.confidence")}{" "}
-                    {t(`report:enums.confidence.${decision.confidence}`)}
-                  </p>
+                  <div className="mt-3 flex flex-wrap gap-2 text-[11px]">
+                    <MetaPill>{decision.owner}</MetaPill>
+                    <MetaPill>{t(`report:enums.confidence.${decision.confidence}`)}</MetaPill>
+                  </div>
                 </>
               )}
             </article>
@@ -469,7 +518,7 @@ function DecisionsEditor({ isEditingEnabled, report, onChange, onDirty }) {
       )}
 
       {isEditingEnabled ? (
-        <div className="rounded-[--radius-button] border border-dashed border-[--color-border] bg-white p-3.5">
+        <div className="rounded-[--radius-panel] border border-dashed border-slate-200 bg-white p-4">
           <label className="block text-xs font-semibold uppercase tracking-[0.14em] text-[--color-muted]">
             {t("report:editor.addDecision")}
           </label>
@@ -554,7 +603,7 @@ function ActionItemsEditor({ isEditingEnabled, report, onChange, onDirty }) {
           return (
             <article
               key={item.id}
-              className="rounded-[--radius-button] border border-[--color-border] bg-[--color-panel] p-4 transition hover:bg-surface-100"
+              className="rounded-[--radius-panel] border border-slate-200 bg-white p-4 transition hover:border-slate-300 motion-reduce:transition-none"
             >
               {isEditing && draft ? (
                 <div className="grid gap-3 md:grid-cols-2">
@@ -637,59 +686,46 @@ function ActionItemsEditor({ isEditingEnabled, report, onChange, onDirty }) {
                   </div>
                 </div>
               ) : (
-                <div className="flex flex-col gap-3 lg:flex-row lg:items-start lg:justify-between">
-                  <div className="min-w-0 flex-1">
-                    <div className="flex flex-wrap items-start justify-between gap-3">
-                      <p className="text-sm font-semibold text-[--color-ink]">{item.task}</p>
-                      <div className="flex flex-wrap gap-2">
-                        {isEditingEnabled ? (
-                          <>
-                            <Button onClick={() => startEditing(item)} size="sm" tone="ghost">
-                              <Pencil size={14} />
-                              {t("report:editor.edit")}
-                            </Button>
-                            <Button
-                              onClick={() => {
-                                onChange((current) => current.filter((currentItem) => currentItem.id !== item.id));
-                                onDirty();
-                              }}
-                              size="sm"
-                              tone="ghost"
-                            >
-                              <Trash2 size={14} />
-                              {t("report:editor.delete")}
-                            </Button>
-                          </>
-                        ) : null}
-                      </div>
+                <div className="flex flex-col gap-3">
+                  <div className="flex flex-wrap items-start justify-between gap-3">
+                    <div className="min-w-0 flex-1">
+                      <p className="text-[15px] font-semibold text-[--color-ink]">{item.task}</p>
+                      <p className="mt-1.5 text-sm text-[--color-muted]">{item.notes || t("report:empty.notes")}</p>
                     </div>
-                    <p className="mt-1.5 text-sm text-[--color-muted]">
-                      {item.notes || t("report:empty.notes")}
-                    </p>
+                    <div className="flex flex-wrap gap-1.5">
+                      {isEditingEnabled ? (
+                        <>
+                          <Button className="min-h-8 rounded-lg px-2.5 py-1.5" onClick={() => startEditing(item)} size="xs" tone="ghost">
+                            <Pencil size={14} />
+                            {t("report:editor.edit")}
+                          </Button>
+                          <Button
+                            className="min-h-8 rounded-lg px-2.5 py-1.5"
+                            onClick={() => {
+                              onChange((current) => current.filter((currentItem) => currentItem.id !== item.id));
+                              onDirty();
+                            }}
+                            size="xs"
+                            tone="ghost"
+                          >
+                            <Trash2 size={14} />
+                            {t("report:editor.delete")}
+                          </Button>
+                        </>
+                      ) : null}
+                    </div>
                   </div>
-                  <dl className="grid grid-cols-1 gap-3 text-xs uppercase tracking-[0.14em] text-[--color-muted] sm:grid-cols-3 lg:min-w-[320px]">
-                    <div>
-                      <dt>{t("report:fields.owner")}</dt>
-                      <dd className="mt-1">
-                        <OwnerBadge owner={item.owner || t("report:editor.unassigned")} />
-                      </dd>
-                    </div>
-                    <div>
-                      <dt>{t("report:fields.deadline")}</dt>
-                      <dd className="mt-1 text-[11px] font-semibold text-[--color-ink] normal-case tracking-normal">
-                        {item.deadline || t("report:empty.deadline")}
-                      </dd>
-                    </div>
-                    <div>
-                      <dt>{t("report:fields.priority")}</dt>
-                      <dd className="mt-1">
-                        <PriorityBadge
-                          label={t(`report:enums.priority.${item.priority}`)}
-                          priority={item.priority}
-                        />
-                      </dd>
-                    </div>
-                  </dl>
+                  <div className="flex flex-wrap gap-2 text-[11px]">
+                    <MetaPill>{item.owner || t("report:editor.unassigned")}</MetaPill>
+                    <MetaPill>
+                      <Clock3 size={12} />
+                      {item.deadline || t("report:empty.deadline")}
+                    </MetaPill>
+                    <PriorityBadge
+                      label={t(`report:enums.priority.${item.priority}`)}
+                      priority={item.priority}
+                    />
+                  </div>
                 </div>
               )}
             </article>
@@ -700,7 +736,7 @@ function ActionItemsEditor({ isEditingEnabled, report, onChange, onDirty }) {
       )}
 
       {isEditingEnabled ? (
-        <div className="rounded-[--radius-button] border border-dashed border-[--color-border] bg-white p-4">
+        <div className="rounded-[--radius-panel] border border-dashed border-slate-200 bg-white p-4">
           <div className="grid gap-3 md:grid-cols-2">
             <div className="md:col-span-2">
               <label className="mb-1 block text-xs font-semibold uppercase tracking-[0.14em] text-[--color-muted]">
@@ -796,7 +832,6 @@ export function ReportWorkspace({
   generationProgress,
   generationError,
   onRetryGeneration,
-  isRegenerating,
   exportActions,
   hasUnsavedChanges,
   reviewStatus,
@@ -823,13 +858,16 @@ export function ReportWorkspace({
   const [revealedSections, setRevealedSections] = useState([]);
   const [isEditing, setIsEditing] = useState(false);
   const [activeSectionId, setActiveSectionId] = useState(REPORT_SECTION_ITEMS[0].id);
-  const [toolbarHeight, setToolbarHeight] = useState(0);
-  const [miniNavHeight, setMiniNavHeight] = useState(0);
-  const toolbarRef = useRef(null);
-  const miniNavRef = useRef(null);
+  const [isHeaderCompact, setIsHeaderCompact] = useState(false);
+  const [headerHeight, setHeaderHeight] = useState(0);
+  const [mobileNavHeight, setMobileNavHeight] = useState(0);
+  const headerRef = useRef(null);
+  const mobileNavRef = useRef(null);
   const sectionRefs = useRef({});
   const sectionObserverRef = useRef(null);
-  const scrollMarginTop = toolbarHeight + miniNavHeight + SECTION_SCROLL_OFFSET_PX;
+  const scrollFrameRef = useRef(0);
+  const lastScrollYRef = useRef(0);
+  const scrollMarginTop = headerHeight + mobileNavHeight + SECTION_SCROLL_OFFSET_PX + 16;
 
   useEffect(() => {
     if (!isReady || !generatedAt) {
@@ -840,7 +878,7 @@ export function ReportWorkspace({
 
     setShowSuccessBanner(true);
 
-    const sectionIds = ["toolbar", "summary", "decisions", "actionItems", "risks", "openQuestions", "nextSteps"];
+    const sectionIds = ["header", "summary", "decisions", "actionItems", "risks", "openQuestions", "nextSteps"];
     const timers = sectionIds.map((sectionId, index) =>
       window.setTimeout(() => {
         setRevealedSections((current) => [...new Set([...current, sectionId])]);
@@ -856,42 +894,41 @@ export function ReportWorkspace({
 
   useEffect(() => {
     setIsEditing(false);
+    setIsHeaderCompact(false);
+    setActiveSectionId(REPORT_SECTION_ITEMS[0].id);
   }, [isReady, generatedAt]);
 
   useEffect(() => {
     if (!isReady) {
-      setActiveSectionId(REPORT_SECTION_ITEMS[0].id);
-      setToolbarHeight(0);
-      setMiniNavHeight(0);
+      setHeaderHeight(0);
+      setMobileNavHeight(0);
       return undefined;
     }
 
     if (typeof ResizeObserver === "undefined") {
-      setToolbarHeight(toolbarRef.current?.getBoundingClientRect().height || 0);
-      setMiniNavHeight(miniNavRef.current?.getBoundingClientRect().height || 0);
+      setHeaderHeight(headerRef.current?.getBoundingClientRect().height || 0);
+      setMobileNavHeight(mobileNavRef.current?.getBoundingClientRect().height || 0);
       return undefined;
     }
 
     const resizeObserver = new ResizeObserver(() => {
-      setToolbarHeight(toolbarRef.current?.getBoundingClientRect().height || 0);
-      setMiniNavHeight(miniNavRef.current?.getBoundingClientRect().height || 0);
+      setHeaderHeight(headerRef.current?.getBoundingClientRect().height || 0);
+      setMobileNavHeight(mobileNavRef.current?.getBoundingClientRect().height || 0);
     });
 
-    if (toolbarRef.current) {
-      resizeObserver.observe(toolbarRef.current);
+    if (headerRef.current) {
+      resizeObserver.observe(headerRef.current);
     }
 
-    if (miniNavRef.current) {
-      resizeObserver.observe(miniNavRef.current);
+    if (mobileNavRef.current) {
+      resizeObserver.observe(mobileNavRef.current);
     }
 
-    setToolbarHeight(toolbarRef.current?.getBoundingClientRect().height || 0);
-    setMiniNavHeight(miniNavRef.current?.getBoundingClientRect().height || 0);
+    setHeaderHeight(headerRef.current?.getBoundingClientRect().height || 0);
+    setMobileNavHeight(mobileNavRef.current?.getBoundingClientRect().height || 0);
 
-    return () => {
-      resizeObserver.disconnect();
-    };
-  }, [isReady]);
+    return () => resizeObserver.disconnect();
+  }, [isReady, generatedAt]);
 
   useEffect(() => {
     if (!isReady) {
@@ -923,7 +960,7 @@ export function ReportWorkspace({
       },
       {
         root: null,
-        rootMargin: `-${toolbarHeight + miniNavHeight + 12}px 0px -55% 0px`,
+        rootMargin: `-${headerHeight + mobileNavHeight + 40}px 0px -50% 0px`,
         threshold: [0.2, 0.35, 0.5, 0.65]
       }
     );
@@ -935,7 +972,61 @@ export function ReportWorkspace({
       observer.disconnect();
       sectionObserverRef.current = null;
     };
-  }, [isReady, toolbarHeight, miniNavHeight, generatedAt]);
+  }, [generatedAt, headerHeight, isReady, mobileNavHeight]);
+
+  useEffect(() => {
+    if (!isReady || typeof window === "undefined") {
+      setIsHeaderCompact(false);
+      return undefined;
+    }
+
+    lastScrollYRef.current = window.scrollY;
+
+    const updateStickyHeaderState = () => {
+      scrollFrameRef.current = 0;
+
+      const summarySection = sectionRefs.current.summary;
+      const headerElement = headerRef.current;
+
+      if (!summarySection || !headerElement) {
+        return;
+      }
+
+      const currentScrollY = window.scrollY;
+      const delta = currentScrollY - lastScrollYRef.current;
+      const summaryTop = summarySection.getBoundingClientRect().top;
+      const enteredContent = summaryTop <= headerElement.getBoundingClientRect().height + 40;
+
+      if (!enteredContent || currentScrollY <= 32) {
+        setIsHeaderCompact(false);
+      } else if (delta >= HEADER_SCROLL_DIRECTION_THRESHOLD_PX) {
+        setIsHeaderCompact(true);
+      } else if (delta <= -HEADER_SCROLL_DIRECTION_THRESHOLD_PX) {
+        setIsHeaderCompact(false);
+      }
+
+      lastScrollYRef.current = currentScrollY;
+    };
+
+    const onScroll = () => {
+      if (scrollFrameRef.current) {
+        return;
+      }
+
+      scrollFrameRef.current = window.requestAnimationFrame(updateStickyHeaderState);
+    };
+
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      if (scrollFrameRef.current) {
+        window.cancelAnimationFrame(scrollFrameRef.current);
+      }
+      scrollFrameRef.current = 0;
+    };
+  }, [generatedAt, headerHeight, isReady, mobileNavHeight]);
 
   function updateReportSection(field, updater) {
     onReportChange((current) => {
@@ -1002,138 +1093,153 @@ export function ReportWorkspace({
     }
 
     setActiveSectionId(sectionId);
+    setIsHeaderCompact(true);
     section.scrollIntoView({
       behavior: "smooth",
       block: "start"
     });
   }
 
+  const headerVisible = isSectionVisible("header");
+  const reportTitle = report?.meeting_title || t("report:structuredMeetingIntelligence");
+
   return (
     <>
-      <section className="rounded-[--radius-panel] border border-white/80 bg-white/92 p-5 shadow-[var(--shadow-card)] backdrop-blur-xl sm:p-6 lg:p-7">
+      <section className="rounded-xl border border-slate-200 bg-white p-5 shadow-[var(--shadow-card)] sm:p-6 lg:p-7">
         <SuccessBanner report={report} t={t} visible={showSuccessBanner} />
 
+        {generationError && status === "error" ? <ErrorBanner>{generationError}</ErrorBanner> : null}
+
+        {!isReady ? renderState() : null}
+
         {isReady ? (
-          <div className="mb-4 flex flex-wrap items-center gap-2 text-sm">
-            <span className="inline-flex items-center gap-2 font-medium text-[--color-accent]">
-              <CheckCircle2 size={16} />
-              <span>{t("report:status.generated")}</span>
-            </span>
-            <ReviewStatusBadge hasUnsavedChanges={hasUnsavedChanges} reviewStatus={reviewStatus} t={t} />
-          </div>
-        ) : null}
+          <div className="space-y-5 xl:grid xl:grid-cols-[220px_minmax(0,1fr)] xl:items-start xl:gap-8 xl:space-y-0">
+            <aside className="hidden xl:block">
+              <ReportSectionNav
+                activeSectionId={activeSectionId}
+                items={REPORT_SECTION_ITEMS}
+                onSelect={scrollToSection}
+                stickyTop={24}
+                t={t}
+                variant="desktop"
+              />
+            </aside>
 
-        <div className="flex flex-col gap-4 border-b border-[--color-border] pb-5 xl:flex-row xl:items-start xl:justify-between">
-          <div>
-            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[--color-warning]">
-              {t("report:generatedReport")}
-            </p>
-            <h2 className="mt-2 font-display text-3xl font-semibold text-[--color-ink] sm:text-4xl">
-              {report?.meeting_title || t("report:structuredMeetingIntelligence")}
-            </h2>
-            <p className="mt-3 max-w-2xl text-sm leading-7 text-[--color-muted]">
-              {generationMeta
-                ? t("report:meta", {
-                    mode: t(
-                      generationMeta.mode === "mock"
-                        ? "common:generationMode.simulation"
-                        : "common:generationMode.llm"
-                    ),
-                    timestamp: formatDateTime(generationMeta.generatedAt, language),
-                    attempts: generationMeta.attempts
-                  })
-                : t("common:states.readyToAnalyze")}
-            </p>
-            {generatedAt || sourceLabel ? (
-              <div className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-2 text-xs text-[--color-muted]">
-                {generatedAt ? (
-                  <span>
-                    {t("report:fields.generated")}: {formatDateTime(generatedAt, language)}
-                  </span>
-                ) : null}
-                {sourceLabel ? (
-                  <span>
-                    {t("report:fields.source")}: {sourceLabel}
-                  </span>
-                ) : null}
-              </div>
-            ) : null}
-            {generationMeta?.mode === "mock" ? (
-              <p className="mt-2 text-xs uppercase tracking-[0.16em] text-[--color-warning]">
-                {t("report:fallbackNotice")}
-              </p>
-            ) : null}
-          </div>
-          <div className="flex flex-wrap gap-2">
-            <Button
-              aria-label={t("report:actions.regenerate")}
-              disabled={!isReady || isRegenerating}
-              onClick={onRetryGeneration}
-              tone="secondary"
-            >
-              {isRegenerating ? <Loader2 className="animate-spin" size={16} /> : <RotateCcw size={16} />}
-              {t("report:actions.regenerate")}
-            </Button>
-          </div>
-        </div>
-
-        <div className="mt-6 space-y-5">
-          {generationError && status === "error" ? <ErrorBanner>{generationError}</ErrorBanner> : null}
-
-          {!isReady ? renderState() : null}
-
-          {isReady ? (
-            <>
+            <div className="min-w-0 space-y-5">
               <div
-                ref={toolbarRef}
-                className={`sticky top-0 z-10 -mx-5 mb-6 border-b border-surface-200 bg-white/90 px-5 py-4 backdrop-blur transition duration-500 ease-out sm:-mx-6 sm:px-6 lg:-mx-7 lg:px-7 ${
-                  isSectionVisible("toolbar") ? "translate-y-0 opacity-100" : "translate-y-3 opacity-0"
+                ref={headerRef}
+                className={`sticky z-30 rounded-xl border border-slate-200 border-b bg-white/90 shadow-[0_14px_32px_rgba(15,23,42,0.07)] backdrop-blur-lg transition-all duration-200 ease-out motion-reduce:transform-none motion-reduce:transition-none ${
+                  isHeaderCompact ? "px-4 py-3 sm:px-5" : "px-4 py-4 sm:px-5"
+                } ${
+                  headerVisible ? "translate-y-0 opacity-100" : "translate-y-2 opacity-0"
                 }`}
-                style={{ transitionDelay: "0ms" }}
+                style={{ top: `${HEADER_STICKY_TOP_PX}px` }}
               >
-                <div className="flex flex-col gap-4">
-                  <div className="flex flex-col gap-1 lg:flex-row lg:items-center lg:justify-between">
-                    <p className="text-sm text-[--color-muted]">{t("export:toolbarBody")}</p>
-                    <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[--color-muted]">
-                      {isEditing ? t("report:editor.editing") : t("report:editor.readOnly")}
-                    </p>
-                  </div>
-                  <ReportExportToolbar
-                    disabled={!isReady}
-                    isBusy={exportActions.isBusy}
-                    isEditing={isEditing}
-                    onAction={exportActions}
-                    onToggleEditing={() => setIsEditing((current) => !current)}
-                    onToggleReview={() =>
-                      onMarkReviewed(reviewStatus === "reviewed" ? "draft" : "reviewed")
-                    }
-                    reviewActionLabel={
-                      reviewStatus === "reviewed" ? t("report:review.markDraft") : t("report:review.markReviewed")
-                    }
-                    reviewActionTone={reviewStatus === "reviewed" ? "secondary" : "primary"}
-                    statusBadge={
-                      <ReviewStatusBadge
-                        hasUnsavedChanges={hasUnsavedChanges}
-                        reviewStatus={reviewStatus}
-                        t={t}
+                {isHeaderCompact ? (
+                  <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
+                    <div className="min-w-0">
+                      <h2
+                        className="truncate font-display text-lg font-semibold text-[--color-ink] sm:text-xl"
+                        data-report-heading="true"
+                        tabIndex={-1}
+                        title={reportTitle}
+                      >
+                        {reportTitle}
+                      </h2>
+                    </div>
+
+                    <div className="w-full lg:w-auto lg:max-w-none">
+                      <ReportExportToolbar
+                        compact
+                        disabled={!isReady}
+                        isBusy={exportActions.isBusy}
+                        isEditing={isEditing}
+                        onAction={exportActions}
+                        onToggleEditing={() => setIsEditing((current) => !current)}
+                        onToggleReview={() =>
+                          onMarkReviewed(reviewStatus === "reviewed" ? "draft" : "reviewed")
+                        }
+                        reviewActionDisabled={false}
+                        reviewActionLabel={
+                          reviewStatus === "reviewed" ? t("report:review.markDraft") : t("report:review.markReviewed")
+                        }
                       />
-                    }
-                  />
-                </div>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="flex flex-col gap-4">
+                    <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
+                      <div className="min-w-0">
+                        <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[--color-warning]">
+                          {t("report:generatedReport")}
+                        </p>
+                        <h2
+                          className="mt-2 font-display text-2xl font-semibold text-[--color-ink] sm:text-3xl"
+                          data-report-heading="true"
+                          tabIndex={-1}
+                          title={reportTitle}
+                        >
+                          {reportTitle}
+                        </h2>
+                        <div className="mt-3 flex flex-wrap items-center gap-2">
+                          <span className="inline-flex items-center gap-1.5 text-sm font-medium text-[--color-accent]">
+                            <CheckCircle2 size={15} />
+                            <span>{t("report:status.generated")}</span>
+                          </span>
+                          <ReviewStatusBadge hasUnsavedChanges={hasUnsavedChanges} reviewStatus={reviewStatus} t={t} />
+                        </div>
+                      </div>
+
+                      <div className="w-full max-w-[560px]">
+                        <ReportExportToolbar
+                          disabled={!isReady}
+                          isBusy={exportActions.isBusy}
+                          isEditing={isEditing}
+                          onAction={exportActions}
+                          onToggleEditing={() => setIsEditing((current) => !current)}
+                          onToggleReview={() =>
+                            onMarkReviewed(reviewStatus === "reviewed" ? "draft" : "reviewed")
+                          }
+                          reviewActionDisabled={false}
+                          reviewActionLabel={
+                            reviewStatus === "reviewed" ? t("report:review.markDraft") : t("report:review.markReviewed")
+                          }
+                        />
+                      </div>
+                    </div>
+
+                    <div className="flex flex-wrap items-center gap-2 text-[11px]">
+                      {generatedAt ? (
+                        <MetaPill>
+                          <Clock3 size={12} />
+                          {formatDateTime(generatedAt, language)}
+                        </MetaPill>
+                      ) : null}
+                      {generationMeta?.attempts ? (
+                        <MetaPill>{t("report:metaAttempt", { attempts: generationMeta.attempts })}</MetaPill>
+                      ) : null}
+                      {sourceLabel ? <MetaPill>{sourceLabel}</MetaPill> : null}
+                      {generationMeta?.mode === "mock" ? (
+                        <MetaPill tone="warning">{t("report:fallbackNoticeCompact")}</MetaPill>
+                      ) : null}
+                    </div>
+                  </div>
+                )}
               </div>
 
-              <div ref={miniNavRef}>
-                <ReportSectionMiniNav
+              <div className="xl:hidden" ref={mobileNavRef}>
+                <ReportSectionNav
                   activeSectionId={activeSectionId}
                   items={REPORT_SECTION_ITEMS}
                   onSelect={scrollToSection}
-                  stickyTop={toolbarHeight}
+                  stickyTop={headerHeight + HEADER_STICKY_TOP_PX + 4}
                   t={t}
+                  variant="mobile"
                 />
               </div>
 
               <ReportSection
-                icon={FileText}
+                icon={SECTION_ICON_MAP.summary}
                 isCopied={exportActions.completedAction === "section-summary"}
                 isVisible={isSectionVisible("summary")}
                 onCopy={() => exportActions.copySection("summary")}
@@ -1156,7 +1262,7 @@ export function ReportWorkspace({
                 badge={report.decisions.length}
                 collapsible={report.decisions.length > 2}
                 defaultOpen
-                icon={CheckCircle}
+                icon={SECTION_ICON_MAP.decisions}
                 isCopied={exportActions.completedAction === "section-decisions"}
                 isVisible={isSectionVisible("decisions")}
                 onCopy={() => exportActions.copySection("decisions")}
@@ -1179,7 +1285,7 @@ export function ReportWorkspace({
                 badge={report.action_items.length}
                 collapsible={report.action_items.length > 3}
                 defaultOpen
-                icon={ListTodo}
+                icon={SECTION_ICON_MAP.actionItems}
                 isCopied={exportActions.completedAction === "section-actionItems"}
                 isVisible={isSectionVisible("actionItems")}
                 onCopy={() => exportActions.copySection("actionItems")}
@@ -1202,7 +1308,7 @@ export function ReportWorkspace({
                 badge={report.risks.length}
                 collapsible
                 defaultOpen={false}
-                icon={AlertTriangle}
+                icon={SECTION_ICON_MAP.risks}
                 isVisible={isSectionVisible("risks")}
                 revealIndex={4}
                 sectionId="risks"
@@ -1214,16 +1320,16 @@ export function ReportWorkspace({
                 <div className="space-y-3">
                   {report.risks.length ? (
                     report.risks.map((risk) => (
-                      <div key={risk.id} className="rounded-[--radius-button] border border-[#f2d393] bg-white/70 p-3.5">
+                      <div key={risk.id} className="rounded-[--radius-panel] border border-slate-200 bg-white p-4">
                         <div className="flex items-start gap-3">
                           <AlertTriangle className="mt-0.5 shrink-0 text-[--color-warning]" size={16} />
-                          <div>
+                          <div className="min-w-0">
                             <p className="text-sm font-semibold text-[--color-ink]">{risk.risk}</p>
-                            <p className="mt-1 text-sm text-[--color-muted]">{risk.impact}</p>
-                            <p className="mt-2 text-xs uppercase tracking-[0.14em] text-[--color-muted]">
-                              {t("report:fields.owner")}: {risk.owner} • {t("report:fields.mitigation")}:{" "}
-                              {risk.mitigation}
-                            </p>
+                            <p className="mt-1.5 text-sm text-[--color-muted]">{risk.impact}</p>
+                            <div className="mt-3 flex flex-wrap gap-2 text-[11px]">
+                              <MetaPill>{risk.owner}</MetaPill>
+                              <MetaPill>{risk.mitigation}</MetaPill>
+                            </div>
                           </div>
                         </div>
                       </div>
@@ -1239,7 +1345,7 @@ export function ReportWorkspace({
                   badge={report.open_questions.length}
                   collapsible
                   defaultOpen={false}
-                  icon={HelpCircle}
+                  icon={SECTION_ICON_MAP.openQuestions}
                   isVisible={isSectionVisible("openQuestions")}
                   revealIndex={5}
                   sectionId="openQuestions"
@@ -1250,14 +1356,14 @@ export function ReportWorkspace({
                   <div className="space-y-3">
                     {report.open_questions.length ? (
                       report.open_questions.map((question) => (
-                        <article key={question.id} className="rounded-[--radius-button] bg-surface-100 p-3.5">
+                        <article key={question.id} className="rounded-[--radius-panel] border border-slate-200 bg-white p-4">
                           <p className="text-sm font-semibold text-[--color-ink]">{question.question}</p>
                           <p className="mt-2 text-sm text-[--color-muted]">
                             {question.notes || t("report:empty.questionNotes")}
                           </p>
-                          <p className="mt-3 text-xs uppercase tracking-[0.14em] text-[--color-muted]">
-                            {t("report:fields.owner")}: {question.owner}
-                          </p>
+                          <div className="mt-3">
+                            <MetaPill>{question.owner}</MetaPill>
+                          </div>
                         </article>
                       ))
                     ) : (
@@ -1270,7 +1376,7 @@ export function ReportWorkspace({
                   badge={report.next_steps.length}
                   collapsible={report.next_steps.length > 4}
                   defaultOpen
-                  icon={ArrowRight}
+                  icon={SECTION_ICON_MAP.nextSteps}
                   isCopied={exportActions.completedAction === "section-nextSteps"}
                   isVisible={isSectionVisible("nextSteps")}
                   onCopy={() => exportActions.copySection("nextSteps")}
@@ -1284,7 +1390,7 @@ export function ReportWorkspace({
                   <ul className="space-y-3 text-sm text-[--color-ink]">
                     {report.next_steps.length ? (
                       report.next_steps.map((step) => (
-                        <li key={step} className="flex gap-3 rounded-[--radius-button] bg-surface-100 p-3.5">
+                        <li key={step} className="flex gap-3 rounded-[--radius-panel] border border-slate-200 bg-white p-4">
                           <CheckCircle2 className="mt-0.5 shrink-0 text-[--color-accent]" size={16} />
                           <span>{step}</span>
                         </li>
@@ -1295,9 +1401,9 @@ export function ReportWorkspace({
                   </ul>
                 </ReportSection>
               </div>
-            </>
-          ) : null}
-        </div>
+            </div>
+          </div>
+        ) : null}
       </section>
 
       <ToastFeedback feedback={exportActions.feedback} />
