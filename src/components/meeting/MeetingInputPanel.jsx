@@ -125,7 +125,7 @@ export function MeetingInputPanel({
   }, [inputText]);
 
   return (
-    <section className="rounded-xl border border-slate-200 bg-white p-6 shadow-[var(--shadow-card)] focus-within:ring-2 focus-within:ring-sky-200">
+    <section className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm focus-within:ring-2 focus-within:ring-sky-200">
       <div className="flex flex-col gap-4">
         <label className="block">
           <span className="mb-3 block text-xs font-medium uppercase tracking-wider text-gray-600">
@@ -134,7 +134,7 @@ export function MeetingInputPanel({
           <textarea
             aria-describedby={displayError ? errorId : undefined}
             aria-invalid={displayError ? "true" : "false"}
-            className={`min-h-[120px] max-h-[300px] w-full resize-none overflow-y-auto rounded-[--radius-button] border bg-slate-50 px-4 py-3 font-mono text-sm leading-6 text-[--color-ink] outline-none transition duration-150 ease-out focus:border-[--color-accent] focus:bg-white focus:shadow-[0_0_0_4px_rgba(23,200,227,0.12)] ${displayError ? "border-red-300" : "border-slate-200"}`}
+            className={`min-h-[120px] max-h-[300px] w-full resize-none overflow-y-auto rounded-md border bg-white px-4 py-3 font-mono text-sm leading-6 text-gray-900 outline-none transition duration-150 ease-out focus:border-[--color-accent] focus:bg-white focus:shadow-[0_0_0_4px_rgba(23,200,227,0.12)] ${displayError ? "border-red-300" : "border-gray-200"}`}
             id="meeting-transcript"
             onBlur={markTranscriptTouched}
             onChange={(event) => setInputText(event.target.value)}
@@ -154,43 +154,60 @@ export function MeetingInputPanel({
           <span>{t("home:helper.supportedFiles")}</span>
         </div>
 
-        <div className="grid grid-cols-2 gap-3">
-          <label className="flex min-h-12 cursor-pointer items-center justify-center gap-2 rounded-[--radius-button] border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-[--color-ink] shadow-[0_10px_24px_rgba(15,23,42,0.04)] transition duration-150 ease-out hover:-translate-y-0.5 hover:border-sky-200 hover:bg-slate-50 hover:shadow-[0_16px_32px_rgba(15,23,42,0.08)] active:translate-y-0 active:bg-white active:shadow-[0_8px_18px_rgba(15,23,42,0.05)] focus-within:outline-3 focus-within:outline-offset-2 focus-within:outline-[--color-accent]">
-            <FileUp size={16} />
-            {t("home:buttons.uploadFile")}
-            <input
-              accept=".pdf,.docx,.txt,.md"
-              aria-label={t("home:buttons.uploadFile")}
-              className="hidden"
-              onChange={(event) => handleFileUpload(event.target.files?.[0])}
-              type="file"
-            />
-          </label>
-          <Button
-            className="w-full"
-            onClick={loadExample}
-            tone="secondary"
+        <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between">
+          <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center sm:gap-2">
+            <label className="flex min-h-12 w-full cursor-pointer items-center justify-center gap-2 rounded-md border border-gray-300 bg-white px-4 py-3 text-sm font-semibold text-gray-700 transition duration-150 ease-out hover:bg-gray-50 active:scale-[0.99] focus-within:outline-3 focus-within:outline-offset-2 focus-within:outline-[--color-accent] sm:w-auto">
+              <FileUp size={16} />
+              {t("home:buttons.uploadFile")}
+              <input
+                accept=".pdf,.docx,.txt,.md"
+                aria-label={t("home:buttons.uploadFile")}
+                className="hidden"
+                onChange={(event) => handleFileUpload(event.target.files?.[0])}
+                type="file"
+              />
+            </label>
+            <Button
+              className="w-full sm:w-auto"
+              onClick={loadExample}
+              tone="secondary"
+            >
+              <Sparkles size={16} />
+              {t("home:buttons.loadExample")}
+            </Button>
+          </div>
+
+          <div
+            className="w-full sm:w-auto"
+            ref={generateButtonRef}
           >
-            <Sparkles size={16} />
-            {t("home:buttons.loadExample")}
-          </Button>
+            <Button
+              aria-label={isGenerating ? t("home:buttons.generatingReport") : t("home:buttons.generateReport")}
+              className="w-full sm:w-auto"
+              disabled={isGenerateDisabled}
+              onClick={onGenerate}
+            >
+              {isGenerating ? <Loader2 className="animate-spin" size={16} /> : <WandSparkles size={16} />}
+              {isGenerating ? t("home:buttons.generatingReport") : t("home:buttons.generateReport")}
+            </Button>
+          </div>
         </div>
 
         <div className="flex flex-col gap-3">
           {fileName ? (
-            <div className="flex items-center justify-between gap-3 rounded-[--radius-panel] border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-[--color-ink]">
+            <div className="flex items-center justify-between gap-3 rounded-md border border-gray-200 bg-gray-50 px-4 py-3 text-sm text-gray-900">
               <div className="flex min-w-0 items-center gap-3">
-                <div className="flex size-10 shrink-0 items-center justify-center rounded-[--radius-button] bg-cyan-100 text-cyan-700">
+                <div className="flex size-10 shrink-0 items-center justify-center rounded-md bg-teal-50 text-teal-700">
                   <FileText size={18} />
                 </div>
                 <div className="min-w-0">
                   <p className="truncate font-semibold">{fileName}</p>
-                  <p className="text-xs text-[--color-muted]">{formatFileSize(fileSize)}</p>
+                  <p className="text-xs text-gray-500">{formatFileSize(fileSize)}</p>
                 </div>
               </div>
               <button
                 aria-label={t("home:buttons.removeFile")}
-                className="inline-flex size-8 items-center justify-center rounded-[--radius-button] text-[--color-muted] hover:bg-white hover:text-[--color-ink]"
+                className="inline-flex size-8 items-center justify-center rounded-md text-gray-500 hover:bg-white hover:text-gray-900"
                 onClick={removeUploadedFile}
                 type="button"
               >
@@ -203,18 +220,6 @@ export function MeetingInputPanel({
         {displayError ? (
           <ErrorBanner id={errorId}>{displayError}</ErrorBanner>
         ) : null}
-
-        <div ref={generateButtonRef}>
-          <Button
-            aria-label={isGenerating ? t("home:buttons.generatingReport") : t("home:buttons.generateReport")}
-            className="w-full"
-            disabled={isGenerateDisabled}
-            onClick={onGenerate}
-          >
-            {isGenerating ? <Loader2 className="animate-spin" size={16} /> : <WandSparkles size={16} />}
-            {isGenerating ? t("home:buttons.generatingReport") : t("home:buttons.generateReport")}
-          </Button>
-        </div>
       </div>
     </section>
   );

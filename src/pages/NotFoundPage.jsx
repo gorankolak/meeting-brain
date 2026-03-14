@@ -6,7 +6,7 @@ export function NotFoundPage() {
 
   return (
     <main className="mx-auto flex min-h-[60vh] max-w-3xl items-center px-4 py-12 lg:px-8">
-      <div className="rounded-[--radius-panel] border border-white/70 bg-white/90 p-8 shadow-[var(--shadow-card)]">
+      <div className="rounded-lg border border-gray-200 bg-white/95 p-8 shadow-sm">
         <p className="text-sm font-semibold uppercase tracking-[0.18em] text-[--color-warning]">
           404
         </p>
@@ -14,7 +14,7 @@ export function NotFoundPage() {
         <p className="mt-3 text-sm leading-7 text-[--color-muted]">
           {t("notFound.body")}
         </p>
-        <Link className="mt-6 inline-flex text-sm font-semibold text-[--color-accent]" to="/">
+        <Link className="mt-6 inline-flex text-sm font-semibold text-teal-700" to="/">
           {t("actions.returnToWorkspace")}
         </Link>
       </div>

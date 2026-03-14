@@ -84,12 +84,12 @@ export function HomePage() {
   }, [reportGeneration.report, reportGeneration.status]);
 
   return (
-    <main className="mx-auto flex w-full max-w-[1440px] flex-col gap-6 bg-slate-50 px-4 pb-12 pt-6 lg:gap-8 lg:px-8">
+    <main className="mx-auto flex w-full max-w-[1440px] flex-col gap-5 px-6 pb-12 pt-6 lg:gap-6">
       <div aria-atomic="true" aria-live="polite" className="sr-only">
         {generationAnnouncement}
       </div>
 
-      <section className="mx-auto flex w-full max-w-[900px] flex-col items-center gap-4 text-center lg:gap-6">
+      <section className="mx-auto flex w-full max-w-[900px] flex-col items-center gap-3 text-center lg:gap-4">
         <h1 className="max-w-3xl whitespace-pre-line font-display text-4xl font-semibold leading-tight text-[--color-ink] sm:text-5xl lg:text-6xl">
           {t("home:hero.title")}
         </h1>
@@ -97,7 +97,7 @@ export function HomePage() {
           {t("home:hero.subtitle")}
         </p>
         <button
-          className="mt-3 cursor-pointer text-sm font-semibold text-[--color-panel-strong] underline decoration-[--color-accent] decoration-2 underline-offset-4 transition duration-150 ease-out hover:text-[--color-accent] hover:decoration-[3px] active:text-[--color-panel-strong]"
+          className="mt-1 cursor-pointer text-sm font-semibold text-gray-700 underline decoration-teal-500 decoration-2 underline-offset-4 transition duration-150 ease-out hover:text-teal-700 hover:decoration-[3px] active:text-gray-700"
           onClick={meetingInput.loadExample}
           type="button"
         >

@@ -24,8 +24,8 @@ export class AppErrorBoundary extends Component {
     }
 
     return (
-      <main className="flex min-h-screen items-center justify-center bg-[radial-gradient(circle_at_top_left,_rgba(38,202,229,0.24),_transparent_30%),linear-gradient(180deg,_#f6fbff_0%,_#eef4f8_40%,_#f5efe9_100%)] px-4 py-10">
-        <section className="w-full max-w-xl rounded-[--radius-panel] border border-white/80 bg-white/92 p-8 shadow-[var(--shadow-card)] backdrop-blur-xl">
+      <main className="flex min-h-screen items-center justify-center bg-[radial-gradient(circle_at_center,_#ffffff_0%,_#f8fafc_55%,_#e5e7eb_100%)] px-4 py-10">
+        <section className="w-full max-w-xl rounded-lg border border-gray-200 bg-white/95 p-8 shadow-sm backdrop-blur-xl">
           <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[--color-warning]">
             {i18n.t("common:errorBoundary.eyebrow")}
           </p>
@@ -39,6 +39,7 @@ export class AppErrorBoundary extends Component {
             <Button
               aria-label={i18n.t("common:errorBoundary.reload")}
               onClick={() => window.location.reload()}
+              tone="secondary"
             >
               {i18n.t("common:errorBoundary.reload")}
             </Button>
