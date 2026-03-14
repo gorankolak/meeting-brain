@@ -3,7 +3,9 @@
     "copyReport": "Kopiraj izvještaj",
     "copied": "Kopirano",
     "downloadPdf": "Preuzmi PDF",
-    "exportForJira": "Izvezi za Jiru"
+    "exportForJira": "Izvezi za Jiru",
+    "editReport": "Uredi izvještaj",
+    "doneEditing": "Završi uređivanje"
   },
   "toolbarLabel": "Akcije izvoza izvještaja",
   "toolbarTitle": "Izvoz i dijeljenje",
@@ -17,9 +19,10 @@
     "unassigned": "Nedodijeljeno"
   },
   "messages": {
-    "copySuccess": "Izvještaj je kopiran u međuspremnik.",
-    "sectionCopySuccess": "Odjeljak \"{{section}}\" je kopiran u međuspremnik.",
-    "downloadReady": "{{format}} izvoz je spreman.",
+    "copySuccess": "Kopirano u međuspremnik",
+    "sectionCopySuccess": "Odjeljak \"{{section}}\" je kopiran u međuspremnik",
+    "downloadReady": "{{format}} je preuzet",
+    "jiraReady": "Jira zadaci su izvezeni",
     "actionFailed": "Akcija izvoza nije uspjela."
   }
 }

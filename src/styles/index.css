@@ -12,6 +12,9 @@
   --color-panel: #f4f8fb;
   --color-panel-strong: #0f1b2d;
   --color-border: #d9e4ec;
+  --color-surface-100: #f7fbfd;
+  --color-surface-200: #e7f0f5;
+  --color-surface-700: #516272;
 
   --radius-button: 14px;
   --radius-panel: 24px;

@@ -3,7 +3,9 @@
     "copyReport": "Copy report",
     "copied": "Copied",
     "downloadPdf": "Download PDF",
-    "exportForJira": "Export for Jira"
+    "exportForJira": "Export for Jira",
+    "editReport": "Edit report",
+    "doneEditing": "Done editing"
   },
   "toolbarLabel": "Report export actions",
   "toolbarTitle": "Export and share",
@@ -17,9 +19,10 @@
     "unassigned": "Unassigned"
   },
   "messages": {
-    "copySuccess": "Report copied to clipboard.",
-    "sectionCopySuccess": "{{section}} copied to clipboard.",
-    "downloadReady": "{{format}} export is ready.",
+    "copySuccess": "Copied to clipboard",
+    "sectionCopySuccess": "{{section}} copied to clipboard",
+    "downloadReady": "{{format}} downloaded",
+    "jiraReady": "Jira tasks exported",
     "actionFailed": "Export action failed."
   }
 }

@@ -2,7 +2,7 @@
   "generatedReport": "Generirani izvještaj",
   "structuredMeetingIntelligence": "Strukturirana inteligencija sastanka",
   "meta": "{{mode}} način rada • {{timestamp}} • Pokušaj {{attempts}}",
-  "fallbackNotice": "Koristi se rezervno generiranje jer live AI servis nije dostupan.",
+  "fallbackNotice": "Simulacijski nacin rada je aktivan. Live AI zahtjevi su iskljuceni tijekom UX razvoja.",
   "actions": {
     "regenerate": "Generiraj ponovno",
     "copy": "Kopiraj",
@@ -13,6 +13,17 @@
   "status": {
     "generated": "Izvještaj je uspješno generiran"
   },
+  "review": {
+    "draft": "AI nacrt",
+    "unsavedChanges": "Nespremljene izmjene",
+    "reviewed": "Pregledano",
+    "markReviewed": "Označi pregledanim",
+    "markDraft": "Vrati u nacrt"
+  },
+  "success": {
+    "title": "Izvještaj je uspješno generiran",
+    "stats": "{{actionItems}} akcijskih stavki • {{decisions}} odluka • {{risks}} rizika"
+  },
   "sections": {
     "summary": "Sažetak sastanka",
     "decisions": "Ključne odluke",
@@ -22,6 +33,7 @@
     "openQuestions": "Otvorena pitanja"
   },
   "fields": {
+    "task": "Zadatak",
     "owner": "Vlasnik",
     "deadline": "Rok",
     "confidence": "Pouzdanost",
@@ -42,9 +54,33 @@
     "questionNotes": "Nema napomena.",
     "deadline": "Bez roka"
   },
+  "editor": {
+    "edit": "Uredi",
+    "editing": "Uređivanje uključeno",
+    "readOnly": "Prikaz samo za čitanje",
+    "save": "Spremi",
+    "cancel": "Odustani",
+    "delete": "Obriši",
+    "add": "Dodaj",
+    "addDecision": "Dodaj odluku",
+    "addTask": "Dodaj zadatak",
+    "decisionPlaceholder": "Dodaj novu odluku...",
+    "taskPlaceholder": "Definiraj sljedeći zadatak...",
+    "ownerPlaceholder": "Ime vlasnika",
+    "deadlinePlaceholder": "GGGG-MM-DD ili petak",
+    "unassigned": "Nedodijeljeno",
+    "addedManually": "Dodano tijekom ljudskog pregleda."
+  },
   "loading": {
     "title": "Generiram strukturirani izvještaj",
     "body": "Analiziram transkript i pripremam sažetak, odluke i akcijske stavke."
+  },
+  "generationMessages": {
+    "analyzing": "Analiziram kontekst sastanka...",
+    "decisions": "Prepoznajem odluke...",
+    "actionItems": "Izdvajam akcijske stavke...",
+    "risks": "Detektiram rizike...",
+    "preparing": "Pripremam strukturirani izvještaj..."
   },
   "announcements": {
     "generationStarted": "Generiranje izvještaja je pokrenuto.",
@@ -54,7 +90,9 @@
   "progress": {
     "queued": "Pripremam zahtjev",
     "analyzing": "Analiziram transkript",
-    "structuring": "Strukturiram izvještaj",
+    "decisions": "Prepoznajem odluke",
+    "actionItems": "Izdvajam akcijske stavke",
+    "risks": "Detektiram rizike",
     "validating": "Validiram shemu",
     "complete": "Dovršeno"
   },

@@ -2,7 +2,7 @@
   "generatedReport": "Generated report",
   "structuredMeetingIntelligence": "Structured meeting intelligence",
   "meta": "{{mode}} mode • {{timestamp}} • Attempt {{attempts}}",
-  "fallbackNotice": "Using fallback generation because the live AI service is unavailable.",
+  "fallbackNotice": "Simulation mode is active. Live AI requests are disabled during UX development.",
   "actions": {
     "regenerate": "Regenerate report",
     "copy": "Copy",
@@ -13,6 +13,17 @@
   "status": {
     "generated": "Report generated successfully"
   },
+  "review": {
+    "draft": "Draft AI Output",
+    "unsavedChanges": "Unsaved changes",
+    "reviewed": "Reviewed",
+    "markReviewed": "Mark reviewed",
+    "markDraft": "Mark as draft"
+  },
+  "success": {
+    "title": "Report generated successfully",
+    "stats": "{{actionItems}} action items • {{decisions}} decisions • {{risks}} risks"
+  },
   "sections": {
     "summary": "Meeting summary",
     "decisions": "Key decisions",
@@ -22,6 +33,7 @@
     "openQuestions": "Open questions"
   },
   "fields": {
+    "task": "Task",
     "owner": "Owner",
     "deadline": "Deadline",
     "confidence": "Confidence",
@@ -42,9 +54,33 @@
     "questionNotes": "No notes.",
     "deadline": "No deadline"
   },
+  "editor": {
+    "edit": "Edit",
+    "editing": "Editing enabled",
+    "readOnly": "Read-only view",
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "add": "Add",
+    "addDecision": "Add decision",
+    "addTask": "Add task",
+    "decisionPlaceholder": "Add an additional decision...",
+    "taskPlaceholder": "Define the next task...",
+    "ownerPlaceholder": "Owner name",
+    "deadlinePlaceholder": "YYYY-MM-DD or Friday",
+    "unassigned": "Unassigned",
+    "addedManually": "Added during human review."
+  },
   "loading": {
     "title": "Generating structured report",
     "body": "Analyzing the transcript and preparing the summary, decisions, and action items."
+  },
+  "generationMessages": {
+    "analyzing": "Analyzing meeting context...",
+    "decisions": "Identifying decisions...",
+    "actionItems": "Extracting action items...",
+    "risks": "Detecting risks...",
+    "preparing": "Preparing structured report..."
   },
   "announcements": {
     "generationStarted": "Report generation started.",
@@ -54,7 +90,9 @@
   "progress": {
     "queued": "Queueing request",
     "analyzing": "Analyzing transcript",
-    "structuring": "Structuring report",
+    "decisions": "Identifying decisions",
+    "actionItems": "Extracting action items",
+    "risks": "Detecting risks",
     "validating": "Validating schema",
     "complete": "Complete"
   },

@@ -1,3 +1,4 @@
+import { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { MeetingInputPanel } from "../components/meeting/MeetingInputPanel";
 import { ReportWorkspace } from "../components/report/ReportWorkspace";
@@ -9,9 +10,29 @@ export function HomePage() {
   const { t } = useTranslation(["home", "example", "report"]);
   const meetingInput = useMeetingInput();
   const reportGeneration = useGenerateReport();
-  const reportActions = useReportActions(reportGeneration.report);
+  const [originalReport, setOriginalReport] = useState(null);
+  const [editableReport, setEditableReport] = useState(null);
+  const [reviewStatus, setReviewStatus] = useState("draft");
+  const reportActions = useReportActions(editableReport);
+  const resultsRef = useRef(null);
+  const hasUnsavedChanges =
+    Boolean(originalReport && editableReport) &&
+    JSON.stringify(originalReport) !== JSON.stringify(editableReport);
+
+  useEffect(() => {
+    if (!reportGeneration.report) {
+      return;
+    }
+
+    setOriginalReport(reportGeneration.report);
+    setEditableReport(reportGeneration.report);
+    setReviewStatus("draft");
+  }, [reportGeneration.report]);
 
   async function handleGenerate() {
+    setOriginalReport(null);
+    setEditableReport(null);
+    setReviewStatus("draft");
     await reportGeneration.generateReport({
       meetingTitle: meetingInput.meetingTitle.trim(),
       transcript: meetingInput.inputText.trim(),
@@ -20,10 +41,20 @@ export function HomePage() {
   }
 
   const generationAnnouncement = {
-    loading: t("report:announcements.generationStarted"),
+    generating: t("report:announcements.generationStarted"),
     success: t("report:announcements.generationComplete"),
     error: reportGeneration.error || t("report:announcements.generationFailed")
   }[reportGeneration.status] || "";
+
+  useEffect(() => {
+    if (
+      reportGeneration.hasStartedGeneration &&
+      (reportGeneration.status === "generating" || reportGeneration.status === "success") &&
+      resultsRef.current
+    ) {
+      resultsRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  }, [reportGeneration.hasStartedGeneration, reportGeneration.status]);
 
   return (
     <main className="mx-auto flex w-full max-w-[1440px] flex-col gap-6 px-4 pb-12 pt-6 lg:gap-8 lg:px-8">
@@ -51,15 +82,15 @@ export function HomePage() {
         <MeetingInputPanel
           meetingInput={meetingInput}
           onGenerate={handleGenerate}
-          isGenerating={reportGeneration.status === "loading"}
+          isGenerating={reportGeneration.status === "generating"}
           error={reportGeneration.error || meetingInput.error}
         />
       </section>
 
       {reportGeneration.hasStartedGeneration ? (
-        <section className="mx-auto w-full max-w-[860px]">
+        <section className="mx-auto w-full max-w-[860px]" ref={resultsRef}>
           <ReportWorkspace
-            report={reportGeneration.report}
+            report={editableReport}
             status={reportGeneration.status}
             generationMeta={reportGeneration.meta}
             generationProgress={reportGeneration.progress}
@@ -67,6 +98,10 @@ export function HomePage() {
             onRetryGeneration={reportGeneration.retryGeneration}
             isRegenerating={reportGeneration.isGenerating}
             exportActions={reportActions}
+            hasUnsavedChanges={hasUnsavedChanges}
+            reviewStatus={reviewStatus}
+            onMarkReviewed={(nextStatus) => setReviewStatus(nextStatus)}
+            onReportChange={setEditableReport}
           />
         </section>
       ) : null}

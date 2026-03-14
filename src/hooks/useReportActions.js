@@ -92,7 +92,7 @@ export function useReportActions(report) {
           exportJiraTasksCsv(report, { t }),
           "text/csv;charset=utf-8"
         );
-        return { message: t("export:messages.downloadReady", { format: "Jira" }) };
+        return { message: t("export:messages.jiraReady") };
       }),
     copySection: (sectionId) =>
       runAction(`section-${sectionId}`, async () => {

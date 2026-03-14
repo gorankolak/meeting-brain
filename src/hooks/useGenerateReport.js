@@ -4,9 +4,11 @@ import { validateTranscript } from "../lib/transcriptInput";
 import { generateReport, isReportGenerationError } from "../services/report";
 
 const PROGRESS_STAGES = [
-  { id: "queued", value: 12 },
-  { id: "analyzing", value: 45 },
-  { id: "structuring", value: 72 },
+  { id: "queued", value: 10 },
+  { id: "analyzing", value: 34 },
+  { id: "decisions", value: 52 },
+  { id: "actionItems", value: 69 },
+  { id: "risks", value: 83 },
   { id: "validating", value: 92 }
 ];
 
@@ -25,7 +27,7 @@ export function useGenerateReport() {
   const inFlightRef = useRef(false);
 
   useEffect(() => {
-    if (status !== "loading") {
+    if (status !== "generating") {
       return undefined;
     }
 
@@ -41,7 +43,7 @@ export function useGenerateReport() {
         currentStage: PROGRESS_STAGES[stageIndex].id,
         percent: PROGRESS_STAGES[stageIndex].value
       });
-    }, 900);
+    }, 1500);
 
     return () => window.clearInterval(intervalId);
   }, [status]);
@@ -83,16 +85,22 @@ export function useGenerateReport() {
 
     latestPayloadRef.current = data;
     setHasStartedGeneration(true);
-    setStatus("loading");
+    setStatus("generating");
     setReport(null);
     setError("");
     setMeta(null);
+    setProgress({
+      currentStage: PROGRESS_STAGES[0].id,
+      percent: 0
+    });
     inFlightRef.current = true;
 
     try {
       const response = await generateReport({
         ...data,
         language: i18n.resolvedLanguage || i18n.language
+      }, {
+        onProgress: (nextProgress) => setProgress(nextProgress)
       });
       setReport(response.report);
       setMeta({
@@ -115,7 +123,7 @@ export function useGenerateReport() {
   }
 
   async function retryGeneration() {
-    if (!latestPayloadRef.current || status === "loading") {
+    if (!latestPayloadRef.current || status === "generating") {
       return;
     }
 
@@ -129,7 +137,7 @@ export function useGenerateReport() {
     meta,
     progress,
     hasStartedGeneration,
-    isGenerating: status === "loading",
+    isGenerating: status === "generating",
     generateReport: generate,
     retryGeneration
   };
