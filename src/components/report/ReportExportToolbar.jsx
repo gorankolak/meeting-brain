@@ -24,7 +24,7 @@ function ToolbarButton({
   return (
     <Button
       aria-label={t(`export:buttons.${actionId}`)}
-      className="min-h-9 w-full justify-center rounded-lg px-3.5 py-2 sm:w-auto"
+      className="min-h-9 w-full justify-center rounded-md px-3.5 py-2 sm:w-auto"
       disabled={disabled || isBusy}
       onClick={onClick}
       size="sm"
@@ -40,7 +40,7 @@ function UtilityButton({ children, disabled, icon: Icon, onClick, pressed = fals
   return (
     <Button
       aria-pressed={pressed}
-      className={`min-h-8 rounded-lg px-2.5 py-1.5 text-xs font-medium ${pressed ? "border-[--color-accent]/30 bg-cyan-50 text-cyan-800" : ""}`}
+      className={`min-h-8 rounded-md px-2.5 py-1.5 text-xs font-medium ${pressed ? "border-teal-200 bg-teal-50 text-teal-700" : ""}`}
       disabled={disabled}
       onClick={onClick}
       size="xs"
@@ -78,7 +78,7 @@ export function ReportExportToolbar({
           icon={FileDown}
           isBusy={isBusy("pdf")}
           onClick={() => onAction.downloadPdf()}
-          tone="primary"
+          tone="accent"
         >
           {t("export:buttons.downloadPdf")}
         </ToolbarButton>
@@ -106,7 +106,7 @@ export function ReportExportToolbar({
       </div>
 
       {!compact ? (
-        <div className="flex flex-wrap items-center gap-1.5 border-t border-surface-200/80 pt-2">
+        <div className="flex flex-wrap items-center gap-1.5 border-t border-gray-100 pt-2.5">
           <UtilityButton disabled={disabled} icon={isEditing ? Check : Pencil} onClick={onToggleEditing} pressed={isEditing}>
             {isEditing ? t("export:buttons.doneEditing") : t("export:buttons.editReport")}
           </UtilityButton>

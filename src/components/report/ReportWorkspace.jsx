@@ -47,7 +47,7 @@ const REPORT_SECTION_ITEMS = [
   { id: "nextSteps", titleKey: "report:sections.nextSteps", icon: ArrowRight }
 ];
 const INPUT_CLASSNAME =
-  "w-full rounded-[--radius-button] border border-slate-200 bg-white px-3 py-2 text-sm text-[--color-ink] outline-none transition focus:border-[--color-accent] focus:shadow-[0_0_0_4px_rgba(23,200,227,0.12)]";
+  "w-full rounded-md border border-gray-200 bg-white px-3 py-2 text-sm text-gray-900 outline-none transition focus:border-[--color-accent] focus:shadow-[0_0_0_4px_rgba(23,200,227,0.12)]";
 const TEXTAREA_CLASSNAME = `${INPUT_CLASSNAME} min-h-[120px] resize-y leading-6`;
 const PRIORITY_OPTIONS = ["high", "medium", "low", "unclear"];
 
@@ -61,7 +61,7 @@ function SuccessBanner({ report, visible, t }) {
   }
 
   return (
-    <div className="mb-5 rounded-[--radius-panel] border border-emerald-200/80 bg-emerald-50/90 px-4 py-3 text-emerald-900 transition duration-300 motion-reduce:transition-none">
+    <div className="mb-5 rounded-lg border border-emerald-200/80 bg-emerald-50/90 px-4 py-3 text-emerald-900 transition duration-300 motion-reduce:transition-none">
       <div className="flex items-start gap-3">
         <CheckCircle className="mt-0.5 shrink-0" size={18} />
         <div>
@@ -82,7 +82,7 @@ function SuccessBanner({ report, visible, t }) {
 function ProgressPanel({ progress, progressMessage, t }) {
   return (
     <div className="space-y-5">
-      <div className="rounded-xl border border-slate-200 bg-white p-4 shadow-[0_12px_30px_rgba(15,23,42,0.04)]">
+      <div className="rounded-lg border border-gray-200 bg-white p-4 shadow-sm">
         <div className="flex items-center justify-between gap-3 text-xs font-semibold uppercase tracking-[0.16em] text-[--color-muted]">
           <span>{t(`report:progress.${progress.currentStage}`)}</span>
           <span>{progress.percent}%</span>
@@ -106,8 +106,8 @@ function ProgressPanel({ progress, progressMessage, t }) {
 
 function PlaceholderState({ icon: Icon, title, body, actions = null }) {
   return (
-    <div className="flex min-h-[420px] flex-col items-center justify-center rounded-xl border border-dashed border-slate-200 bg-white px-6 py-10 text-center sm:min-h-[520px] sm:px-8">
-      <div className="flex size-18 items-center justify-center rounded-[--radius-button] bg-[--color-panel] text-[--color-accent]">
+    <div className="flex min-h-[420px] flex-col items-center justify-center rounded-lg border border-dashed border-gray-200 bg-white px-6 py-10 text-center sm:min-h-[520px] sm:px-8">
+      <div className="flex size-18 items-center justify-center rounded-md bg-[--color-panel] text-[--color-accent]">
         <Icon size={28} />
       </div>
       <h2 className="mt-6 font-display text-3xl font-semibold text-[--color-ink] sm:text-4xl">{title}</h2>
@@ -126,7 +126,7 @@ function PriorityBadge({ label, priority }) {
   };
 
   return (
-    <span className={`inline-flex items-center rounded-full border px-2.5 py-1 text-[11px] font-medium ${tones[priority]}`}>
+    <span className={`inline-flex items-center rounded-md border px-2.5 py-1 text-[11px] font-medium ${tones[priority]}`}>
       {label}
     </span>
   );
@@ -144,7 +144,7 @@ function ToastFeedback({ feedback }) {
 
   return (
     <div className="pointer-events-none fixed bottom-5 right-5 z-50">
-      <div className={`rounded-[--radius-panel] border px-4 py-3 shadow-[var(--shadow-soft)] ${tone}`}>
+      <div className={`rounded-lg border px-4 py-3 shadow-sm ${tone}`}>
         <p className="text-sm font-semibold">{feedback.message}</p>
       </div>
     </div>
@@ -157,7 +157,7 @@ function SectionCopyButton({ isCopied, onClick, t, title }) {
   return (
     <Button
       aria-label={`${label}: ${title}`}
-      className="min-h-8 rounded-lg px-2.5 py-1.5 sm:px-2"
+      className="min-h-8 rounded-md px-2.5 py-1.5 sm:px-2"
       onClick={onClick}
       size="xs"
       title={`${label}: ${title}`}
@@ -173,7 +173,7 @@ function SectionToggleButton({ isOpen, onClick, t }) {
   return (
     <button
       aria-expanded={isOpen}
-      className="inline-flex min-h-8 items-center gap-2 rounded-lg px-2.5 py-1.5 text-xs font-medium text-[--color-muted] transition hover:bg-surface-100 hover:text-[--color-ink] focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-[--color-accent] motion-reduce:transition-none"
+      className="inline-flex min-h-8 items-center gap-2 rounded-md px-2.5 py-1.5 text-xs font-medium text-gray-600 transition hover:bg-gray-50 hover:text-gray-900 focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-[--color-accent] motion-reduce:transition-none"
       onClick={onClick}
       type="button"
     >
@@ -203,9 +203,9 @@ function ReportSection({
   const { t } = useTranslation("report");
   const [isOpen, setIsOpen] = useState(defaultOpen);
   const tones = {
-    primary: "border-slate-200 bg-slate-50",
-    secondary: "border-slate-200 bg-slate-50",
-    warning: "border-slate-200 bg-slate-50"
+    primary: "border-gray-200 bg-white",
+    secondary: "border-gray-200 bg-white",
+    warning: "border-gray-200 bg-white"
   };
 
   useEffect(() => {
@@ -216,7 +216,7 @@ function ReportSection({
     <section
       id={sectionId}
       ref={sectionRef}
-      className={`rounded-xl border p-4 shadow-[0_10px_30px_rgba(15,23,42,0.03)] transition duration-300 ease-out motion-reduce:transform-none motion-reduce:transition-none sm:p-5 ${tones[tone]} ${
+      className={`rounded-lg border p-5 transition duration-300 ease-out motion-reduce:transform-none motion-reduce:transition-none sm:p-5 ${tones[tone]} ${
         isVisible ? "translate-y-0 opacity-100" : "translate-y-2 opacity-0"
       }`}
       style={{
@@ -228,14 +228,14 @@ function ReportSection({
         <div className="min-w-0">
           <div className="flex items-center gap-3">
             {Icon ? (
-              <span className="flex size-9 shrink-0 items-center justify-center rounded-[--radius-button] bg-surface-100 text-[--color-accent]">
+              <span className="flex size-9 shrink-0 items-center justify-center rounded-md bg-surface-100 text-[--color-accent]">
                 <Icon size={17} />
               </span>
             ) : null}
             <div className="flex min-w-0 items-center gap-2.5">
               <h3 className="text-base font-semibold text-[--color-ink] sm:text-[17px]">{title}</h3>
               {badge !== null ? (
-                <span className="inline-flex min-w-7 items-center justify-center rounded-full border border-surface-200 bg-surface-100 px-2 py-0.5 text-[11px] font-medium text-[--color-muted]">
+                <span className="inline-flex min-w-7 items-center justify-center rounded-md border border-gray-100 bg-gray-50 px-2 py-0.5 text-[11px] font-medium text-gray-500">
                   {badge}
                 </span>
               ) : null}
@@ -252,7 +252,7 @@ function ReportSection({
         </div>
       </div>
 
-      {!collapsible || isOpen ? <div className="mt-4">{children}</div> : null}
+      {!collapsible || isOpen ? <div className="mt-5">{children}</div> : null}
     </section>
   );
 }
@@ -265,7 +265,7 @@ function ReportSectionNav({ activeSectionId, items, onSelect, stickyTop = 16, t,
       className={
         isDesktop
           ? "sticky"
-          : "sticky z-20 -mx-5 border-b border-slate-200 bg-white/90 px-5 py-3 backdrop-blur-md sm:-mx-6 sm:px-6"
+          : "sticky z-20 -mx-5 border-b border-gray-200 bg-white/90 px-5 py-3 backdrop-blur-md sm:-mx-6 sm:px-6"
       }
       style={{ top: `${stickyTop}px` }}
     >
@@ -282,15 +282,15 @@ function ReportSectionNav({ activeSectionId, items, onSelect, stickyTop = 16, t,
               key={item.id}
               className={
                 isDesktop
-                  ? `flex w-full items-center gap-3 rounded-lg px-3 py-2 text-left text-sm transition duration-200 focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-[--color-accent] motion-reduce:transition-none ${
+                  ? `flex w-full items-center gap-3 rounded-md px-3 py-2 text-left text-sm transition duration-200 focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-[--color-accent] motion-reduce:transition-none ${
                       isActive
-                        ? "bg-cyan-50/90 text-cyan-950 shadow-[inset_0_0_0_1px_rgba(8,145,178,0.14)]"
-                        : "text-[--color-muted] hover:bg-surface-100 hover:text-[--color-ink]"
+                        ? "border border-teal-200 bg-teal-50 text-teal-800"
+                        : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
                     }`
-                  : `shrink-0 rounded-full px-3 py-1.5 text-xs font-medium transition duration-200 focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-[--color-accent] motion-reduce:transition-none ${
+                  : `shrink-0 rounded-md border px-3 py-1.5 text-xs font-medium transition duration-200 focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-[--color-accent] motion-reduce:transition-none ${
                       isActive
-                        ? "bg-cyan-50/90 text-cyan-950 shadow-[inset_0_0_0_1px_rgba(8,145,178,0.14)]"
-                        : "text-[--color-muted] hover:bg-surface-100 hover:text-[--color-ink]"
+                        ? "border-teal-200 bg-teal-50 text-teal-800"
+                        : "border-gray-200 bg-white text-gray-600 hover:bg-gray-50 hover:text-gray-900"
                     }`
               }
               onClick={() => onSelect(item.id)}
@@ -311,7 +311,7 @@ function ReviewStatusBadge({ hasUnsavedChanges, reviewStatus, t }) {
     reviewStatus === "reviewed"
       ? {
           label: t("report:review.reviewed"),
-          className: "border-cyan-200 bg-cyan-50 text-cyan-800"
+          className: "border-teal-200 bg-teal-50 text-teal-700"
         }
       : hasUnsavedChanges
         ? {
@@ -324,7 +324,7 @@ function ReviewStatusBadge({ hasUnsavedChanges, reviewStatus, t }) {
           };
 
   return (
-    <span className={`inline-flex items-center rounded-full border px-2.5 py-1 text-[11px] font-medium ${badge.className}`}>
+    <span className={`inline-flex items-center rounded-md border px-2.5 py-1 text-[11px] font-medium ${badge.className}`}>
       {badge.label}
     </span>
   );
@@ -332,12 +332,12 @@ function ReviewStatusBadge({ hasUnsavedChanges, reviewStatus, t }) {
 
 function MetaPill({ children, tone = "neutral" }) {
   const tones = {
-    neutral: "border-surface-200 bg-surface-50 text-[--color-muted]",
+    neutral: "border-gray-100 bg-gray-50 text-gray-500",
     warning: "border-amber-200 bg-amber-50 text-amber-800"
   };
 
   return (
-    <span className={`inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-[11px] font-medium ${tones[tone]}`}>
+    <span className={`inline-flex items-center gap-1.5 rounded-md border px-2.5 py-1 text-[11px] font-medium ${tones[tone]}`}>
       {children}
     </span>
   );
@@ -363,6 +363,7 @@ function SummaryEditor({ isEditingEnabled, report, onSave, onDirty }) {
         />
         <div className="flex flex-wrap gap-2">
           <Button
+            tone="secondary"
             onClick={() => {
               onSave(draft);
               onDirty();
@@ -394,7 +395,7 @@ function SummaryEditor({ isEditingEnabled, report, onSave, onDirty }) {
       {isEditingEnabled ? (
         <div>
           <Button
-            className="min-h-8 rounded-lg px-2.5 py-1.5"
+            className="min-h-8 rounded-md px-2.5 py-1.5"
             onClick={() => {
               setIsEditing(true);
             }}
@@ -430,7 +431,7 @@ function DecisionsEditor({ isEditingEnabled, report, onChange, onDirty }) {
           const isEditing = editingId === decision.id;
 
           return (
-            <article key={decision.id} className="rounded-[--radius-panel] border border-slate-200 bg-white p-4">
+            <article key={decision.id} className="rounded-lg border border-gray-100 bg-white p-4 sm:p-5">
               {isEditing ? (
                 <div className="space-y-3">
                   <textarea
@@ -440,6 +441,7 @@ function DecisionsEditor({ isEditingEnabled, report, onChange, onDirty }) {
                   />
                   <div className="flex flex-wrap gap-2">
                     <Button
+                      tone="secondary"
                       onClick={() => {
                         onChange((current) =>
                           current.map((item) =>
@@ -476,7 +478,7 @@ function DecisionsEditor({ isEditingEnabled, report, onChange, onDirty }) {
                       {isEditingEnabled ? (
                         <>
                           <Button
-                            className="min-h-8 rounded-lg px-2.5 py-1.5"
+                            className="min-h-8 rounded-md px-2.5 py-1.5"
                             onClick={() => {
                               setEditingId(decision.id);
                               setDraftValue(decision.decision);
@@ -488,7 +490,7 @@ function DecisionsEditor({ isEditingEnabled, report, onChange, onDirty }) {
                             {t("report:editor.edit")}
                           </Button>
                           <Button
-                            className="min-h-8 rounded-lg px-2.5 py-1.5"
+                            className="min-h-8 rounded-md px-2.5 py-1.5"
                             onClick={() => {
                               onChange((current) => current.filter((item) => item.id !== decision.id));
                               onDirty();
@@ -518,7 +520,7 @@ function DecisionsEditor({ isEditingEnabled, report, onChange, onDirty }) {
       )}
 
       {isEditingEnabled ? (
-        <div className="rounded-[--radius-panel] border border-dashed border-slate-200 bg-white p-4">
+        <div className="rounded-lg border border-dashed border-gray-200 bg-white p-4">
           <label className="block text-xs font-semibold uppercase tracking-[0.14em] text-[--color-muted]">
             {t("report:editor.addDecision")}
           </label>
@@ -603,7 +605,7 @@ function ActionItemsEditor({ isEditingEnabled, report, onChange, onDirty }) {
           return (
             <article
               key={item.id}
-              className="rounded-[--radius-panel] border border-slate-200 bg-white p-4 transition hover:border-slate-300 motion-reduce:transition-none"
+              className="rounded-lg border border-gray-100 bg-white p-4 transition hover:border-gray-200 motion-reduce:transition-none sm:p-5"
             >
               {isEditing && draft ? (
                 <div className="grid gap-3 md:grid-cols-2">
@@ -656,6 +658,7 @@ function ActionItemsEditor({ isEditingEnabled, report, onChange, onDirty }) {
                   <div className="md:col-span-2">
                     <div className="flex flex-wrap gap-2">
                       <Button
+                        tone="secondary"
                         onClick={() => {
                           onChange((current) =>
                             current.map((currentItem) =>
@@ -695,12 +698,12 @@ function ActionItemsEditor({ isEditingEnabled, report, onChange, onDirty }) {
                     <div className="flex flex-wrap gap-1.5">
                       {isEditingEnabled ? (
                         <>
-                          <Button className="min-h-8 rounded-lg px-2.5 py-1.5" onClick={() => startEditing(item)} size="xs" tone="ghost">
+                          <Button className="min-h-8 rounded-md px-2.5 py-1.5" onClick={() => startEditing(item)} size="xs" tone="ghost">
                             <Pencil size={14} />
                             {t("report:editor.edit")}
                           </Button>
                           <Button
-                            className="min-h-8 rounded-lg px-2.5 py-1.5"
+                            className="min-h-8 rounded-md px-2.5 py-1.5"
                             onClick={() => {
                               onChange((current) => current.filter((currentItem) => currentItem.id !== item.id));
                               onDirty();
@@ -736,7 +739,7 @@ function ActionItemsEditor({ isEditingEnabled, report, onChange, onDirty }) {
       )}
 
       {isEditingEnabled ? (
-        <div className="rounded-[--radius-panel] border border-dashed border-slate-200 bg-white p-4">
+        <div className="rounded-lg border border-dashed border-gray-200 bg-white p-4">
           <div className="grid gap-3 md:grid-cols-2">
             <div className="md:col-span-2">
               <label className="mb-1 block text-xs font-semibold uppercase tracking-[0.14em] text-[--color-muted]">
@@ -1105,7 +1108,7 @@ export function ReportWorkspace({
 
   return (
     <>
-      <section className="rounded-xl border border-slate-200 bg-white p-5 shadow-[var(--shadow-card)] sm:p-6 lg:p-7">
+      <section className="rounded-lg border border-gray-200 bg-white p-5 shadow-sm sm:p-6 lg:p-7">
         <SuccessBanner report={report} t={t} visible={showSuccessBanner} />
 
         {generationError && status === "error" ? <ErrorBanner>{generationError}</ErrorBanner> : null}
@@ -1113,7 +1116,7 @@ export function ReportWorkspace({
         {!isReady ? renderState() : null}
 
         {isReady ? (
-          <div className="space-y-5 xl:grid xl:grid-cols-[220px_minmax(0,1fr)] xl:items-start xl:gap-8 xl:space-y-0">
+          <div className="space-y-6 xl:grid xl:grid-cols-[220px_minmax(0,1fr)] xl:items-start xl:gap-8 xl:space-y-0">
             <aside className="hidden xl:block">
               <ReportSectionNav
                 activeSectionId={activeSectionId}
@@ -1125,10 +1128,10 @@ export function ReportWorkspace({
               />
             </aside>
 
-            <div className="min-w-0 space-y-5">
+            <div className="min-w-0 space-y-6">
               <div
                 ref={headerRef}
-                className={`sticky z-30 rounded-xl border border-slate-200 border-b bg-white/90 shadow-[0_14px_32px_rgba(15,23,42,0.07)] backdrop-blur-lg transition-all duration-200 ease-out motion-reduce:transform-none motion-reduce:transition-none ${
+                className={`sticky z-30 rounded-lg border border-gray-200 border-b bg-white/90 shadow-sm backdrop-blur-lg transition-all duration-200 ease-out motion-reduce:transform-none motion-reduce:transition-none ${
                   isHeaderCompact ? "px-4 py-3 sm:px-5" : "px-4 py-4 sm:px-5"
                 } ${
                   headerVisible ? "translate-y-0 opacity-100" : "translate-y-2 opacity-0"
@@ -1182,7 +1185,7 @@ export function ReportWorkspace({
                           {reportTitle}
                         </h2>
                         <div className="mt-3 flex flex-wrap items-center gap-2">
-                          <span className="inline-flex items-center gap-1.5 text-sm font-medium text-[--color-accent]">
+                          <span className="inline-flex items-center gap-1.5 text-sm font-medium text-teal-700">
                             <CheckCircle2 size={15} />
                             <span>{t("report:status.generated")}</span>
                           </span>
@@ -1208,7 +1211,7 @@ export function ReportWorkspace({
                       </div>
                     </div>
 
-                    <div className="flex flex-wrap items-center gap-2 text-[11px]">
+                    <div className="flex flex-wrap items-center gap-2.5 text-[11px]">
                       {generatedAt ? (
                         <MetaPill>
                           <Clock3 size={12} />
@@ -1317,10 +1320,10 @@ export function ReportWorkspace({
                 title={t("report:sections.risks")}
                 tone="warning"
               >
-                <div className="space-y-3">
+                <div className="space-y-4">
                   {report.risks.length ? (
                     report.risks.map((risk) => (
-                      <div key={risk.id} className="rounded-[--radius-panel] border border-slate-200 bg-white p-4">
+                      <div key={risk.id} className="rounded-lg border border-gray-100 bg-white p-4 sm:p-5">
                         <div className="flex items-start gap-3">
                           <AlertTriangle className="mt-0.5 shrink-0 text-[--color-warning]" size={16} />
                           <div className="min-w-0">
@@ -1340,7 +1343,7 @@ export function ReportWorkspace({
                 </div>
               </ReportSection>
 
-              <div className="grid gap-5 xl:grid-cols-2">
+              <div className="grid gap-6 xl:grid-cols-2">
                 <ReportSection
                   badge={report.open_questions.length}
                   collapsible
@@ -1353,10 +1356,10 @@ export function ReportWorkspace({
                   scrollMarginTop={scrollMarginTop}
                   title={t("report:sections.openQuestions")}
                 >
-                  <div className="space-y-3">
+                  <div className="space-y-4">
                     {report.open_questions.length ? (
                       report.open_questions.map((question) => (
-                        <article key={question.id} className="rounded-[--radius-panel] border border-slate-200 bg-white p-4">
+                        <article key={question.id} className="rounded-lg border border-gray-100 bg-white p-4 sm:p-5">
                           <p className="text-sm font-semibold text-[--color-ink]">{question.question}</p>
                           <p className="mt-2 text-sm text-[--color-muted]">
                             {question.notes || t("report:empty.questionNotes")}
@@ -1387,10 +1390,10 @@ export function ReportWorkspace({
                   title={t("report:sections.nextSteps")}
                   tone="primary"
                 >
-                  <ul className="space-y-3 text-sm text-[--color-ink]">
+                  <ul className="space-y-4 text-sm text-[--color-ink]">
                     {report.next_steps.length ? (
                       report.next_steps.map((step) => (
-                        <li key={step} className="flex gap-3 rounded-[--radius-panel] border border-slate-200 bg-white p-4">
+                        <li key={step} className="flex gap-3 rounded-lg border border-gray-100 bg-white p-4 sm:p-5">
                           <CheckCircle2 className="mt-0.5 shrink-0 text-[--color-accent]" size={16} />
                           <span>{step}</span>
                         </li>

@@ -4,7 +4,7 @@ function SkeletonLine({ className = "" }) {
 
 function SkeletonCard({ children, className = "" }) {
   return (
-    <div className={`rounded-[--radius-panel] border border-[--color-border] bg-white p-4 ${className}`}>
+    <div className={`rounded-lg border border-gray-200 bg-white p-4 ${className}`}>
       {children}
     </div>
   );
@@ -24,12 +24,12 @@ export function ReportSkeleton() {
         <SkeletonCard className="space-y-3">
           <SkeletonLine className="w-32" />
           <div className="space-y-3">
-            <div className="rounded-[--radius-panel] bg-surface-100 p-3">
+            <div className="rounded-lg bg-surface-100 p-3">
               <SkeletonLine className="w-5/6" />
               <SkeletonLine className="mt-3 w-full" />
               <SkeletonLine className="mt-2 w-2/3" />
             </div>
-            <div className="rounded-[--radius-panel] bg-surface-100 p-3">
+            <div className="rounded-lg bg-surface-100 p-3">
               <SkeletonLine className="w-4/5" />
               <SkeletonLine className="mt-3 w-full" />
               <SkeletonLine className="mt-2 w-1/2" />
@@ -40,11 +40,11 @@ export function ReportSkeleton() {
         <SkeletonCard className="space-y-3">
           <SkeletonLine className="w-36" />
           <div className="space-y-3">
-            <div className="rounded-[--radius-panel] bg-surface-100 p-3">
+            <div className="rounded-lg bg-surface-100 p-3">
               <SkeletonLine className="w-full" />
               <SkeletonLine className="mt-3 w-2/3" />
             </div>
-            <div className="rounded-[--radius-panel] bg-surface-100 p-3">
+            <div className="rounded-lg bg-surface-100 p-3">
               <SkeletonLine className="w-5/6" />
               <SkeletonLine className="mt-3 w-1/2" />
             </div>
@@ -56,7 +56,7 @@ export function ReportSkeleton() {
         <SkeletonLine className="w-32" />
         <div className="space-y-3">
           {[0, 1, 2].map((item) => (
-            <div key={item} className="rounded-[--radius-panel] bg-surface-100 p-4">
+            <div key={item} className="rounded-lg bg-surface-100 p-4">
               <SkeletonLine className="w-11/12" />
               <SkeletonLine className="mt-3 w-3/4" />
               <div className="mt-4 grid grid-cols-3 gap-3">
@@ -72,11 +72,11 @@ export function ReportSkeleton() {
       <SkeletonCard className="space-y-3">
         <SkeletonLine className="w-24" />
         <div className="space-y-3">
-          <div className="rounded-[--radius-panel] bg-surface-100 p-3">
+          <div className="rounded-lg bg-surface-100 p-3">
             <SkeletonLine className="w-5/6" />
             <SkeletonLine className="mt-3 w-full" />
           </div>
-          <div className="rounded-[--radius-panel] bg-surface-100 p-3">
+          <div className="rounded-lg bg-surface-100 p-3">
             <SkeletonLine className="w-4/5" />
             <SkeletonLine className="mt-3 w-2/3" />
           </div>
