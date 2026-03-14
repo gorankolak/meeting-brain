@@ -1,8 +1,20 @@
 import { useEffect, useRef } from "react";
-import { FileUp, Sparkles, WandSparkles } from "lucide-react";
+import { FileText, FileUp, Loader2, Sparkles, WandSparkles, X } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { ErrorBanner } from "../ui/ErrorBanner";
 import { Button } from "../ui/Button";
+
+function formatFileSize(bytes) {
+  if (!bytes) {
+    return "";
+  }
+
+  if (bytes < 1024 * 1024) {
+    return `${(bytes / 1024).toFixed(1)} KB`;
+  }
+
+  return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
+}
 
 export function MeetingInputPanel({
   meetingInput,
@@ -15,11 +27,13 @@ export function MeetingInputPanel({
   const {
     inputText,
     fileName,
+    fileSize,
     transcriptError,
     isTranscriptValid,
     setInputText,
     markTranscriptTouched,
     handleFileUpload,
+    removeUploadedFile,
     loadExample
   } = meetingInput;
   const errorId = "transcript-error";
@@ -61,6 +75,11 @@ export function MeetingInputPanel({
           />
         </label>
 
+        <div className="flex items-center justify-between px-1 text-xs text-gray-500">
+          <span>{t("home:helper.characterCount", { count: inputText.length })}</span>
+          <span>{t("home:helper.supportedFiles")}</span>
+        </div>
+
         <div className="grid grid-cols-2 gap-3">
           <label className="flex min-h-12 cursor-pointer items-center justify-center gap-2 rounded-[--radius-button] border border-[--color-border] bg-white/92 px-4 py-3 text-sm font-semibold text-[--color-ink] shadow-[0_10px_24px_rgba(15,23,42,0.04)] transition duration-150 ease-out hover:-translate-y-0.5 hover:border-sky-200 hover:bg-[--color-panel] hover:shadow-[0_16px_32px_rgba(15,23,42,0.08)] active:translate-y-0 active:bg-white active:shadow-[0_8px_18px_rgba(15,23,42,0.05)] focus-within:outline-3 focus-within:outline-offset-2 focus-within:outline-[--color-accent]">
             <FileUp size={16} />
@@ -85,14 +104,26 @@ export function MeetingInputPanel({
 
         <div className="flex flex-col gap-3">
           {fileName ? (
-            <div className="rounded-[--radius-button] bg-[--color-panel] px-3 py-2 text-xs text-[--color-muted]">
-              {t("home:helper.loadedFile", { fileName })}
+            <div className="flex items-center justify-between gap-3 rounded-[--radius-button] border border-[--color-border] bg-surface-100 px-4 py-3 text-sm text-[--color-ink]">
+              <div className="flex min-w-0 items-center gap-3">
+                <div className="flex size-10 shrink-0 items-center justify-center rounded-full bg-cyan-100 text-cyan-700">
+                  <FileText size={18} />
+                </div>
+                <div className="min-w-0">
+                  <p className="truncate font-semibold">{fileName}</p>
+                  <p className="text-xs text-[--color-muted]">{formatFileSize(fileSize)}</p>
+                </div>
+              </div>
+              <button
+                aria-label={t("home:buttons.removeFile")}
+                className="inline-flex size-8 items-center justify-center rounded-full text-[--color-muted] hover:bg-white hover:text-[--color-ink]"
+                onClick={removeUploadedFile}
+                type="button"
+              >
+                <X size={16} />
+              </button>
             </div>
           ) : null}
-
-          <p className="px-1 text-xs leading-5 text-gray-500">
-            {t("home:helper.supportedFiles")}
-          </p>
         </div>
 
         {displayError ? (
@@ -100,13 +131,13 @@ export function MeetingInputPanel({
         ) : null}
 
         <Button
-          aria-label={isGenerating ? t("report:loading.title") : t("home:buttons.generateReport")}
+          aria-label={isGenerating ? t("home:buttons.generatingReport") : t("home:buttons.generateReport")}
           className="w-full"
           disabled={isGenerateDisabled}
           onClick={onGenerate}
         >
-          <WandSparkles size={16} />
-          {isGenerating ? t("report:loading.title") : t("home:buttons.generateReport")}
+          {isGenerating ? <Loader2 className="animate-spin" size={16} /> : <WandSparkles size={16} />}
+          {isGenerating ? t("home:buttons.generatingReport") : t("home:buttons.generateReport")}
         </Button>
       </div>
     </section>

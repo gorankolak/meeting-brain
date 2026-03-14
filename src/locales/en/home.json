@@ -15,17 +15,21 @@
   },
   "placeholders": {
     "meetingTitle": "Sprint review, rollout sync, vendor coordination...",
-    "transcript": "[10:00] Alice: Welcome everyone. Today we are discussing..."
+    "transcript": "[10:00] Ana: We can keep the beta launch date if QA signs off by Wednesday. [10:02] Luka: I will finish regression testing tomorrow. [10:05] Mia: Petra owns the customer email draft and legal review. [10:08] Ana: The main risk is incomplete analytics coverage before launch."
   },
   "buttons": {
     "uploadFile": "Upload file",
+    "removeFile": "Remove file",
     "loadExample": "Load example",
-    "generateReport": "Generate structured report"
+    "generateReport": "Generate structured report",
+    "generatingReport": "Generating report..."
   },
   "helper": {
     "supportedFiles": "Supported uploads: PDF, DOCX, TXT, MD up to 5MB",
     "loadedFile": "Loaded file: {{fileName}}",
-    "examplePrompt": "Use the example meeting if you want to preview the workflow before pasting a real transcript."
+    "examplePrompt": "Use the example meeting if you want to preview the workflow before pasting a real transcript.",
+    "characterCount_one": "{{count}} character",
+    "characterCount_other": "{{count}} characters"
   },
   "sourceTypes": {
     "pasted_notes": "pasted notes",

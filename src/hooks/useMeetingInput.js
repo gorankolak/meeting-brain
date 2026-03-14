@@ -13,6 +13,7 @@ export function useMeetingInput() {
   const [inputText, setInputText] = useState("");
   const [sourceType, setSourceType] = useState("pasted_notes");
   const [fileName, setFileName] = useState("");
+  const [fileSize, setFileSize] = useState(0);
   const [error, setError] = useState("");
   const [activeExampleId, setActiveExampleId] = useState("");
   const [hasTouchedTranscript, setHasTouchedTranscript] = useState(false);
@@ -34,6 +35,7 @@ export function useMeetingInput() {
     setInputText(value);
     setSourceType("pasted_notes");
     setFileName("");
+    setFileSize(0);
     setActiveExampleId("");
     setError("");
   }
@@ -46,6 +48,7 @@ export function useMeetingInput() {
       setInputText(parsedText);
       setMeetingTitle(file.name.replace(/\.[^.]+$/, ""));
       setFileName(file.name);
+      setFileSize(file.size);
       setSourceType(inferSourceType(file));
       setActiveExampleId("");
       setHasTouchedTranscript(true);
@@ -81,6 +84,7 @@ export function useMeetingInput() {
     setMeetingTitle(example.title);
     setInputText(example.transcript);
     setFileName("");
+    setFileSize(0);
     setSourceType("example");
     setActiveExampleId(example.id);
     setHasTouchedTranscript(true);
@@ -89,6 +93,13 @@ export function useMeetingInput() {
 
   function markTranscriptTouched() {
     setHasTouchedTranscript(true);
+  }
+
+  function removeUploadedFile() {
+    setFileName("");
+    setFileSize(0);
+    setSourceType("pasted_notes");
+    setError("");
   }
 
   useEffect(() => {
@@ -108,6 +119,7 @@ export function useMeetingInput() {
     inputText,
     sourceType,
     fileName,
+    fileSize,
     error,
     transcriptError: showTranscriptError ? t(`common:${transcriptError}`) : "",
     isTranscriptValid: !transcriptError,
@@ -116,6 +128,7 @@ export function useMeetingInput() {
     setMeetingTitle,
     setInputText: updateTranscript,
     handleFileUpload,
+    removeUploadedFile,
     loadExample,
     markTranscriptTouched
   };

@@ -15,17 +15,22 @@
   },
   "placeholders": {
     "meetingTitle": "Pregled sprinta, rollout sinkronizacija, koordinacija s dobavljačem...",
-    "transcript": "[10:00] Ana: Dobro jutro svima. Danas raspravljamo o..."
+    "transcript": "[10:00] Ana: Mozemo zadrzati datum beta lansiranja ako QA potvrdi sve do srijede. [10:02] Luka: Zavrsit cu regresijsko testiranje sutra. [10:05] Mia: Petra preuzima draft e-maila prema korisnicima i pravni pregled. [10:08] Ana: Glavni rizik je nepotpuna analitika prije lansiranja."
   },
   "buttons": {
     "uploadFile": "Učitaj datoteku",
+    "removeFile": "Ukloni datoteku",
     "loadExample": "Učitaj primjer",
-    "generateReport": "Generiraj strukturirani izvještaj"
+    "generateReport": "Generiraj strukturirani izvještaj",
+    "generatingReport": "Generiram izvještaj..."
   },
   "helper": {
     "supportedFiles": "Podržani prijenosi: PDF, DOCX, TXT i MD do 5 MB",
     "loadedFile": "Učitana datoteka: {{fileName}}",
-    "examplePrompt": "Učitaj primjer sastanka ako želiš isprobati tijek rada prije lijepljenja stvarnog transkripta."
+    "examplePrompt": "Učitaj primjer sastanka ako želiš isprobati tijek rada prije lijepljenja stvarnog transkripta.",
+    "characterCount_one": "{{count}} znak",
+    "characterCount_few": "{{count}} znaka",
+    "characterCount_other": "{{count}} znakova"
   },
   "sourceTypes": {
     "pasted_notes": "zalijepljene bilješke",

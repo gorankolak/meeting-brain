@@ -1,14 +1,12 @@
 {
   "appTitle": "Meeting Brain",
   "appTagline": "Od zapisnika do zadatka",
-  "nav": {
-    "workspace": "Radni prostor",
-    "privacy": "Privatnost",
-    "terms": "Uvjeti"
-  },
   "footer": {
-    "disclaimer": "Meeting Brain MVP. Pregledajte generirane rezultate prije dijeljenja.",
-    "security": "Frontend nikada ne izlaže API ključeve pružatelja usluga."
+    "title": "Meeting Brain — AI analiza sastanaka za projektne timove",
+    "description": "Zalijepite bilješke sa sastanka, generirajte strukturirane izvještaje\ni izvezite akcijske stavke u nekoliko sekundi.",
+    "stack": "Pokreću React • Gemini AI • Netlify",
+    "github": "Pogledaj projekt na GitHubu",
+    "githubUrl": ""
   },
   "language": {
     "switcherLabel": "Odabir jezika",
@@ -31,6 +29,7 @@
   },
   "generationMode": {
     "fallback": "Rezervni",
+    "simulation": "Simulacija",
     "llm": "LLM"
   },
   "errors": {
@@ -47,16 +46,6 @@
     "transcriptTooShort": "Zapisnik mora imati najmanje 20 znakova.",
     "transcriptTooLong": "Zapisnik mora imati najviše 20.000 znakova.",
     "reportRequired": "Najprije generirajte izvještaj."
-  },
-  "legal": {
-    "privacy": {
-      "title": "Privatnost",
-      "body": "Meeting Brain obrađuje poslani sadržaj sastanka kako bi generirao strukturirane izvještaje. Za produkcijsku uporabu konfigurirajte LLM i e-mail pružatelje kroz Netlify varijable okruženja i provjerite politiku zadržavanja prije rada s osjetljivim podacima."
-    },
-    "terms": {
-      "title": "Uvjeti",
-      "body": "Meeting Brain je dostupan kao MVP radni prostor. Generirane rezultate treba pregledati čovjek prije vanjske distribucije ili uvoza u projektne sustave."
-    }
   },
   "notFound": {
     "title": "Stranica nije pronađena",

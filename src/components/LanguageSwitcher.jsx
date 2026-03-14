@@ -9,7 +9,7 @@ export function LanguageSwitcher() {
   return (
     <div
       aria-label={t("language.switcherLabel")}
-      className="inline-flex rounded-full border border-[--color-border] bg-[--color-panel] p-1"
+      className="flex gap-1 rounded-full bg-surface-100 p-1"
       role="group"
     >
       {LANGUAGES.map((language) => {
@@ -19,10 +19,10 @@ export function LanguageSwitcher() {
           <button
             aria-label={t(`language.options.${language}`)}
             aria-pressed={isActive}
-            className={`cursor-pointer rounded-full px-3 py-1.5 text-xs font-semibold tracking-[0.08em] transition duration-150 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[--color-accent] focus-visible:ring-offset-2 focus-visible:ring-offset-white ${
+            className={`min-h-9 cursor-pointer rounded-full px-3 text-sm transition duration-150 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[--color-accent] focus-visible:ring-offset-2 focus-visible:ring-offset-white ${
               isActive
-                ? "bg-[--color-panel-strong] text-white shadow-[var(--shadow-soft)] hover:brightness-110 active:brightness-95"
-                : "text-[--color-muted] hover:bg-white hover:text-[--color-ink] hover:shadow-[0_8px_18px_rgba(15,23,42,0.08)] active:bg-white/80"
+                ? "bg-white font-medium text-[--color-ink] shadow-sm"
+                : "text-surface-500 hover:text-surface-900"
             }`}
             key={language}
             onClick={() => i18n.changeLanguage(language)}

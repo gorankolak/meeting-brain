@@ -1,14 +1,12 @@
 {
   "appTitle": "Meeting Brain",
   "appTagline": "Minutes to action",
-  "nav": {
-    "workspace": "Workspace",
-    "privacy": "Privacy",
-    "terms": "Terms"
-  },
   "footer": {
-    "disclaimer": "Meeting Brain MVP. Review generated outputs before distribution.",
-    "security": "Frontend never exposes provider API keys."
+    "title": "Meeting Brain — AI meeting analysis for project teams",
+    "description": "Paste meeting notes, generate structured reports,\nand export action items in seconds.",
+    "stack": "Built with React • Gemini AI • Netlify",
+    "github": "View project on GitHub",
+    "githubUrl": ""
   },
   "language": {
     "switcherLabel": "Language selection",
@@ -31,6 +29,7 @@
   },
   "generationMode": {
     "fallback": "Fallback",
+    "simulation": "Simulation",
     "llm": "LLM"
   },
   "errors": {
@@ -47,16 +46,6 @@
     "transcriptTooShort": "Transcript must be at least 20 characters.",
     "transcriptTooLong": "Transcript must be 20,000 characters or fewer.",
     "reportRequired": "Generate a report first."
-  },
-  "legal": {
-    "privacy": {
-      "title": "Privacy",
-      "body": "Meeting Brain processes submitted meeting content to generate structured reports. For production use, configure your LLM and email providers in Netlify environment variables and review retention policy before handling sensitive data."
-    },
-    "terms": {
-      "title": "Terms",
-      "body": "Meeting Brain is provided as an MVP workspace. Generated outputs should be reviewed by a human before external distribution or project system import."
-    }
   },
   "notFound": {
     "title": "Page not found",
