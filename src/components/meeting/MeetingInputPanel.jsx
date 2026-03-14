@@ -24,7 +24,13 @@ export function MeetingInputPanel({
 }) {
   const { t } = useTranslation(["home", "report"]);
   const textareaRef = useRef(null);
+  const generateButtonRef = useRef(null);
+  const typingRevealTimeoutRef = useRef(0);
+  const lastRevealKeyRef = useRef("");
+  const pendingPasteRevealRef = useRef(false);
+  const previousInputLengthRef = useRef(0);
   const {
+    activeExampleId,
     inputText,
     fileName,
     fileSize,
@@ -40,6 +46,28 @@ export function MeetingInputPanel({
   const isGenerateDisabled = isGenerating || !isTranscriptValid;
   const displayError = transcriptError || error;
 
+  function revealGenerateButton(revealKey) {
+    if (!revealKey || lastRevealKeyRef.current === revealKey) {
+      return;
+    }
+
+    const buttonContainer = generateButtonRef.current;
+    if (!buttonContainer || typeof window === "undefined") {
+      return;
+    }
+
+    const rect = buttonContainer.getBoundingClientRect();
+    if (rect.bottom <= window.innerHeight - 24) {
+      return;
+    }
+
+    lastRevealKeyRef.current = revealKey;
+    buttonContainer.scrollIntoView({
+      behavior: "smooth",
+      block: "nearest"
+    });
+  }
+
   function autoResizeTextarea() {
     const textarea = textareaRef.current;
     if (!textarea) return;
@@ -53,8 +81,51 @@ export function MeetingInputPanel({
     return () => cancelAnimationFrame(frame);
   }, [inputText]);
 
+  useEffect(() => {
+    if (!activeExampleId || !inputText.trim()) {
+      return undefined;
+    }
+
+    const frame = requestAnimationFrame(() => revealGenerateButton(`example:${activeExampleId}`));
+    return () => cancelAnimationFrame(frame);
+  }, [activeExampleId, inputText]);
+
+  useEffect(() => {
+    if (!fileName || !inputText.trim()) {
+      return undefined;
+    }
+
+    const frame = requestAnimationFrame(() => revealGenerateButton(`file:${fileName}:${inputText.length}`));
+    return () => cancelAnimationFrame(frame);
+  }, [fileName, inputText]);
+
+  useEffect(() => {
+    const previousLength = previousInputLengthRef.current;
+    const nextLength = inputText.length;
+
+    if (pendingPasteRevealRef.current && nextLength > previousLength) {
+      pendingPasteRevealRef.current = false;
+      const frame = requestAnimationFrame(() => revealGenerateButton(`paste:${nextLength}`));
+      previousInputLengthRef.current = nextLength;
+      return () => cancelAnimationFrame(frame);
+    }
+
+    if (previousLength <= 120 && nextLength > 120) {
+      window.clearTimeout(typingRevealTimeoutRef.current);
+      typingRevealTimeoutRef.current = window.setTimeout(() => {
+        revealGenerateButton(`typed-threshold:${nextLength}`);
+      }, 180);
+    }
+
+    previousInputLengthRef.current = nextLength;
+
+    return () => {
+      window.clearTimeout(typingRevealTimeoutRef.current);
+    };
+  }, [inputText]);
+
   return (
-    <section className="rounded-[--radius-panel] border border-white/80 bg-white/92 p-6 shadow-[var(--shadow-card)] backdrop-blur-xl focus-within:ring-2 focus-within:ring-sky-200">
+    <section className="rounded-xl border border-slate-200 bg-white p-6 shadow-[var(--shadow-card)] focus-within:ring-2 focus-within:ring-sky-200">
       <div className="flex flex-col gap-4">
         <label className="block">
           <span className="mb-3 block text-xs font-medium uppercase tracking-wider text-gray-600">
@@ -63,11 +134,14 @@ export function MeetingInputPanel({
           <textarea
             aria-describedby={displayError ? errorId : undefined}
             aria-invalid={displayError ? "true" : "false"}
-            className={`min-h-[120px] max-h-[300px] w-full resize-none overflow-y-auto rounded-[--radius-panel] border bg-[--color-panel] px-4 py-3 font-mono text-sm leading-6 text-[--color-ink] outline-none transition duration-150 ease-out focus:border-[--color-accent] focus:bg-white focus:shadow-[0_0_0_4px_rgba(23,200,227,0.12)] ${displayError ? "border-red-300" : "border-[--color-border]"}`}
+            className={`min-h-[120px] max-h-[300px] w-full resize-none overflow-y-auto rounded-[--radius-button] border bg-slate-50 px-4 py-3 font-mono text-sm leading-6 text-[--color-ink] outline-none transition duration-150 ease-out focus:border-[--color-accent] focus:bg-white focus:shadow-[0_0_0_4px_rgba(23,200,227,0.12)] ${displayError ? "border-red-300" : "border-slate-200"}`}
             id="meeting-transcript"
             onBlur={markTranscriptTouched}
             onChange={(event) => setInputText(event.target.value)}
             onInput={() => requestAnimationFrame(autoResizeTextarea)}
+            onPaste={() => {
+              pendingPasteRevealRef.current = true;
+            }}
             placeholder={t("home:placeholders.transcript")}
             ref={textareaRef}
             rows={1}
@@ -81,7 +155,7 @@ export function MeetingInputPanel({
         </div>
 
         <div className="grid grid-cols-2 gap-3">
-          <label className="flex min-h-12 cursor-pointer items-center justify-center gap-2 rounded-[--radius-button] border border-[--color-border] bg-white/92 px-4 py-3 text-sm font-semibold text-[--color-ink] shadow-[0_10px_24px_rgba(15,23,42,0.04)] transition duration-150 ease-out hover:-translate-y-0.5 hover:border-sky-200 hover:bg-[--color-panel] hover:shadow-[0_16px_32px_rgba(15,23,42,0.08)] active:translate-y-0 active:bg-white active:shadow-[0_8px_18px_rgba(15,23,42,0.05)] focus-within:outline-3 focus-within:outline-offset-2 focus-within:outline-[--color-accent]">
+          <label className="flex min-h-12 cursor-pointer items-center justify-center gap-2 rounded-[--radius-button] border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-[--color-ink] shadow-[0_10px_24px_rgba(15,23,42,0.04)] transition duration-150 ease-out hover:-translate-y-0.5 hover:border-sky-200 hover:bg-slate-50 hover:shadow-[0_16px_32px_rgba(15,23,42,0.08)] active:translate-y-0 active:bg-white active:shadow-[0_8px_18px_rgba(15,23,42,0.05)] focus-within:outline-3 focus-within:outline-offset-2 focus-within:outline-[--color-accent]">
             <FileUp size={16} />
             {t("home:buttons.uploadFile")}
             <input
@@ -104,9 +178,9 @@ export function MeetingInputPanel({
 
         <div className="flex flex-col gap-3">
           {fileName ? (
-            <div className="flex items-center justify-between gap-3 rounded-[--radius-button] border border-[--color-border] bg-surface-100 px-4 py-3 text-sm text-[--color-ink]">
+            <div className="flex items-center justify-between gap-3 rounded-[--radius-panel] border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-[--color-ink]">
               <div className="flex min-w-0 items-center gap-3">
-                <div className="flex size-10 shrink-0 items-center justify-center rounded-full bg-cyan-100 text-cyan-700">
+                <div className="flex size-10 shrink-0 items-center justify-center rounded-[--radius-button] bg-cyan-100 text-cyan-700">
                   <FileText size={18} />
                 </div>
                 <div className="min-w-0">
@@ -116,7 +190,7 @@ export function MeetingInputPanel({
               </div>
               <button
                 aria-label={t("home:buttons.removeFile")}
-                className="inline-flex size-8 items-center justify-center rounded-full text-[--color-muted] hover:bg-white hover:text-[--color-ink]"
+                className="inline-flex size-8 items-center justify-center rounded-[--radius-button] text-[--color-muted] hover:bg-white hover:text-[--color-ink]"
                 onClick={removeUploadedFile}
                 type="button"
               >
@@ -130,15 +204,17 @@ export function MeetingInputPanel({
           <ErrorBanner id={errorId}>{displayError}</ErrorBanner>
         ) : null}
 
-        <Button
-          aria-label={isGenerating ? t("home:buttons.generatingReport") : t("home:buttons.generateReport")}
-          className="w-full"
-          disabled={isGenerateDisabled}
-          onClick={onGenerate}
-        >
-          {isGenerating ? <Loader2 className="animate-spin" size={16} /> : <WandSparkles size={16} />}
-          {isGenerating ? t("home:buttons.generatingReport") : t("home:buttons.generateReport")}
-        </Button>
+        <div ref={generateButtonRef}>
+          <Button
+            aria-label={isGenerating ? t("home:buttons.generatingReport") : t("home:buttons.generateReport")}
+            className="w-full"
+            disabled={isGenerateDisabled}
+            onClick={onGenerate}
+          >
+            {isGenerating ? <Loader2 className="animate-spin" size={16} /> : <WandSparkles size={16} />}
+            {isGenerating ? t("home:buttons.generatingReport") : t("home:buttons.generateReport")}
+          </Button>
+        </div>
       </div>
     </section>
   );

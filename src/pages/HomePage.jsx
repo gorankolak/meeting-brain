@@ -15,6 +15,7 @@ export function HomePage() {
   const [reviewStatus, setReviewStatus] = useState("draft");
   const reportActions = useReportActions(editableReport);
   const resultsRef = useRef(null);
+  const hasScrolledToResultsRef = useRef(false);
   const hasUnsavedChanges =
     Boolean(originalReport && editableReport) &&
     JSON.stringify(originalReport) !== JSON.stringify(editableReport);
@@ -33,6 +34,7 @@ export function HomePage() {
     setOriginalReport(null);
     setEditableReport(null);
     setReviewStatus("draft");
+    hasScrolledToResultsRef.current = false;
     await reportGeneration.generateReport({
       meetingTitle: meetingInput.meetingTitle.trim(),
       transcript: meetingInput.inputText.trim(),
@@ -49,15 +51,40 @@ export function HomePage() {
   useEffect(() => {
     if (
       reportGeneration.hasStartedGeneration &&
+      !hasScrolledToResultsRef.current &&
       (reportGeneration.status === "generating" || reportGeneration.status === "success") &&
       resultsRef.current
     ) {
-      resultsRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
+      hasScrolledToResultsRef.current = true;
+      const frameId = window.requestAnimationFrame(() => {
+        resultsRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+      });
+
+      return () => window.cancelAnimationFrame(frameId);
     }
   }, [reportGeneration.hasStartedGeneration, reportGeneration.status]);
 
+  useEffect(() => {
+    if (
+      reportGeneration.status === "success" &&
+      reportGeneration.report &&
+      resultsRef.current
+    ) {
+      const frameId = window.requestAnimationFrame(() => {
+        window.requestAnimationFrame(() => {
+          const focusTarget = resultsRef.current?.querySelector("[data-report-heading]");
+          if (focusTarget instanceof HTMLElement) {
+            focusTarget.focus({ preventScroll: true });
+          }
+        });
+      });
+
+      return () => window.cancelAnimationFrame(frameId);
+    }
+  }, [reportGeneration.report, reportGeneration.status]);
+
   return (
-    <main className="mx-auto flex w-full max-w-[1440px] flex-col gap-6 px-4 pb-12 pt-6 lg:gap-8 lg:px-8">
+    <main className="mx-auto flex w-full max-w-[1440px] flex-col gap-6 bg-slate-50 px-4 pb-12 pt-6 lg:gap-8 lg:px-8">
       <div aria-atomic="true" aria-live="polite" className="sr-only">
         {generationAnnouncement}
       </div>
@@ -88,7 +115,7 @@ export function HomePage() {
       </section>
 
       {reportGeneration.hasStartedGeneration ? (
-        <section className="mx-auto w-full max-w-[860px]" ref={resultsRef}>
+        <section className="mx-auto w-full max-w-[1180px]" ref={resultsRef}>
           <ReportWorkspace
             report={editableReport}
             status={reportGeneration.status}
@@ -96,7 +123,6 @@ export function HomePage() {
             generationProgress={reportGeneration.progress}
             generationError={reportGeneration.error}
             onRetryGeneration={reportGeneration.retryGeneration}
-            isRegenerating={reportGeneration.isGenerating}
             exportActions={reportActions}
             hasUnsavedChanges={hasUnsavedChanges}
             reviewStatus={reviewStatus}

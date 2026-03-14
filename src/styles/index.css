@@ -16,8 +16,8 @@
   --color-surface-200: #e7f0f5;
   --color-surface-700: #516272;
 
-  --radius-button: 14px;
-  --radius-panel: 24px;
+  --radius-button: 8px;
+  --radius-panel: 12px;
 
   --shadow-soft: 0 16px 30px rgba(23, 32, 51, 0.12);
   --shadow-card: 0 24px 60px rgba(23, 32, 51, 0.1);
