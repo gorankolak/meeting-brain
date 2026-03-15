@@ -11,7 +11,7 @@ const TONES = {
   },
   info: {
     Icon: Info,
-    className: "border-[--color-border] bg-[--color-panel] text-[--color-ink]"
+    className: "border-[--color-border] bg-[--color-panel] text-[--color-text]"
   }
 };
 

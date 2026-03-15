@@ -9,7 +9,7 @@ export function LanguageSwitcher() {
   return (
     <div
       aria-label={t("language.switcherLabel")}
-      className="flex h-9 items-center gap-1 rounded-md border border-gray-200 bg-white p-1"
+      className="flex h-9 items-center gap-1 rounded-md border border-[var(--color-border)] bg-[var(--color-surface)] p-1"
       role="group"
     >
       {LANGUAGES.map((language) => {
@@ -19,10 +19,10 @@ export function LanguageSwitcher() {
           <button
             aria-label={t(`language.options.${language}`)}
             aria-pressed={isActive}
-            className={`h-7 cursor-pointer rounded-md px-3 text-sm transition duration-150 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[--color-accent] focus-visible:ring-offset-2 focus-visible:ring-offset-white ${
+            className={`h-7 cursor-pointer rounded-md border px-3 text-sm transition duration-150 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-primary)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--color-surface)] ${
               isActive
-                ? "bg-gray-50 font-semibold text-gray-900"
-                : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
+                ? "border-transparent bg-[var(--color-primary)] font-semibold text-[var(--color-primary-dark)] shadow-sm"
+                : "border-transparent text-[var(--color-text-muted)] hover:border-[var(--color-border)] hover:bg-[var(--color-panel)] hover:text-[var(--color-text)]"
             }`}
             key={language}
             onClick={() => i18n.changeLanguage(language)}

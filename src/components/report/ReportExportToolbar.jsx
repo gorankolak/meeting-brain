@@ -40,7 +40,7 @@ function UtilityButton({ children, disabled, icon: Icon, onClick, pressed = fals
   return (
     <Button
       aria-pressed={pressed}
-      className={`min-h-8 rounded-md px-2.5 py-1.5 text-xs font-medium ${pressed ? "border-teal-200 bg-teal-50 text-teal-700" : ""}`}
+      className={`min-h-8 rounded-md px-2.5 py-1.5 text-xs font-medium ${pressed ? "border-[--color-border] bg-[color-mix(in_srgb,var(--color-primary)_18%,white)] text-[--color-primary-dark]" : ""}`}
       disabled={disabled}
       onClick={onClick}
       size="xs"
@@ -106,7 +106,7 @@ export function ReportExportToolbar({
       </div>
 
       {!compact ? (
-        <div className="flex flex-wrap items-center gap-1.5 border-t border-gray-100 pt-2.5">
+        <div className="flex flex-wrap items-center gap-1.5 border-t border-[--color-border] pt-2.5">
           <UtilityButton disabled={disabled} icon={isEditing ? Check : Pencil} onClick={onToggleEditing} pressed={isEditing}>
             {isEditing ? t("export:buttons.doneEditing") : t("export:buttons.editReport")}
           </UtilityButton>

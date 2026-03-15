@@ -29,10 +29,10 @@ export class AppErrorBoundary extends Component {
           <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[--color-warning]">
             {i18n.t("common:errorBoundary.eyebrow")}
           </p>
-          <h1 className="mt-3 font-display text-3xl font-semibold text-[--color-ink]">
+          <h1 className="mt-3 font-display text-3xl font-semibold text-[--color-text]">
             {i18n.t("common:errorBoundary.title")}
           </h1>
-          <p className="mt-3 text-sm leading-7 text-[--color-muted]">
+          <p className="mt-3 text-sm leading-7 text-[--color-text-muted]">
             {i18n.t("common:errorBoundary.body")}
           </p>
           <div className="mt-6">

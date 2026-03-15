@@ -90,14 +90,14 @@ export function HomePage() {
       </div>
 
       <section className="mx-auto flex w-full max-w-[900px] flex-col items-center gap-3 text-center lg:gap-4">
-        <h1 className="max-w-3xl whitespace-pre-line font-display text-4xl font-semibold leading-tight text-[--color-ink] sm:text-5xl lg:text-6xl">
+        <h1 className="max-w-3xl whitespace-pre-line font-display text-4xl font-semibold leading-tight text-[--color-text] sm:text-5xl lg:text-6xl">
           {t("home:hero.title")}
         </h1>
-        <p className="max-w-2xl text-base leading-7 text-[--color-muted] sm:text-lg sm:leading-8">
+        <p className="max-w-2xl text-base leading-7 text-[--color-text-muted] sm:text-lg sm:leading-8">
           {t("home:hero.subtitle")}
         </p>
         <button
-          className="mt-1 cursor-pointer text-sm font-semibold text-gray-700 underline decoration-teal-500 decoration-2 underline-offset-4 transition duration-150 ease-out hover:text-teal-700 hover:decoration-[3px] active:text-gray-700"
+          className="mt-1 cursor-pointer text-sm font-semibold text-[--color-primary-dark] underline decoration-[--color-primary] decoration-2 underline-offset-4 transition duration-150 ease-out hover:text-[--color-primary-dark] hover:decoration-[3px] active:text-[--color-primary-dark]"
           onClick={meetingInput.loadExample}
           type="button"
         >

@@ -3,10 +3,10 @@
   "appTagline": "Od zapisnika do zadatka",
   "footer": {
     "title": "Meeting Brain — AI analiza sastanaka za projektne timove",
-    "description": "Zalijepite bilješke sa sastanka, generirajte strukturirane izvještaje\ni izvezite akcijske stavke u nekoliko sekundi.",
+    "description": "Zalijepite bilješke sa sastanka, generirajte strukturirane izvještaje i izvezite akcijske stavke u nekoliko sekundi.",
     "stack": "Pokreću React • Gemini AI • Netlify",
     "github": "Pogledaj projekt na GitHubu",
-    "githubUrl": ""
+    "githubUrl": "https://github.com/gorankolak/meeting-brain"
   },
   "language": {
     "switcherLabel": "Odabir jezika",

@@ -6,7 +6,7 @@
     "description": "Paste meeting notes, generate structured reports,\nand export action items in seconds.",
     "stack": "Built with React • Gemini AI • Netlify",
     "github": "View project on GitHub",
-    "githubUrl": ""
+    "githubUrl": "https://github.com/gorankolak/meeting-brain"
   },
   "language": {
     "switcherLabel": "Language selection",

@@ -5,16 +5,21 @@
   --font-sans: "Manrope", sans-serif;
   --font-display: "Sora", sans-serif;
 
-  --color-ink: #172033;
-  --color-muted: #667085;
-  --color-accent: #17c8e3;
-  --color-warning: #f0a338;
-  --color-panel: #f4f8fb;
-  --color-panel-strong: #0f1b2d;
-  --color-border: #d9e4ec;
-  --color-surface-100: #f7fbfd;
-  --color-surface-200: #e7f0f5;
-  --color-surface-700: #516272;
+  --color-primary: #9fe870;
+  --color-primary-dark: #163300;
+  --color-bg: #f3f3f3;
+  --color-surface: #ffffff;
+  --color-text: #111111;
+  --color-text-muted: #6b6b6b;
+  --color-border: #e5e5e5;
+  --color-muted: #d9d9d9;
+  --color-ink: var(--color-text);
+  --color-panel: var(--color-bg);
+  --color-accent: var(--color-primary);
+  --color-warning: #b45309;
+  --color-surface-100: #f7f7f7;
+  --color-surface-200: #ebebeb;
+  --color-surface-700: var(--color-text-muted);
 
   --radius-button: 8px;
   --radius-panel: 12px;
@@ -25,8 +30,8 @@
 
 :root {
   font-family: var(--font-sans);
-  color: var(--color-ink);
-  background: #f5f8fb;
+  color: var(--color-text);
+  background: var(--color-bg);
   --duration-interaction: 160ms;
   --ease-interaction: cubic-bezier(0.2, 0.8, 0.2, 1);
 }
@@ -41,7 +46,7 @@ body {
 }
 
 :focus-visible {
-  outline: 3px solid var(--color-accent);
+  outline: 3px solid var(--color-primary);
   outline-offset: 2px;
 }
 
@@ -73,7 +78,7 @@ a {
 }
 
 a[href]:hover {
-  color: color-mix(in srgb, var(--color-accent) 88%, black 12%);
+  color: color-mix(in srgb, var(--color-primary-dark) 88%, black 12%);
 }
 
 :where(

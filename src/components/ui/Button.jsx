@@ -8,13 +8,13 @@ export function Button({
 }) {
   const tones = {
     primary:
-      "border border-teal-500 bg-teal-500 text-white hover:brightness-105 active:scale-[0.99]",
+      "border border-transparent bg-[var(--color-primary)] text-[var(--color-primary-dark)] shadow-[inset_0_-1px_0_rgba(22,51,0,0.14),0_1px_2px_rgba(17,17,17,0.08)] hover:bg-[#8ED85F] hover:shadow-[inset_0_-1px_0_rgba(22,51,0,0.18),0_2px_4px_rgba(17,17,17,0.10)] active:scale-[0.99]",
     accent:
-      "border border-teal-200 bg-teal-50 text-teal-700 hover:bg-teal-100 active:scale-[0.99]",
+      "border border-transparent bg-[var(--color-primary)] text-[var(--color-primary-dark)] shadow-[inset_0_-1px_0_rgba(22,51,0,0.14),0_1px_2px_rgba(17,17,17,0.08)] hover:bg-[#8ED85F] hover:shadow-[inset_0_-1px_0_rgba(22,51,0,0.18),0_2px_4px_rgba(17,17,17,0.10)] active:scale-[0.99]",
     secondary:
-      "border border-gray-300 bg-white text-gray-700 hover:bg-gray-50 active:scale-[0.99]",
+      "border border-[var(--color-border)] bg-[var(--color-surface)] text-[var(--color-text)] hover:bg-[color-mix(in_srgb,var(--color-surface)_92%,black_8%)] active:scale-[0.99]",
     ghost:
-      "border border-transparent bg-transparent text-gray-600 hover:border-gray-200 hover:bg-gray-50 hover:text-gray-900 active:scale-[0.99]"
+      "border border-transparent bg-transparent text-[var(--color-primary-dark)] hover:bg-[color-mix(in_srgb,var(--color-surface)_85%,var(--color-primary)_15%)] active:scale-[0.99]"
   };
   const sizes = {
     md: "min-h-12 px-4 py-3 text-sm",
@@ -24,7 +24,7 @@ export function Button({
 
   return (
     <button
-      className={`inline-flex cursor-pointer items-center justify-center gap-2 rounded-md font-semibold transition duration-150 ease-out motion-reduce:transform-none motion-reduce:transition-none focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-[--color-accent] disabled:cursor-not-allowed disabled:translate-y-0 disabled:opacity-60 ${sizes[size]} ${tones[tone]} ${className}`}
+      className={`inline-flex cursor-pointer items-center justify-center gap-2 rounded-md font-semibold transition duration-150 ease-out motion-reduce:transform-none motion-reduce:transition-none focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-primary)] disabled:cursor-not-allowed disabled:translate-y-0 disabled:opacity-60 ${sizes[size]} ${tones[tone]} ${className}`}
       type={type}
       {...props}
     >

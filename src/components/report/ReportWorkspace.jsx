@@ -47,7 +47,7 @@ const REPORT_SECTION_ITEMS = [
   { id: "nextSteps", titleKey: "report:sections.nextSteps", icon: ArrowRight }
 ];
 const INPUT_CLASSNAME =
-  "w-full rounded-md border border-gray-200 bg-white px-3 py-2 text-sm text-gray-900 outline-none transition focus:border-[--color-accent] focus:shadow-[0_0_0_4px_rgba(23,200,227,0.12)]";
+  "w-full rounded-md border border-[--color-border] bg-[--color-surface] px-3 py-2 text-sm text-[--color-text] outline-none transition focus:border-[--color-primary] focus:shadow-[0_0_0_4px_color-mix(in_srgb,var(--color-primary)_28%,white)]";
 const TEXTAREA_CLASSNAME = `${INPUT_CLASSNAME} min-h-[120px] resize-y leading-6`;
 const PRIORITY_OPTIONS = ["high", "medium", "low", "unclear"];
 
@@ -82,20 +82,20 @@ function SuccessBanner({ report, visible, t }) {
 function ProgressPanel({ progress, progressMessage, t }) {
   return (
     <div className="space-y-5">
-      <div className="rounded-lg border border-gray-200 bg-white p-4 shadow-sm">
-        <div className="flex items-center justify-between gap-3 text-xs font-semibold uppercase tracking-[0.16em] text-[--color-muted]">
+      <div className="rounded-lg border border-[--color-border] bg-[--color-surface] p-4 shadow-sm">
+        <div className="flex items-center justify-between gap-3 text-xs font-semibold uppercase tracking-[0.16em] text-[--color-text-muted]">
           <span>{t(`report:progress.${progress.currentStage}`)}</span>
           <span>{progress.percent}%</span>
         </div>
-        <div className="mt-3 h-2 overflow-hidden rounded-full bg-surface-200">
+        <div className="mt-3 h-2 overflow-hidden rounded-full bg-[--color-muted]">
           <div
-            className="h-full rounded-full bg-[--color-accent] transition-[width] duration-500 motion-reduce:transition-none"
+            className="h-full rounded-full bg-[--color-primary] transition-[width] duration-500 motion-reduce:transition-none"
             style={{ width: `${progress.percent}%` }}
           />
         </div>
       </div>
 
-      <div aria-live="polite" className="text-sm font-medium text-[--color-muted]">
+      <div aria-live="polite" className="text-sm font-medium text-[--color-text-muted]">
         {progressMessage}
       </div>
 
@@ -106,12 +106,12 @@ function ProgressPanel({ progress, progressMessage, t }) {
 
 function PlaceholderState({ icon: Icon, title, body, actions = null }) {
   return (
-    <div className="flex min-h-[420px] flex-col items-center justify-center rounded-lg border border-dashed border-gray-200 bg-white px-6 py-10 text-center sm:min-h-[520px] sm:px-8">
-      <div className="flex size-18 items-center justify-center rounded-md bg-[--color-panel] text-[--color-accent]">
+    <div className="flex min-h-[420px] flex-col items-center justify-center rounded-lg border border-dashed border-[--color-border] bg-[--color-surface] px-6 py-10 text-center sm:min-h-[520px] sm:px-8">
+      <div className="flex size-18 items-center justify-center rounded-md bg-[--color-panel] text-[--color-primary-dark]">
         <Icon size={28} />
       </div>
-      <h2 className="mt-6 font-display text-3xl font-semibold text-[--color-ink] sm:text-4xl">{title}</h2>
-      <p className="mt-3 max-w-md text-sm leading-7 text-[--color-muted]">{body}</p>
+      <h2 className="mt-6 font-display text-3xl font-semibold text-[--color-text] sm:text-4xl">{title}</h2>
+      <p className="mt-3 max-w-md text-sm leading-7 text-[--color-text-muted]">{body}</p>
       {actions ? <div className="mt-6 flex flex-wrap justify-center gap-3">{actions}</div> : null}
     </div>
   );
@@ -119,10 +119,10 @@ function PlaceholderState({ icon: Icon, title, body, actions = null }) {
 
 function PriorityBadge({ label, priority }) {
   const tones = {
-    high: "border-red-200 bg-red-50 text-red-700",
-    medium: "border-amber-200 bg-amber-50 text-amber-700",
-    low: "border-surface-200 bg-surface-100 text-surface-700",
-    unclear: "border-surface-200 bg-surface-100 text-surface-700"
+    high: "border-red-200 bg-red-100 text-red-700",
+    medium: "border-amber-200 bg-amber-100 text-amber-700",
+    low: "border-[--color-border] bg-[--color-panel] text-[--color-text-muted]",
+    unclear: "border-[--color-border] bg-[--color-panel] text-[--color-text-muted]"
   };
 
   return (
@@ -139,8 +139,8 @@ function ToastFeedback({ feedback }) {
 
   const tone =
     feedback.tone === "error"
-      ? "border-red-200 bg-white text-red-700"
-      : "border-emerald-200 bg-white text-emerald-700";
+      ? "border-red-200 bg-[--color-surface] text-red-700"
+      : "border-[--color-border] bg-[--color-surface] text-[--color-primary-dark]";
 
   return (
     <div className="pointer-events-none fixed bottom-5 right-5 z-50">
@@ -173,7 +173,7 @@ function SectionToggleButton({ isOpen, onClick, t }) {
   return (
     <button
       aria-expanded={isOpen}
-      className="inline-flex min-h-8 items-center gap-2 rounded-md px-2.5 py-1.5 text-xs font-medium text-gray-600 transition hover:bg-gray-50 hover:text-gray-900 focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-[--color-accent] motion-reduce:transition-none"
+      className="inline-flex min-h-8 items-center gap-2 rounded-md px-2.5 py-1.5 text-xs font-medium text-[--color-text-muted] transition hover:bg-[color-mix(in_srgb,var(--color-surface)_92%,black_8%)] hover:text-[--color-text] focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-[--color-primary] motion-reduce:transition-none"
       onClick={onClick}
       type="button"
     >
@@ -203,9 +203,17 @@ function ReportSection({
   const { t } = useTranslation("report");
   const [isOpen, setIsOpen] = useState(defaultOpen);
   const tones = {
-    primary: "border-gray-200 bg-white",
-    secondary: "border-gray-200 bg-white",
-    warning: "border-gray-200 bg-white"
+    primary: "border-[--color-border] bg-[--color-surface]",
+    secondary: "border-[--color-border] bg-[--color-surface]",
+    warning: "border-[--color-border] bg-[--color-surface]"
+  };
+  const iconTones = {
+    summary: "bg-[color-mix(in_srgb,var(--color-primary)_18%,white)] text-[--color-primary-dark]",
+    decisions: "bg-[color-mix(in_srgb,var(--color-primary)_18%,white)] text-[--color-primary-dark]",
+    actionItems: "bg-[color-mix(in_srgb,var(--color-primary)_18%,white)] text-[--color-primary-dark]",
+    risks: "bg-[color-mix(in_srgb,var(--color-primary)_18%,white)] text-[--color-primary-dark]",
+    openQuestions: "bg-[color-mix(in_srgb,var(--color-primary)_18%,white)] text-[--color-primary-dark]",
+    nextSteps: "bg-[color-mix(in_srgb,var(--color-primary)_18%,white)] text-[--color-primary-dark]"
   };
 
   useEffect(() => {
@@ -228,14 +236,14 @@ function ReportSection({
         <div className="min-w-0">
           <div className="flex items-center gap-3">
             {Icon ? (
-              <span className="flex size-9 shrink-0 items-center justify-center rounded-md bg-surface-100 text-[--color-accent]">
+              <span className={`flex size-9 shrink-0 items-center justify-center rounded-md ${iconTones[sectionId] || "bg-[--color-panel] text-[--color-primary-dark]"}`}>
                 <Icon size={17} />
               </span>
             ) : null}
             <div className="flex min-w-0 items-center gap-2.5">
-              <h3 className="text-base font-semibold text-[--color-ink] sm:text-[17px]">{title}</h3>
+              <h3 className="text-base font-semibold text-[--color-text] sm:text-[17px]">{title}</h3>
               {badge !== null ? (
-                <span className="inline-flex min-w-7 items-center justify-center rounded-md border border-gray-100 bg-gray-50 px-2 py-0.5 text-[11px] font-medium text-gray-500">
+                <span className="inline-flex min-w-7 items-center justify-center rounded-md border border-[--color-border] bg-[--color-panel] px-2 py-0.5 text-[11px] font-medium text-[--color-text-muted]">
                   {badge}
                 </span>
               ) : null}
@@ -265,7 +273,7 @@ function ReportSectionNav({ activeSectionId, items, onSelect, stickyTop = 16, t,
       className={
         isDesktop
           ? "sticky"
-          : "sticky z-20 -mx-5 border-b border-gray-200 bg-white/90 px-5 py-3 backdrop-blur-md sm:-mx-6 sm:px-6"
+          : "sticky z-20 -mx-5 border-b border-[--color-border] bg-[color-mix(in_srgb,var(--color-surface)_92%,white)] px-5 py-3 backdrop-blur-md sm:-mx-6 sm:px-6"
       }
       style={{ top: `${stickyTop}px` }}
     >
@@ -282,15 +290,15 @@ function ReportSectionNav({ activeSectionId, items, onSelect, stickyTop = 16, t,
               key={item.id}
               className={
                 isDesktop
-                  ? `flex w-full items-center gap-3 rounded-md px-3 py-2 text-left text-sm transition duration-200 focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-[--color-accent] motion-reduce:transition-none ${
+                  ? `flex w-full items-center gap-3 rounded-md px-3 py-2 text-left text-sm transition duration-200 focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-[--color-primary] motion-reduce:transition-none ${
                       isActive
-                        ? "border border-teal-200 bg-teal-50 text-teal-800"
-                        : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
+                        ? "border border-[--color-border] bg-[color-mix(in_srgb,var(--color-primary)_18%,white)] text-[--color-primary-dark]"
+                        : "text-[--color-text-muted] hover:bg-[color-mix(in_srgb,var(--color-surface)_92%,black_8%)] hover:text-[--color-text]"
                     }`
-                  : `shrink-0 rounded-md border px-3 py-1.5 text-xs font-medium transition duration-200 focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-[--color-accent] motion-reduce:transition-none ${
+                  : `shrink-0 rounded-md border px-3 py-1.5 text-xs font-medium transition duration-200 focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-[--color-primary] motion-reduce:transition-none ${
                       isActive
-                        ? "border-teal-200 bg-teal-50 text-teal-800"
-                        : "border-gray-200 bg-white text-gray-600 hover:bg-gray-50 hover:text-gray-900"
+                        ? "border-[--color-border] bg-[color-mix(in_srgb,var(--color-primary)_18%,white)] text-[--color-primary-dark]"
+                        : "border-[--color-border] bg-[--color-surface] text-[--color-text-muted] hover:bg-[color-mix(in_srgb,var(--color-surface)_92%,black_8%)] hover:text-[--color-text]"
                     }`
               }
               onClick={() => onSelect(item.id)}
@@ -311,16 +319,16 @@ function ReviewStatusBadge({ hasUnsavedChanges, reviewStatus, t }) {
     reviewStatus === "reviewed"
       ? {
           label: t("report:review.reviewed"),
-          className: "border-teal-200 bg-teal-50 text-teal-700"
+          className: "border-emerald-200 bg-emerald-50 text-emerald-700"
         }
       : hasUnsavedChanges
         ? {
             label: t("report:review.unsavedChanges"),
-            className: "border-amber-200 bg-amber-50 text-amber-800"
+            className: "border-amber-200 bg-amber-100 text-amber-700"
           }
         : {
             label: t("report:review.draft"),
-            className: "border-surface-200 bg-surface-100 text-surface-700"
+            className: "border-[--color-border] bg-[--color-panel] text-[--color-text-muted]"
           };
 
   return (
@@ -332,8 +340,8 @@ function ReviewStatusBadge({ hasUnsavedChanges, reviewStatus, t }) {
 
 function MetaPill({ children, tone = "neutral" }) {
   const tones = {
-    neutral: "border-gray-100 bg-gray-50 text-gray-500",
-    warning: "border-amber-200 bg-amber-50 text-amber-800"
+    neutral: "border-[--color-border] bg-[--color-panel] text-[--color-text-muted]",
+    warning: "border-amber-200 bg-amber-100 text-amber-700"
   };
 
   return (
@@ -407,7 +415,7 @@ function SummaryEditor({ isEditingEnabled, report, onSave, onDirty }) {
           </Button>
         </div>
       ) : null}
-      <p className="max-w-4xl text-sm leading-7 text-[--color-ink] sm:text-[15px]">{report.summary}</p>
+      <p className="max-w-4xl text-sm leading-7 text-[--color-text] sm:text-[15px]">{report.summary}</p>
     </div>
   );
 }
@@ -431,7 +439,7 @@ function DecisionsEditor({ isEditingEnabled, report, onChange, onDirty }) {
           const isEditing = editingId === decision.id;
 
           return (
-            <article key={decision.id} className="rounded-lg border border-gray-100 bg-white p-4 sm:p-5">
+            <article key={decision.id} className="rounded-lg border border-[--color-border] bg-[--color-surface] p-4 sm:p-5">
               {isEditing ? (
                 <div className="space-y-3">
                   <textarea
@@ -473,7 +481,7 @@ function DecisionsEditor({ isEditingEnabled, report, onChange, onDirty }) {
               ) : (
                 <>
                   <div className="flex flex-wrap items-start justify-between gap-3">
-                    <p className="text-sm font-semibold text-[--color-ink]">{decision.decision}</p>
+                    <p className="text-sm font-semibold text-[--color-text]">{decision.decision}</p>
                     <div className="flex flex-wrap gap-1.5">
                       {isEditingEnabled ? (
                         <>
@@ -505,7 +513,7 @@ function DecisionsEditor({ isEditingEnabled, report, onChange, onDirty }) {
                       ) : null}
                     </div>
                   </div>
-                  <p className="mt-2 text-sm text-[--color-muted]">{decision.reasoning}</p>
+                  <p className="mt-2 text-sm text-[--color-text-muted]">{decision.reasoning}</p>
                   <div className="mt-3 flex flex-wrap gap-2 text-[11px]">
                     <MetaPill>{decision.owner}</MetaPill>
                     <MetaPill>{t(`report:enums.confidence.${decision.confidence}`)}</MetaPill>
@@ -516,12 +524,12 @@ function DecisionsEditor({ isEditingEnabled, report, onChange, onDirty }) {
           );
         })
       ) : (
-        <p className="text-sm text-[--color-muted]">{t("report:empty.decisions")}</p>
+        <p className="text-sm text-[--color-text-muted]">{t("report:empty.decisions")}</p>
       )}
 
       {isEditingEnabled ? (
-        <div className="rounded-lg border border-dashed border-gray-200 bg-white p-4">
-          <label className="block text-xs font-semibold uppercase tracking-[0.14em] text-[--color-muted]">
+        <div className="rounded-lg border border-dashed border-[--color-border] bg-[--color-surface] p-4">
+          <label className="block text-xs font-semibold uppercase tracking-[0.14em] text-[--color-text-muted]">
             {t("report:editor.addDecision")}
           </label>
           <textarea
@@ -605,12 +613,12 @@ function ActionItemsEditor({ isEditingEnabled, report, onChange, onDirty }) {
           return (
             <article
               key={item.id}
-              className="rounded-lg border border-gray-100 bg-white p-4 transition hover:border-gray-200 motion-reduce:transition-none sm:p-5"
+              className="rounded-lg border border-[--color-border] bg-[--color-surface] p-4 transition hover:border-[--color-border] motion-reduce:transition-none sm:p-5"
             >
               {isEditing && draft ? (
                 <div className="grid gap-3 md:grid-cols-2">
                   <div className="md:col-span-2">
-                    <label className="mb-1 block text-xs font-semibold uppercase tracking-[0.14em] text-[--color-muted]">
+                    <label className="mb-1 block text-xs font-semibold uppercase tracking-[0.14em] text-[--color-text-muted]">
                       {t("report:fields.task")}
                     </label>
                     <textarea
@@ -620,7 +628,7 @@ function ActionItemsEditor({ isEditingEnabled, report, onChange, onDirty }) {
                     />
                   </div>
                   <div>
-                    <label className="mb-1 block text-xs font-semibold uppercase tracking-[0.14em] text-[--color-muted]">
+                    <label className="mb-1 block text-xs font-semibold uppercase tracking-[0.14em] text-[--color-text-muted]">
                       {t("report:fields.owner")}
                     </label>
                     <input
@@ -630,7 +638,7 @@ function ActionItemsEditor({ isEditingEnabled, report, onChange, onDirty }) {
                     />
                   </div>
                   <div>
-                    <label className="mb-1 block text-xs font-semibold uppercase tracking-[0.14em] text-[--color-muted]">
+                    <label className="mb-1 block text-xs font-semibold uppercase tracking-[0.14em] text-[--color-text-muted]">
                       {t("report:fields.deadline")}
                     </label>
                     <input
@@ -640,7 +648,7 @@ function ActionItemsEditor({ isEditingEnabled, report, onChange, onDirty }) {
                     />
                   </div>
                   <div>
-                    <label className="mb-1 block text-xs font-semibold uppercase tracking-[0.14em] text-[--color-muted]">
+                    <label className="mb-1 block text-xs font-semibold uppercase tracking-[0.14em] text-[--color-text-muted]">
                       {t("report:fields.priority")}
                     </label>
                     <select
@@ -692,8 +700,8 @@ function ActionItemsEditor({ isEditingEnabled, report, onChange, onDirty }) {
                 <div className="flex flex-col gap-3">
                   <div className="flex flex-wrap items-start justify-between gap-3">
                     <div className="min-w-0 flex-1">
-                      <p className="text-[15px] font-semibold text-[--color-ink]">{item.task}</p>
-                      <p className="mt-1.5 text-sm text-[--color-muted]">{item.notes || t("report:empty.notes")}</p>
+                      <p className="text-[15px] font-semibold text-[--color-text]">{item.task}</p>
+                      <p className="mt-1.5 text-sm text-[--color-text-muted]">{item.notes || t("report:empty.notes")}</p>
                     </div>
                     <div className="flex flex-wrap gap-1.5">
                       {isEditingEnabled ? (
@@ -735,14 +743,14 @@ function ActionItemsEditor({ isEditingEnabled, report, onChange, onDirty }) {
           );
         })
       ) : (
-        <p className="text-sm text-[--color-muted]">{t("report:empty.actionItems")}</p>
+        <p className="text-sm text-[--color-text-muted]">{t("report:empty.actionItems")}</p>
       )}
 
       {isEditingEnabled ? (
-        <div className="rounded-lg border border-dashed border-gray-200 bg-white p-4">
+        <div className="rounded-lg border border-dashed border-[--color-border] bg-[--color-surface] p-4">
           <div className="grid gap-3 md:grid-cols-2">
             <div className="md:col-span-2">
-              <label className="mb-1 block text-xs font-semibold uppercase tracking-[0.14em] text-[--color-muted]">
+              <label className="mb-1 block text-xs font-semibold uppercase tracking-[0.14em] text-[--color-text-muted]">
                 {t("report:fields.task")}
               </label>
               <textarea
@@ -753,7 +761,7 @@ function ActionItemsEditor({ isEditingEnabled, report, onChange, onDirty }) {
               />
             </div>
             <div>
-              <label className="mb-1 block text-xs font-semibold uppercase tracking-[0.14em] text-[--color-muted]">
+              <label className="mb-1 block text-xs font-semibold uppercase tracking-[0.14em] text-[--color-text-muted]">
                 {t("report:fields.owner")}
               </label>
               <input
@@ -764,7 +772,7 @@ function ActionItemsEditor({ isEditingEnabled, report, onChange, onDirty }) {
               />
             </div>
             <div>
-              <label className="mb-1 block text-xs font-semibold uppercase tracking-[0.14em] text-[--color-muted]">
+              <label className="mb-1 block text-xs font-semibold uppercase tracking-[0.14em] text-[--color-text-muted]">
                 {t("report:fields.deadline")}
               </label>
               <input
@@ -775,7 +783,7 @@ function ActionItemsEditor({ isEditingEnabled, report, onChange, onDirty }) {
               />
             </div>
             <div>
-              <label className="mb-1 block text-xs font-semibold uppercase tracking-[0.14em] text-[--color-muted]">
+              <label className="mb-1 block text-xs font-semibold uppercase tracking-[0.14em] text-[--color-text-muted]">
                 {t("report:fields.priority")}
               </label>
               <select
@@ -1108,7 +1116,7 @@ export function ReportWorkspace({
 
   return (
     <>
-      <section className="rounded-lg border border-gray-200 bg-white p-5 shadow-sm sm:p-6 lg:p-7">
+      <section className="rounded-lg border border-[--color-border] bg-[--color-surface] p-5 shadow-sm sm:p-6 lg:p-7">
         <SuccessBanner report={report} t={t} visible={showSuccessBanner} />
 
         {generationError && status === "error" ? <ErrorBanner>{generationError}</ErrorBanner> : null}
@@ -1131,7 +1139,7 @@ export function ReportWorkspace({
             <div className="min-w-0 space-y-6">
               <div
                 ref={headerRef}
-                className={`sticky z-30 rounded-lg border border-gray-200 border-b bg-white/90 shadow-sm backdrop-blur-lg transition-all duration-200 ease-out motion-reduce:transform-none motion-reduce:transition-none ${
+                className={`sticky z-30 rounded-lg border border-[--color-border] border-b bg-[color-mix(in_srgb,var(--color-surface)_92%,white)] shadow-sm backdrop-blur-lg transition-all duration-200 ease-out motion-reduce:transform-none motion-reduce:transition-none ${
                   isHeaderCompact ? "px-4 py-3 sm:px-5" : "px-4 py-4 sm:px-5"
                 } ${
                   headerVisible ? "translate-y-0 opacity-100" : "translate-y-2 opacity-0"
@@ -1142,7 +1150,7 @@ export function ReportWorkspace({
                   <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
                     <div className="min-w-0">
                       <h2
-                        className="truncate font-display text-lg font-semibold text-[--color-ink] sm:text-xl"
+                        className="truncate font-display text-lg font-semibold text-[--color-text] sm:text-xl"
                         data-report-heading="true"
                         tabIndex={-1}
                         title={reportTitle}
@@ -1177,7 +1185,7 @@ export function ReportWorkspace({
                           {t("report:generatedReport")}
                         </p>
                         <h2
-                          className="mt-2 font-display text-2xl font-semibold text-[--color-ink] sm:text-3xl"
+                          className="mt-2 font-display text-2xl font-semibold text-[--color-text] sm:text-3xl"
                           data-report-heading="true"
                           tabIndex={-1}
                           title={reportTitle}
@@ -1185,7 +1193,7 @@ export function ReportWorkspace({
                           {reportTitle}
                         </h2>
                         <div className="mt-3 flex flex-wrap items-center gap-2">
-                          <span className="inline-flex items-center gap-1.5 text-sm font-medium text-teal-700">
+                          <span className="inline-flex items-center gap-1.5 text-sm font-medium text-[--color-primary-dark]">
                             <CheckCircle2 size={15} />
                             <span>{t("report:status.generated")}</span>
                           </span>
@@ -1323,12 +1331,12 @@ export function ReportWorkspace({
                 <div className="space-y-4">
                   {report.risks.length ? (
                     report.risks.map((risk) => (
-                      <div key={risk.id} className="rounded-lg border border-gray-100 bg-white p-4 sm:p-5">
+                      <div key={risk.id} className="rounded-lg border border-[--color-border] bg-[--color-surface] p-4 sm:p-5">
                         <div className="flex items-start gap-3">
-                          <AlertTriangle className="mt-0.5 shrink-0 text-[--color-warning]" size={16} />
+                          <AlertTriangle className="mt-0.5 shrink-0 text-red-500" size={16} />
                           <div className="min-w-0">
-                            <p className="text-sm font-semibold text-[--color-ink]">{risk.risk}</p>
-                            <p className="mt-1.5 text-sm text-[--color-muted]">{risk.impact}</p>
+                            <p className="text-sm font-semibold text-[--color-text]">{risk.risk}</p>
+                            <p className="mt-1.5 text-sm text-[--color-text-muted]">{risk.impact}</p>
                             <div className="mt-3 flex flex-wrap gap-2 text-[11px]">
                               <MetaPill>{risk.owner}</MetaPill>
                               <MetaPill>{risk.mitigation}</MetaPill>
@@ -1338,7 +1346,7 @@ export function ReportWorkspace({
                       </div>
                     ))
                   ) : (
-                    <p className="text-sm text-[--color-muted]">{t("report:empty.risks")}</p>
+                    <p className="text-sm text-[--color-text-muted]">{t("report:empty.risks")}</p>
                   )}
                 </div>
               </ReportSection>
@@ -1359,9 +1367,9 @@ export function ReportWorkspace({
                   <div className="space-y-4">
                     {report.open_questions.length ? (
                       report.open_questions.map((question) => (
-                        <article key={question.id} className="rounded-lg border border-gray-100 bg-white p-4 sm:p-5">
-                          <p className="text-sm font-semibold text-[--color-ink]">{question.question}</p>
-                          <p className="mt-2 text-sm text-[--color-muted]">
+                        <article key={question.id} className="rounded-lg border border-[--color-border] bg-[--color-surface] p-4 sm:p-5">
+                          <p className="text-sm font-semibold text-[--color-text]">{question.question}</p>
+                          <p className="mt-2 text-sm text-[--color-text-muted]">
                             {question.notes || t("report:empty.questionNotes")}
                           </p>
                           <div className="mt-3">
@@ -1370,7 +1378,7 @@ export function ReportWorkspace({
                         </article>
                       ))
                     ) : (
-                      <p className="text-sm text-[--color-muted]">{t("report:empty.openQuestions")}</p>
+                      <p className="text-sm text-[--color-text-muted]">{t("report:empty.openQuestions")}</p>
                     )}
                   </div>
                 </ReportSection>
@@ -1390,16 +1398,16 @@ export function ReportWorkspace({
                   title={t("report:sections.nextSteps")}
                   tone="primary"
                 >
-                  <ul className="space-y-4 text-sm text-[--color-ink]">
+                  <ul className="space-y-4 text-sm text-[--color-text]">
                     {report.next_steps.length ? (
                       report.next_steps.map((step) => (
-                        <li key={step} className="flex gap-3 rounded-lg border border-gray-100 bg-white p-4 sm:p-5">
-                          <CheckCircle2 className="mt-0.5 shrink-0 text-[--color-accent]" size={16} />
+                        <li key={step} className="flex gap-3 rounded-lg border border-[--color-border] bg-[--color-surface] p-4 sm:p-5">
+                          <CheckCircle2 className="mt-0.5 shrink-0 text-[--color-primary-dark]" size={16} />
                           <span>{step}</span>
                         </li>
                       ))
                     ) : (
-                      <li className="text-[--color-muted]">{t("report:empty.nextSteps")}</li>
+                      <li className="text-[--color-text-muted]">{t("report:empty.nextSteps")}</li>
                     )}
                   </ul>
                 </ReportSection>
