@@ -1,41 +1,75 @@
 # Meeting Brain
 
-Meeting Brain is a React + Netlify Functions MVP that converts messy meeting notes into structured project reports.
+AI-powered meeting assistant that converts transcripts or notes into structured project reports with actions, risks, and next steps.
 
-## Stack
+🌐 Live Demo: https://meeting-brain.netlify.app  
+📂 Repo: https://github.com/gorankolak/meeting-brain
 
-- React 18 + Vite
-- TailwindCSS v4 using CSS `@theme`
-- Netlify Functions
-- Zod validation
-- Gemini API for report generation
-- `@react-pdf/renderer` for PDF export
-- Resend for optional future email delivery
+---
 
-## Local setup
+## Overview
 
-1. Install dependencies with `npm install`.
-2. Copy `.env.example` to `.env`.
-3. Keep `FORCE_FALLBACK=true` to use mock/fallback report generation and avoid Gemini requests during development.
-4. Set `FORCE_FALLBACK=false` and fill `GEMINI_API_KEY` to enable live report generation when needed.
-5. Leave `RESEND_API_KEY` and `EMAIL_FROM` blank for the current MVP, or fill them later if email delivery is re-enabled.
-6. Run `npm run dev`.
+Meeting Brain is a lightweight AI productivity tool designed to help teams quickly transform messy meeting notes into clear, structured outputs.
 
-With `FORCE_FALLBACK=true`, the app skips Gemini entirely even if a valid API key is present. Without provider keys, the app also works in fallback/mock mode for local evaluation.
+Users can paste transcripts, upload notes, or load an example meeting. The application then generates a structured report containing:
 
-In local development, Vite bridges `/api/generate-report` to the Netlify function handler. The email function remains available in code but is treated as a deferred feature for this MVP slice.
+- summary
+- action items
+- responsible persons
+- risks
+- next steps
 
-## Deploy
+The goal is to reduce time spent manually organizing meeting outcomes and help teams move faster from discussion to execution.
 
-1. Connect the repo to Netlify.
-2. Set build command to `npm run build`.
-3. Set publish directory to `dist`.
-4. Add `GEMINI_API_KEY` and optional `GEMINI_MODEL`.
-5. Add `RESEND_API_KEY` and `EMAIL_FROM` only if email delivery is enabled in a future release.
+---
 
-## Notes
+## Tech Stack
 
-- Frontend calls `/api/generate-report` in the active MVP flow.
-- File parsing supports PDF, DOCX, TXT, and MD on the client.
-- Generated output is validated against the shared Meeting Brain schema.
-- Export support includes Markdown, plain text, JSON, PDF, and Jira-style task output.
+**Frontend**
+
+- React (Vite)
+- Tailwind CSS v4
+- Lucide Icons
+
+**AI**
+
+- Google Gemini API
+
+**Deployment**
+
+- Netlify
+
+---
+
+## Features
+
+- Paste transcript or meeting notes
+- Upload meeting files
+- Example meeting for quick testing
+- AI-generated structured report
+- Export options (PDF, Jira-ready tasks)
+- Croatian / English interface
+
+---
+
+## AI-Paired Development Workflow
+
+Meeting Brain was developed using an **AI-paired engineering workflow** combining LLM planning with automated implementation.
+
+The process followed a structured development flow:
+
+1. Product idea and requirements definition
+2. UX planning and architecture design
+3. Backlog creation and task breakdown
+4. Implementation with **OpenAI Codex as development executor**
+5. Human review, iteration, and UI/UX refinement
+
+This approach allowed rapid iteration while maintaining clear product direction and architecture control.
+
+AI was used as a development accelerator, while architectural decisions, product scope, and code review remained human-guided.
+
+---
+
+## Project Goal
+
+Meeting Brain is part of my portfolio exploring **AI-assisted product development**, where structured planning and LLM execution can significantly accelerate building and shipping MVP applications.
