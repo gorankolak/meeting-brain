@@ -24,7 +24,7 @@ function ToolbarButton({
   return (
     <Button
       aria-label={t(`export:buttons.${actionId}`)}
-      className="min-h-9 w-full justify-center rounded-md px-3.5 py-2 sm:w-auto"
+      className="min-h-9 w-full justify-center rounded-md px-3.5 py-2 whitespace-nowrap sm:w-auto"
       disabled={disabled || isBusy}
       onClick={onClick}
       size="sm"
@@ -64,14 +64,17 @@ export function ReportExportToolbar({
   reviewActionLabel
 }) {
   const { t } = useTranslation(["export", "report"]);
+  const primaryActions = compact
+    ? "flex flex-col gap-1.5 sm:flex-row sm:flex-wrap sm:items-center lg:flex-nowrap lg:justify-end"
+    : "flex flex-wrap items-center gap-2";
 
   return (
     <div
       aria-label={t("export:toolbarLabel")}
-      className={`flex flex-col ${compact ? "gap-2" : "gap-3"}`}
+      className={`flex flex-col ${compact ? "gap-2 lg:items-end" : "gap-3"}`}
       role="toolbar"
     >
-      <div className={`flex flex-wrap items-center ${compact ? "gap-1.5" : "gap-2"}`}>
+      <div className={primaryActions}>
         <ToolbarButton
           actionId="downloadPdf"
           disabled={disabled}

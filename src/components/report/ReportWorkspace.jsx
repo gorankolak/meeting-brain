@@ -30,6 +30,7 @@ const SECTION_REVEAL_DELAY_MS = 120;
 const SECTION_SCROLL_OFFSET_PX = 28;
 const HEADER_SCROLL_DIRECTION_THRESHOLD_PX = 12;
 const HEADER_STICKY_TOP_PX = 16;
+const COMPACT_HEADER_TRIGGER_OFFSET_PX = 84;
 const SECTION_ICON_MAP = {
   summary: FileText,
   decisions: CheckCircle,
@@ -341,13 +342,29 @@ function ReviewStatusBadge({ hasUnsavedChanges, reviewStatus, t }) {
 function MetaPill({ children, tone = "neutral" }) {
   const tones = {
     neutral: "border-[--color-border] bg-[--color-panel] text-[--color-text-muted]",
-    warning: "border-amber-200 bg-amber-100 text-amber-700"
+    warning: "border-amber-200 bg-amber-100 text-amber-700",
+    info: "border-sky-200 bg-sky-50 text-sky-800"
   };
 
   return (
     <span className={`inline-flex items-center gap-1.5 rounded-md border px-2.5 py-1 text-[11px] font-medium ${tones[tone]}`}>
       {children}
     </span>
+  );
+}
+
+function MockModeBanner({ fallbackReason, t }) {
+  if (!fallbackReason) {
+    return null;
+  }
+
+  const messageKey =
+    fallbackReason === "quota_exceeded" ? "report:mockMode.quotaBanner" : "report:mockMode.genericBanner";
+
+  return (
+    <ErrorBanner role="status" tone="info">
+      {t(messageKey)}
+    </ErrorBanner>
   );
 }
 
@@ -854,6 +871,7 @@ export function ReportWorkspace({
   const language = i18n.resolvedLanguage || i18n.language;
   const generatedAt = generationMeta?.generatedAt || report?.generated_at;
   const sourceLabel = generationMeta?.sourceType ? t(`home:sourceTypes.${generationMeta.sourceType}`) : null;
+  const generationModeLabel = generationMeta?.mode === "mock" ? t("report:mockMode.demoBadge") : t("report:mockMode.aiBadge");
   const generationMessages = useMemo(
     () => [
       t("report:generationMessages.analyzing"),
@@ -1006,7 +1024,7 @@ export function ReportWorkspace({
       const currentScrollY = window.scrollY;
       const delta = currentScrollY - lastScrollYRef.current;
       const summaryTop = summarySection.getBoundingClientRect().top;
-      const enteredContent = summaryTop <= headerElement.getBoundingClientRect().height + 40;
+      const enteredContent = summaryTop <= HEADER_STICKY_TOP_PX + mobileNavHeight + COMPACT_HEADER_TRIGGER_OFFSET_PX;
 
       if (!enteredContent || currentScrollY <= 32) {
         setIsHeaderCompact(false);
@@ -1147,8 +1165,8 @@ export function ReportWorkspace({
                 style={{ top: `${HEADER_STICKY_TOP_PX}px` }}
               >
                 {isHeaderCompact ? (
-                  <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
-                    <div className="min-w-0">
+                  <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between lg:gap-4">
+                    <div className="min-w-0 lg:max-w-[min(42%,26rem)]">
                       <h2
                         className="truncate font-display text-lg font-semibold text-[--color-text] sm:text-xl"
                         data-report-heading="true"
@@ -1159,7 +1177,7 @@ export function ReportWorkspace({
                       </h2>
                     </div>
 
-                    <div className="w-full lg:w-auto lg:max-w-none">
+                    <div className="w-full lg:w-auto lg:max-w-none lg:flex-1 lg:min-w-0">
                       <ReportExportToolbar
                         compact
                         disabled={!isReady}
@@ -1179,6 +1197,10 @@ export function ReportWorkspace({
                   </div>
                 ) : (
                   <div className="flex flex-col gap-4">
+                    {generationMeta?.mode === "mock" ? (
+                      <MockModeBanner fallbackReason={generationMeta.fallbackReason} t={t} />
+                    ) : null}
+
                     <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
                       <div className="min-w-0">
                         <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[--color-warning]">
@@ -1226,13 +1248,11 @@ export function ReportWorkspace({
                           {formatDateTime(generatedAt, language)}
                         </MetaPill>
                       ) : null}
+                      <MetaPill tone={generationMeta?.mode === "mock" ? "info" : "neutral"}>{generationModeLabel}</MetaPill>
                       {generationMeta?.attempts ? (
                         <MetaPill>{t("report:metaAttempt", { attempts: generationMeta.attempts })}</MetaPill>
                       ) : null}
                       {sourceLabel ? <MetaPill>{sourceLabel}</MetaPill> : null}
-                      {generationMeta?.mode === "mock" ? (
-                        <MetaPill tone="warning">{t("report:fallbackNoticeCompact")}</MetaPill>
-                      ) : null}
                     </div>
                   </div>
                 )}
