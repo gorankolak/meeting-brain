@@ -105,6 +105,8 @@ export function useGenerateReport() {
       setReport(response.report);
       setMeta({
         mode: response.mode,
+        provider: response.provider,
+        fallbackReason: response.fallbackReason,
         generatedAt: response.report.generated_at,
         attempts: response.attempts,
         sourceType: data.sourceType

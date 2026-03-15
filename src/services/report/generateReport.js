@@ -1,8 +1,5 @@
 import { ZodError } from "zod";
 import { meetingReportSchema } from "../../schemas/report.schema";
-import { DEV_SIMULATE_AI } from "../../config/devFlags";
-import { createMockReport } from "../../lib/mockReport";
-import { simulateDelay } from "../../lib/simulateDelay";
 import { ReportGenerationError } from "./errors";
 
 const REPORT_REQUEST_TIMEOUT_MS = 20_000;
@@ -66,40 +63,8 @@ function validateReportSchema(report) {
   }
 }
 
-async function simulateReport(payload, onProgress) {
-  onProgress?.({ currentStage: "queued", percent: 10 });
-  await simulateDelay(1100);
-
-  onProgress?.({ currentStage: "analyzing", percent: 34 });
-  await simulateDelay(1400);
-
-  onProgress?.({ currentStage: "decisions", percent: 52 });
-  await simulateDelay(1300);
-
-  onProgress?.({ currentStage: "actionItems", percent: 69 });
-  await simulateDelay(1100);
-
-  onProgress?.({ currentStage: "risks", percent: 83 });
-  await simulateDelay(1100);
-
-  onProgress?.({ currentStage: "validating", percent: 95 });
-  await simulateDelay(650);
-
-  const report = validateReportSchema(createMockReport(payload));
-
-  return {
-    mode: "mock",
-    report,
-    attempts: 1
-  };
-}
-
 export async function generateReport(payload, options = {}) {
   const { onProgress } = options;
-
-  if (DEV_SIMULATE_AI) {
-    return simulateReport(payload, onProgress);
-  }
 
   let attempt = 0;
   let lastError = null;

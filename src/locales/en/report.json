@@ -3,8 +3,12 @@
   "structuredMeetingIntelligence": "Structured meeting intelligence",
   "meta": "{{mode}} mode • {{timestamp}} • Attempt {{attempts}}",
   "metaAttempt": "Attempt {{attempts}}",
-  "fallbackNotice": "Simulation mode is active. Live AI requests are disabled during UX development.",
-  "fallbackNoticeCompact": "Simulation mode active",
+  "mockMode": {
+    "quotaBanner": "The daily AI limit has been reached. Showing demo output so you can still experience the full workflow.",
+    "genericBanner": "AI is currently unavailable. Showing demo output so you can continue using the app.",
+    "aiBadge": "AI generated",
+    "demoBadge": "Demo output"
+  },
   "actions": {
     "regenerate": "Regenerate report",
     "copy": "Copy",

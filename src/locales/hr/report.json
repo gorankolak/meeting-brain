@@ -3,8 +3,12 @@
   "structuredMeetingIntelligence": "Strukturirana inteligencija sastanka",
   "meta": "{{mode}} način rada • {{timestamp}} • Pokušaj {{attempts}}",
   "metaAttempt": "Pokušaj {{attempts}}",
-  "fallbackNotice": "Simulacijski nacin rada je aktivan. Live AI zahtjevi su iskljuceni tijekom UX razvoja.",
-  "fallbackNoticeCompact": "Aktivan je simulacijski način",
+  "mockMode": {
+    "quotaBanner": "Dnevni AI limit je dosegnut. Prikazujemo demo izlaz kako biste i dalje mogli proći cijeli tijek rada.",
+    "genericBanner": "AI trenutno nije dostupan. Prikazujemo demo izlaz kako biste mogli nastaviti koristiti aplikaciju.",
+    "aiBadge": "AI generirano",
+    "demoBadge": "Demo izlaz"
+  },
   "actions": {
     "regenerate": "Generiraj ponovno",
     "copy": "Kopiraj",
