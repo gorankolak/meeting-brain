@@ -21,7 +21,7 @@ export function LanguageSwitcher() {
             aria-pressed={isActive}
             className={`h-7 cursor-pointer rounded-md border px-3 text-sm transition duration-150 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-primary)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--color-surface)] ${
               isActive
-                ? "border-transparent bg-[var(--color-primary)] font-semibold text-[var(--color-primary-dark)] shadow-sm"
+                ? "border-[var(--color-border)] bg-[color-mix(in_srgb,var(--color-primary)_18%,white)] font-semibold text-[var(--color-primary-dark)]"
                 : "border-transparent text-[var(--color-text-muted)] hover:border-[var(--color-border)] hover:bg-[var(--color-panel)] hover:text-[var(--color-text)]"
             }`}
             key={language}
