@@ -9,8 +9,8 @@ export function AppShell() {
   const sourceCodeUrl = "https://github.com/gorankolak/meeting-brain";
 
   return (
-    <div className="flex min-h-screen flex-col bg-[--color-bg] text-[--color-text]">
-      <header className="border-b border-[--color-border] bg-[--color-bg]">
+    <div className="flex min-h-screen flex-col bg-[var(--color-bg)] text-[--color-text]">
+      <header className="border-b border-[--color-border] bg-[var(--color-bg)]">
         <div className="mx-auto flex max-w-[1440px] items-center justify-between gap-4 px-6 py-3">
           <div className="flex items-center gap-3">
             <BrainCircuit className="text-[--color-primary-dark]" size={22} />
@@ -34,7 +34,7 @@ export function AppShell() {
       <div className="flex flex-1 flex-col">
         <Outlet />
       </div>
-      <footer className="mt-14 border-t border-[--color-border] pt-6">
+      <footer className="mt-14 border-t border-[--color-border] bg-[var(--color-surface)] pt-6">
         <div className="mx-auto flex max-w-[1440px] flex-col gap-6 px-6 pb-8 text-center text-sm text-[--color-text-muted] md:flex-row md:items-start md:justify-between md:text-left">
           <div className="flex flex-col gap-2 md:max-w-sm">
             <p className="font-medium text-[--color-text]">{t("footer.title")}</p>

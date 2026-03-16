@@ -47,10 +47,10 @@ const REPORT_SECTION_ITEMS = [
   { id: "nextSteps", titleKey: "report:sections.nextSteps", icon: ArrowRight }
 ];
 const INPUT_CLASSNAME =
-  "w-full rounded-md border border-[--color-border] bg-[--color-surface] px-3 py-2 text-sm text-[--color-text] outline-none transition focus:border-[--color-primary] focus:shadow-[0_0_0_4px_color-mix(in_srgb,var(--color-primary)_28%,white)]";
+  "w-full rounded-md border border-[--color-border] bg-[var(--color-surface)] px-3 py-2 text-sm text-[--color-text] outline-none transition focus:border-[--color-primary] focus:shadow-[0_0_0_4px_color-mix(in_srgb,var(--color-primary)_28%,white)]";
 const TEXTAREA_CLASSNAME = `${INPUT_CLASSNAME} min-h-[120px] resize-y leading-6`;
-const INNER_CARD_CLASSNAME = "rounded-lg border border-[--color-border] bg-[--color-surface-alt] p-4 sm:p-5";
-const INNER_CARD_DASHED_CLASSNAME = "rounded-lg border border-dashed border-[--color-border] bg-[--color-surface-alt] p-4";
+const INNER_CARD_CLASSNAME = "rounded-lg border border-[--color-border] bg-[var(--color-surface-alt)] p-4 sm:p-5";
+const INNER_CARD_DASHED_CLASSNAME = "rounded-lg border border-dashed border-[--color-border] bg-[var(--color-surface-alt)] p-4";
 const PRIORITY_OPTIONS = ["high", "medium", "low", "unclear"];
 
 function createId(prefix) {
@@ -84,14 +84,14 @@ function SuccessBanner({ report, visible, t }) {
 function ProgressPanel({ progress, progressMessage, t }) {
   return (
     <div className="space-y-5">
-      <div className="rounded-lg border border-[--color-border] bg-[--color-surface] p-4 shadow-sm">
+      <div className="rounded-lg border border-[--color-border] bg-[var(--color-surface)] p-4 shadow-sm">
         <div className="flex items-center justify-between gap-3 text-xs font-semibold uppercase tracking-[0.16em] text-[--color-text-muted]">
           <span>{t(`report:progress.${progress.currentStage}`)}</span>
           <span>{progress.percent}%</span>
         </div>
-        <div className="mt-3 h-2 overflow-hidden rounded-full bg-[--color-muted]">
+        <div className="mt-3 h-2 overflow-hidden rounded-full bg-[var(--color-muted)]">
           <div
-            className="h-full rounded-full bg-[--color-primary] transition-[width] duration-500 motion-reduce:transition-none"
+            className="h-full rounded-full bg-[var(--color-primary)] transition-[width] duration-500 motion-reduce:transition-none"
             style={{ width: `${progress.percent}%` }}
           />
         </div>
@@ -108,8 +108,8 @@ function ProgressPanel({ progress, progressMessage, t }) {
 
 function PlaceholderState({ icon: Icon, title, body, actions = null }) {
   return (
-    <div className="flex min-h-[420px] flex-col items-center justify-center rounded-lg border border-dashed border-[--color-border] bg-[--color-surface] px-6 py-10 text-center sm:min-h-[520px] sm:px-8">
-      <div className="flex size-18 items-center justify-center rounded-md bg-[--color-panel] text-[--color-primary-dark]">
+    <div className="flex min-h-[420px] flex-col items-center justify-center rounded-lg border border-dashed border-[--color-border] bg-[var(--color-surface)] px-6 py-10 text-center sm:min-h-[520px] sm:px-8">
+      <div className="flex size-18 items-center justify-center rounded-md bg-[var(--color-panel)] text-[--color-primary-dark]">
         <Icon size={28} />
       </div>
       <h2 className="mt-6 font-display text-3xl font-semibold text-[--color-text] sm:text-4xl">{title}</h2>
@@ -123,8 +123,8 @@ function PriorityBadge({ label, priority }) {
   const tones = {
     high: "border-red-200 bg-red-100 text-red-700",
     medium: "border-amber-200 bg-amber-100 text-amber-700",
-    low: "border-[--color-border] bg-[--color-panel] text-[--color-text-muted]",
-    unclear: "border-[--color-border] bg-[--color-panel] text-[--color-text-muted]"
+    low: "border-[--color-border] bg-[var(--color-panel)] text-[--color-text-muted]",
+    unclear: "border-[--color-border] bg-[var(--color-panel)] text-[--color-text-muted]"
   };
 
   return (
@@ -141,8 +141,8 @@ function ToastFeedback({ feedback }) {
 
   const tone =
     feedback.tone === "error"
-      ? "border-red-200 bg-[--color-surface] text-red-700"
-      : "border-[--color-border] bg-[--color-surface] text-[--color-primary-dark]";
+      ? "border-red-200 bg-[var(--color-surface)] text-red-700"
+      : "border-[--color-border] bg-[var(--color-surface)] text-[--color-primary-dark]";
 
   return (
     <div className="pointer-events-none fixed bottom-5 right-5 z-50">
@@ -205,9 +205,9 @@ function ReportSection({
   const { t } = useTranslation("report");
   const [isOpen, setIsOpen] = useState(defaultOpen);
   const tones = {
-    primary: "border-[--color-border] bg-[--color-surface]",
-    secondary: "border-[--color-border] bg-[--color-surface]",
-    warning: "border-[--color-border] bg-[--color-surface]"
+    primary: "border-[--color-border] bg-[var(--color-surface)]",
+    secondary: "border-[--color-border] bg-[var(--color-surface)]",
+    warning: "border-[--color-border] bg-[var(--color-surface)]"
   };
   const iconTones = {
     summary: "bg-[color-mix(in_srgb,var(--color-primary)_18%,white)] text-[--color-primary-dark]",
@@ -238,14 +238,14 @@ function ReportSection({
         <div className="min-w-0">
           <div className="flex items-center gap-3">
             {Icon ? (
-              <span className={`flex size-9 shrink-0 items-center justify-center rounded-md ${iconTones[sectionId] || "bg-[--color-panel] text-[--color-primary-dark]"}`}>
+              <span className={`flex size-9 shrink-0 items-center justify-center rounded-md ${iconTones[sectionId] || "bg-[var(--color-panel)] text-[--color-primary-dark]"}`}>
                 <Icon size={17} />
               </span>
             ) : null}
             <div className="flex min-w-0 items-center gap-2.5">
               <h3 className="text-base font-semibold text-[--color-text] sm:text-[17px]">{title}</h3>
               {badge !== null ? (
-                <span className="inline-flex min-w-7 items-center justify-center rounded-md border border-[--color-border] bg-[--color-panel] px-2 py-0.5 text-[11px] font-medium text-[--color-text-muted]">
+                <span className="inline-flex min-w-7 items-center justify-center rounded-md border border-[--color-border] bg-[var(--color-panel)] px-2 py-0.5 text-[11px] font-medium text-[--color-text-muted]">
                   {badge}
                 </span>
               ) : null}
@@ -274,8 +274,8 @@ function ReportSectionNav({ activeSectionId, items, onSelect, stickyTop = 16, t,
     <div
       className={
         isDesktop
-          ? "bg-[--color-surface]"
-          : "sticky z-20 -mx-5 border-b border-[--color-border] bg-[--color-surface] px-5 py-3 backdrop-blur-md sm:-mx-6 sm:px-6"
+          ? "bg-[var(--color-surface)]"
+          : "sticky z-20 -mx-5 border-b border-[--color-border] bg-[var(--color-surface)] px-5 py-3 backdrop-blur-md sm:-mx-6 sm:px-6"
       }
       style={isDesktop ? undefined : { top: `${stickyTop}px` }}
     >
@@ -300,7 +300,7 @@ function ReportSectionNav({ activeSectionId, items, onSelect, stickyTop = 16, t,
                   : `shrink-0 rounded-md border px-3 py-1.5 text-xs font-medium transition duration-200 focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-[--color-primary] motion-reduce:transition-none ${
                       isActive
                         ? "border-[--color-border] bg-[color-mix(in_srgb,var(--color-primary)_18%,white)] text-[--color-primary-dark]"
-                        : "border-[--color-border] bg-[--color-surface] text-[--color-text-muted] hover:bg-[color-mix(in_srgb,var(--color-surface)_92%,black_8%)] hover:text-[--color-text]"
+                        : "border-[--color-border] bg-[var(--color-surface)] text-[--color-text-muted] hover:bg-[color-mix(in_srgb,var(--color-surface)_92%,black_8%)] hover:text-[--color-text]"
                     }`
               }
               onClick={() => onSelect(item.id)}
@@ -330,7 +330,7 @@ function ReviewStatusBadge({ hasUnsavedChanges, reviewStatus, t }) {
           }
         : {
             label: t("report:review.draft"),
-            className: "border-[--color-border] bg-[--color-panel] text-[--color-text-muted]"
+            className: "border-[--color-border] bg-[var(--color-panel)] text-[--color-text-muted]"
           };
 
   return (
@@ -342,7 +342,7 @@ function ReviewStatusBadge({ hasUnsavedChanges, reviewStatus, t }) {
 
 function MetaPill({ children, tone = "neutral" }) {
   const tones = {
-    neutral: "border-[--color-border] bg-[--color-panel] text-[--color-text-muted]",
+    neutral: "border-[--color-border] bg-[var(--color-panel)] text-[--color-text-muted]",
     warning: "border-amber-200 bg-amber-100 text-amber-700",
     info: "border-sky-200 bg-sky-50 text-sky-800"
   };
@@ -433,7 +433,7 @@ function SummaryEditor({ isEditingEnabled, report, onSave, onDirty }) {
           </Button>
         </div>
       ) : null}
-      <div className="rounded-lg bg-[--color-surface-alt] p-4 sm:p-5">
+      <div className="rounded-lg bg-[var(--color-surface-alt)] p-4 sm:p-5">
         <p className="max-w-4xl text-sm leading-7 text-[--color-text] sm:text-[15px]">{report.summary}</p>
       </div>
     </div>
@@ -1145,7 +1145,7 @@ export function ReportWorkspace({
 
   return (
     <>
-      <section className="rounded-lg border border-[--color-border] bg-[--color-surface] p-5 shadow-sm sm:p-6 lg:p-7">
+      <section className="rounded-lg border border-[--color-border] bg-[var(--color-surface)] p-5 shadow-sm sm:p-6 lg:p-7">
         <SuccessBanner report={report} t={t} visible={showSuccessBanner} />
 
         {generationError && status === "error" ? <ErrorBanner>{generationError}</ErrorBanner> : null}
@@ -1154,7 +1154,7 @@ export function ReportWorkspace({
 
         {isReady ? (
           <div className="space-y-6 xl:grid xl:grid-cols-[220px_minmax(0,1fr)] xl:items-start xl:gap-8 xl:space-y-0">
-            <aside className="hidden xl:block xl:self-start xl:sticky" style={{ top: `${HEADER_STICKY_TOP_PX}px` }}>
+            <aside className="hidden bg-[var(--color-surface)] xl:block xl:self-start xl:sticky" style={{ top: `${HEADER_STICKY_TOP_PX}px` }}>
               <ReportSectionNav
                 activeSectionId={activeSectionId}
                 items={REPORT_SECTION_ITEMS}
@@ -1164,11 +1164,11 @@ export function ReportWorkspace({
               />
             </aside>
 
-            <div className="min-w-0 space-y-6">
+            <div className="min-w-0 space-y-6 bg-[var(--color-surface)]">
               <div
                 id="header"
                 ref={setSectionRef("header")}
-                className={`rounded-lg border border-[--color-border] border-b bg-[--color-surface] px-4 py-4 shadow-sm backdrop-blur-lg transition-all duration-200 ease-out motion-reduce:transform-none motion-reduce:transition-none sm:px-5 ${
+                className={`rounded-lg border border-[--color-border] border-b bg-[var(--color-surface)] px-4 py-4 shadow-sm backdrop-blur-lg transition-all duration-200 ease-out motion-reduce:transform-none motion-reduce:transition-none sm:px-5 ${
                   headerVisible ? "translate-y-0 opacity-100" : "translate-y-2 opacity-0"
                 }`}
                 style={{ scrollMarginTop: `${scrollMarginTop}px` }}

@@ -125,7 +125,7 @@ export function MeetingInputPanel({
   }, [inputText]);
 
   return (
-    <section className="rounded-lg border border-[--color-border] bg-[--color-surface] p-6 shadow-sm focus-within:ring-2 focus-within:ring-[color-mix(in_srgb,var(--color-primary)_30%,white)]">
+    <section className="rounded-lg border border-[--color-border] bg-[var(--color-surface)] p-6 shadow-sm focus-within:ring-2 focus-within:ring-[color-mix(in_srgb,var(--color-primary)_30%,white)]">
       <div className="flex flex-col gap-4">
         <label className="block">
           <span className="mb-3 block text-xs font-medium uppercase tracking-wider text-[--color-text-muted]">
@@ -134,7 +134,7 @@ export function MeetingInputPanel({
           <textarea
             aria-describedby={displayError ? errorId : undefined}
             aria-invalid={displayError ? "true" : "false"}
-            className={`min-h-[120px] max-h-[300px] w-full resize-none overflow-y-auto rounded-md border bg-[--color-surface-alt] px-4 py-3 font-mono text-sm leading-6 text-[--color-text] outline-none transition duration-150 ease-out focus:border-[--color-primary] focus:bg-[--color-surface-alt] focus:shadow-[0_0_0_4px_color-mix(in_srgb,var(--color-primary)_28%,white)] ${displayError ? "border-red-300" : "border-[--color-border]"}`}
+            className={`min-h-[120px] max-h-[300px] w-full resize-none overflow-y-auto rounded-md border bg-[var(--color-surface-alt)] px-4 py-3 font-mono text-sm leading-6 text-[--color-text] outline-none transition duration-150 ease-out focus:border-[--color-primary] focus:bg-[var(--color-surface-alt)] focus:shadow-[0_0_0_4px_color-mix(in_srgb,var(--color-primary)_28%,white)] ${displayError ? "border-red-300" : "border-[--color-border]"}`}
             id="meeting-transcript"
             onBlur={markTranscriptTouched}
             onChange={(event) => setInputText(event.target.value)}
@@ -156,7 +156,7 @@ export function MeetingInputPanel({
 
         <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between">
           <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center sm:gap-2">
-            <label className="flex min-h-12 w-full cursor-pointer items-center justify-center gap-2 rounded-md border border-[--color-border] bg-[--color-surface] px-4 py-3 text-sm font-semibold text-[--color-text] transition duration-150 ease-out hover:bg-[color-mix(in_srgb,var(--color-surface)_92%,black_8%)] active:scale-[0.99] focus-within:outline-3 focus-within:outline-offset-2 focus-within:outline-[--color-primary] sm:w-auto">
+            <label className="flex min-h-12 w-full cursor-pointer items-center justify-center gap-2 rounded-md border border-[--color-border] bg-[var(--color-surface)] px-4 py-3 text-sm font-semibold text-[--color-text] transition duration-150 ease-out hover:bg-[color-mix(in_srgb,var(--color-surface)_92%,black_8%)] active:scale-[0.99] focus-within:outline-3 focus-within:outline-offset-2 focus-within:outline-[--color-primary] sm:w-auto">
               <FileUp size={16} />
               {t("home:buttons.uploadFile")}
               <input
@@ -195,7 +195,7 @@ export function MeetingInputPanel({
 
         <div className="flex flex-col gap-3">
           {fileName ? (
-            <div className="flex items-center justify-between gap-3 rounded-md border border-[--color-border] bg-[--color-surface] px-4 py-3 text-sm text-[--color-text]">
+            <div className="flex items-center justify-between gap-3 rounded-md border border-[--color-border] bg-[var(--color-surface)] px-4 py-3 text-sm text-[--color-text]">
               <div className="flex min-w-0 items-center gap-3">
                 <div className="flex size-10 shrink-0 items-center justify-center rounded-md bg-[color-mix(in_srgb,var(--color-primary)_28%,white)] text-[--color-primary-dark]">
                   <FileText size={18} />

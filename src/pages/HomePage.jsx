@@ -105,7 +105,7 @@ export function HomePage() {
         </button>
       </section>
 
-      <section className="mx-auto w-full max-w-[860px]">
+      <section className="mx-auto w-full max-w-[860px] bg-[var(--color-surface)]">
         <MeetingInputPanel
           meetingInput={meetingInput}
           onGenerate={handleGenerate}
@@ -115,7 +115,7 @@ export function HomePage() {
       </section>
 
       {reportGeneration.hasStartedGeneration ? (
-        <section className="mx-auto w-full max-w-[1180px]" ref={resultsRef}>
+        <section className="mx-auto w-full max-w-[1180px] bg-[var(--color-surface)]" ref={resultsRef}>
           <ReportWorkspace
             report={editableReport}
             status={reportGeneration.status}

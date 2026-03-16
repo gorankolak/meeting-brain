@@ -67,7 +67,7 @@ export function ReportExportToolbar({
   return (
     <div
       aria-label={t("export:toolbarLabel")}
-      className="flex min-w-fit flex-col gap-3"
+      className="flex min-w-fit flex-col gap-3 bg-[var(--color-surface)]"
       role="toolbar"
     >
       <div className="flex flex-nowrap items-center justify-start gap-2 sm:justify-end">
