@@ -134,7 +134,7 @@ export function MeetingInputPanel({
           <textarea
             aria-describedby={displayError ? errorId : undefined}
             aria-invalid={displayError ? "true" : "false"}
-            className={`min-h-[120px] max-h-[300px] w-full resize-none overflow-y-auto rounded-md border bg-[--color-surface] px-4 py-3 font-mono text-sm leading-6 text-[--color-text] outline-none transition duration-150 ease-out focus:border-[--color-primary] focus:bg-[--color-surface] focus:shadow-[0_0_0_4px_color-mix(in_srgb,var(--color-primary)_28%,white)] ${displayError ? "border-red-300" : "border-[--color-border]"}`}
+            className={`min-h-[120px] max-h-[300px] w-full resize-none overflow-y-auto rounded-md border bg-[--color-surface-alt] px-4 py-3 font-mono text-sm leading-6 text-[--color-text] outline-none transition duration-150 ease-out focus:border-[--color-primary] focus:bg-[--color-surface-alt] focus:shadow-[0_0_0_4px_color-mix(in_srgb,var(--color-primary)_28%,white)] ${displayError ? "border-red-300" : "border-[--color-border]"}`}
             id="meeting-transcript"
             onBlur={markTranscriptTouched}
             onChange={(event) => setInputText(event.target.value)}

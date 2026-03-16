@@ -49,6 +49,8 @@ const REPORT_SECTION_ITEMS = [
 const INPUT_CLASSNAME =
   "w-full rounded-md border border-[--color-border] bg-[--color-surface] px-3 py-2 text-sm text-[--color-text] outline-none transition focus:border-[--color-primary] focus:shadow-[0_0_0_4px_color-mix(in_srgb,var(--color-primary)_28%,white)]";
 const TEXTAREA_CLASSNAME = `${INPUT_CLASSNAME} min-h-[120px] resize-y leading-6`;
+const INNER_CARD_CLASSNAME = "rounded-lg border border-[--color-border] bg-[--color-surface-alt] p-4 sm:p-5";
+const INNER_CARD_DASHED_CLASSNAME = "rounded-lg border border-dashed border-[--color-border] bg-[--color-surface-alt] p-4";
 const PRIORITY_OPTIONS = ["high", "medium", "low", "unclear"];
 
 function createId(prefix) {
@@ -272,8 +274,8 @@ function ReportSectionNav({ activeSectionId, items, onSelect, stickyTop = 16, t,
     <div
       className={
         isDesktop
-          ? undefined
-          : "sticky z-20 -mx-5 border-b border-[--color-border] bg-[color-mix(in_srgb,var(--color-surface)_92%,white)] px-5 py-3 backdrop-blur-md sm:-mx-6 sm:px-6"
+          ? "bg-[--color-surface]"
+          : "sticky z-20 -mx-5 border-b border-[--color-border] bg-[--color-surface] px-5 py-3 backdrop-blur-md sm:-mx-6 sm:px-6"
       }
       style={isDesktop ? undefined : { top: `${stickyTop}px` }}
     >
@@ -431,7 +433,9 @@ function SummaryEditor({ isEditingEnabled, report, onSave, onDirty }) {
           </Button>
         </div>
       ) : null}
-      <p className="max-w-4xl text-sm leading-7 text-[--color-text] sm:text-[15px]">{report.summary}</p>
+      <div className="rounded-lg bg-[--color-surface-alt] p-4 sm:p-5">
+        <p className="max-w-4xl text-sm leading-7 text-[--color-text] sm:text-[15px]">{report.summary}</p>
+      </div>
     </div>
   );
 }
@@ -455,7 +459,7 @@ function DecisionsEditor({ isEditingEnabled, report, onChange, onDirty }) {
           const isEditing = editingId === decision.id;
 
           return (
-            <article key={decision.id} className="rounded-lg border border-[--color-border] bg-[--color-surface] p-4 sm:p-5">
+            <article key={decision.id} className={INNER_CARD_CLASSNAME}>
               {isEditing ? (
                 <div className="space-y-3">
                   <textarea
@@ -544,7 +548,7 @@ function DecisionsEditor({ isEditingEnabled, report, onChange, onDirty }) {
       )}
 
       {isEditingEnabled ? (
-        <div className="rounded-lg border border-dashed border-[--color-border] bg-[--color-surface] p-4">
+        <div className={INNER_CARD_DASHED_CLASSNAME}>
           <label className="block text-xs font-semibold uppercase tracking-[0.14em] text-[--color-text-muted]">
             {t("report:editor.addDecision")}
           </label>
@@ -629,7 +633,7 @@ function ActionItemsEditor({ isEditingEnabled, report, onChange, onDirty }) {
           return (
             <article
               key={item.id}
-              className="rounded-lg border border-[--color-border] bg-[--color-surface] p-4 transition hover:border-[--color-border] motion-reduce:transition-none sm:p-5"
+              className={`${INNER_CARD_CLASSNAME} transition hover:border-[--color-border] motion-reduce:transition-none`}
             >
               {isEditing && draft ? (
                 <div className="grid gap-3 md:grid-cols-2">
@@ -763,7 +767,7 @@ function ActionItemsEditor({ isEditingEnabled, report, onChange, onDirty }) {
       )}
 
       {isEditingEnabled ? (
-        <div className="rounded-lg border border-dashed border-[--color-border] bg-[--color-surface] p-4">
+        <div className={INNER_CARD_DASHED_CLASSNAME}>
           <div className="grid gap-3 md:grid-cols-2">
             <div className="md:col-span-2">
               <label className="mb-1 block text-xs font-semibold uppercase tracking-[0.14em] text-[--color-text-muted]">
@@ -1164,7 +1168,7 @@ export function ReportWorkspace({
               <div
                 id="header"
                 ref={setSectionRef("header")}
-                className={`rounded-lg border border-[--color-border] border-b bg-[color-mix(in_srgb,var(--color-surface)_92%,white)] px-4 py-4 shadow-sm backdrop-blur-lg transition-all duration-200 ease-out motion-reduce:transform-none motion-reduce:transition-none sm:px-5 ${
+                className={`rounded-lg border border-[--color-border] border-b bg-[--color-surface] px-4 py-4 shadow-sm backdrop-blur-lg transition-all duration-200 ease-out motion-reduce:transform-none motion-reduce:transition-none sm:px-5 ${
                   headerVisible ? "translate-y-0 opacity-100" : "translate-y-2 opacity-0"
                 }`}
                 style={{ scrollMarginTop: `${scrollMarginTop}px` }}
@@ -1323,7 +1327,7 @@ export function ReportWorkspace({
                 <div className="space-y-4">
                   {report.risks.length ? (
                     report.risks.map((risk) => (
-                      <div key={risk.id} className="rounded-lg border border-[--color-border] bg-[--color-surface] p-4 sm:p-5">
+                      <div key={risk.id} className={INNER_CARD_CLASSNAME}>
                         <div className="flex items-start gap-3">
                           <AlertTriangle className="mt-0.5 shrink-0 text-red-500" size={16} />
                           <div className="min-w-0">
@@ -1359,7 +1363,7 @@ export function ReportWorkspace({
                   <div className="space-y-4">
                     {report.open_questions.length ? (
                       report.open_questions.map((question) => (
-                        <article key={question.id} className="rounded-lg border border-[--color-border] bg-[--color-surface] p-4 sm:p-5">
+                        <article key={question.id} className={INNER_CARD_CLASSNAME}>
                           <p className="text-sm font-semibold text-[--color-text]">{question.question}</p>
                           <p className="mt-2 text-sm text-[--color-text-muted]">
                             {question.notes || t("report:empty.questionNotes")}
@@ -1393,7 +1397,7 @@ export function ReportWorkspace({
                   <ul className="space-y-4 text-sm text-[--color-text]">
                     {report.next_steps.length ? (
                       report.next_steps.map((step) => (
-                        <li key={step} className="flex gap-3 rounded-lg border border-[--color-border] bg-[--color-surface] p-4 sm:p-5">
+                        <li key={step} className={`${INNER_CARD_CLASSNAME} flex gap-3`}>
                           <CheckCircle2 className="mt-0.5 shrink-0 text-[--color-primary-dark]" size={16} />
                           <span>{step}</span>
                         </li>
