@@ -28,9 +28,7 @@ import { formatDateTime } from "../../lib/locale";
 
 const SECTION_REVEAL_DELAY_MS = 120;
 const SECTION_SCROLL_OFFSET_PX = 28;
-const HEADER_SCROLL_DIRECTION_THRESHOLD_PX = 12;
 const HEADER_STICKY_TOP_PX = 16;
-const COMPACT_HEADER_TRIGGER_OFFSET_PX = 84;
 const SECTION_ICON_MAP = {
   summary: FileText,
   decisions: CheckCircle,
@@ -40,6 +38,7 @@ const SECTION_ICON_MAP = {
   nextSteps: ArrowRight
 };
 const REPORT_SECTION_ITEMS = [
+  { id: "header", titleKey: "report:generatedReport", icon: CheckCircle2 },
   { id: "summary", titleKey: "report:sections.summary", icon: FileText },
   { id: "decisions", titleKey: "report:sections.decisions", icon: CheckCircle },
   { id: "actionItems", titleKey: "report:sections.actionItems", icon: ListTodo },
@@ -273,10 +272,10 @@ function ReportSectionNav({ activeSectionId, items, onSelect, stickyTop = 16, t,
     <div
       className={
         isDesktop
-          ? "sticky"
+          ? undefined
           : "sticky z-20 -mx-5 border-b border-[--color-border] bg-[color-mix(in_srgb,var(--color-surface)_92%,white)] px-5 py-3 backdrop-blur-md sm:-mx-6 sm:px-6"
       }
-      style={{ top: `${stickyTop}px` }}
+      style={isDesktop ? undefined : { top: `${stickyTop}px` }}
     >
       <nav
         aria-label={t("report:generatedReport")}
@@ -887,16 +886,12 @@ export function ReportWorkspace({
   const [revealedSections, setRevealedSections] = useState([]);
   const [isEditing, setIsEditing] = useState(false);
   const [activeSectionId, setActiveSectionId] = useState(REPORT_SECTION_ITEMS[0].id);
-  const [isHeaderCompact, setIsHeaderCompact] = useState(false);
-  const [headerHeight, setHeaderHeight] = useState(0);
   const [mobileNavHeight, setMobileNavHeight] = useState(0);
-  const headerRef = useRef(null);
   const mobileNavRef = useRef(null);
   const sectionRefs = useRef({});
-  const sectionObserverRef = useRef(null);
-  const scrollFrameRef = useRef(0);
-  const lastScrollYRef = useRef(0);
-  const scrollMarginTop = headerHeight + mobileNavHeight + SECTION_SCROLL_OFFSET_PX + 16;
+  const pendingScrollTargetRef = useRef(null);
+  const pendingScrollTimeoutRef = useRef(null);
+  const scrollMarginTop = mobileNavHeight + HEADER_STICKY_TOP_PX + SECTION_SCROLL_OFFSET_PX;
 
   useEffect(() => {
     if (!isReady || !generatedAt) {
@@ -923,37 +918,34 @@ export function ReportWorkspace({
 
   useEffect(() => {
     setIsEditing(false);
-    setIsHeaderCompact(false);
     setActiveSectionId(REPORT_SECTION_ITEMS[0].id);
+    pendingScrollTargetRef.current = null;
+
+    if (pendingScrollTimeoutRef.current !== null) {
+      window.clearTimeout(pendingScrollTimeoutRef.current);
+      pendingScrollTimeoutRef.current = null;
+    }
   }, [isReady, generatedAt]);
 
   useEffect(() => {
     if (!isReady) {
-      setHeaderHeight(0);
       setMobileNavHeight(0);
       return undefined;
     }
 
     if (typeof ResizeObserver === "undefined") {
-      setHeaderHeight(headerRef.current?.getBoundingClientRect().height || 0);
       setMobileNavHeight(mobileNavRef.current?.getBoundingClientRect().height || 0);
       return undefined;
     }
 
     const resizeObserver = new ResizeObserver(() => {
-      setHeaderHeight(headerRef.current?.getBoundingClientRect().height || 0);
       setMobileNavHeight(mobileNavRef.current?.getBoundingClientRect().height || 0);
     });
-
-    if (headerRef.current) {
-      resizeObserver.observe(headerRef.current);
-    }
 
     if (mobileNavRef.current) {
       resizeObserver.observe(mobileNavRef.current);
     }
 
-    setHeaderHeight(headerRef.current?.getBoundingClientRect().height || 0);
     setMobileNavHeight(mobileNavRef.current?.getBoundingClientRect().height || 0);
 
     return () => resizeObserver.disconnect();
@@ -961,8 +953,6 @@ export function ReportWorkspace({
 
   useEffect(() => {
     if (!isReady) {
-      sectionObserverRef.current?.disconnect();
-      sectionObserverRef.current = null;
       return undefined;
     }
 
@@ -972,90 +962,98 @@ export function ReportWorkspace({
       return undefined;
     }
 
-    if (typeof IntersectionObserver === "undefined") {
-      setActiveSectionId(REPORT_SECTION_ITEMS[0].id);
-      return undefined;
-    }
+    let frameId = null;
+    const activationOffset = mobileNavHeight + HEADER_STICKY_TOP_PX + 32;
 
-    const observer = new IntersectionObserver(
-      (entries) => {
-        const visibleEntries = entries
-          .filter((entry) => entry.isIntersecting)
-          .sort((entryA, entryB) => entryB.intersectionRatio - entryA.intersectionRatio);
+    const updateActiveSection = () => {
+      frameId = null;
 
-        if (visibleEntries.length) {
-          setActiveSectionId(visibleEntries[0].target.id);
+      const sectionPositions = REPORT_SECTION_ITEMS.map((item) => {
+        const section = sectionRefs.current[item.id];
+
+        if (!section) {
+          return null;
         }
-      },
-      {
-        root: null,
-        rootMargin: `-${headerHeight + mobileNavHeight + 40}px 0px -50% 0px`,
-        threshold: [0.2, 0.35, 0.5, 0.65]
-      }
-    );
 
-    sections.forEach((section) => observer.observe(section));
-    sectionObserverRef.current = observer;
+        return {
+          id: item.id,
+          top: section.getBoundingClientRect().top
+        };
+      }).filter(Boolean);
 
-    return () => {
-      observer.disconnect();
-      sectionObserverRef.current = null;
-    };
-  }, [generatedAt, headerHeight, isReady, mobileNavHeight]);
-
-  useEffect(() => {
-    if (!isReady || typeof window === "undefined") {
-      setIsHeaderCompact(false);
-      return undefined;
-    }
-
-    lastScrollYRef.current = window.scrollY;
-
-    const updateStickyHeaderState = () => {
-      scrollFrameRef.current = 0;
-
-      const summarySection = sectionRefs.current.summary;
-      const headerElement = headerRef.current;
-
-      if (!summarySection || !headerElement) {
+      if (!sectionPositions.length) {
         return;
       }
 
-      const currentScrollY = window.scrollY;
-      const delta = currentScrollY - lastScrollYRef.current;
-      const summaryTop = summarySection.getBoundingClientRect().top;
-      const enteredContent = summaryTop <= HEADER_STICKY_TOP_PX + mobileNavHeight + COMPACT_HEADER_TRIGGER_OFFSET_PX;
+      const pendingTargetId = pendingScrollTargetRef.current;
 
-      if (!enteredContent || currentScrollY <= 32) {
-        setIsHeaderCompact(false);
-      } else if (delta >= HEADER_SCROLL_DIRECTION_THRESHOLD_PX) {
-        setIsHeaderCompact(true);
-      } else if (delta <= -HEADER_SCROLL_DIRECTION_THRESHOLD_PX) {
-        setIsHeaderCompact(false);
-      }
-
-      lastScrollYRef.current = currentScrollY;
-    };
-
-    const onScroll = () => {
-      if (scrollFrameRef.current) {
+      if (pendingTargetId) {
+        setActiveSectionId((previousSectionId) =>
+          previousSectionId === pendingTargetId ? previousSectionId : pendingTargetId
+        );
         return;
       }
 
-      scrollFrameRef.current = window.requestAnimationFrame(updateStickyHeaderState);
+      let currentSection = sectionPositions[0];
+
+      sectionPositions.forEach((section) => {
+        if (section.top - activationOffset <= 0) {
+          currentSection = section;
+        }
+      });
+
+      setActiveSectionId((previousSectionId) =>
+        previousSectionId === currentSection.id ? previousSectionId : currentSection.id
+      );
     };
 
-    onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
+    const requestSectionUpdate = () => {
+      if (frameId !== null) {
+        return;
+      }
+
+      frameId = window.requestAnimationFrame(updateActiveSection);
+    };
+
+    const releasePendingScrollTarget = () => {
+      if (!pendingScrollTargetRef.current) {
+        return;
+      }
+
+      pendingScrollTargetRef.current = null;
+
+      if (pendingScrollTimeoutRef.current !== null) {
+        window.clearTimeout(pendingScrollTimeoutRef.current);
+        pendingScrollTimeoutRef.current = null;
+      }
+
+      requestSectionUpdate();
+    };
+
+    const resizeObserver =
+      typeof ResizeObserver === "undefined"
+        ? null
+        : new ResizeObserver(() => {
+            requestSectionUpdate();
+          });
+
+    sections.forEach((section) => resizeObserver?.observe(section));
+    window.addEventListener("scroll", requestSectionUpdate, { passive: true });
+    window.addEventListener("resize", requestSectionUpdate);
+    window.addEventListener("scrollend", releasePendingScrollTarget);
+    requestSectionUpdate();
 
     return () => {
-      window.removeEventListener("scroll", onScroll);
-      if (scrollFrameRef.current) {
-        window.cancelAnimationFrame(scrollFrameRef.current);
+      if (frameId !== null) {
+        window.cancelAnimationFrame(frameId);
       }
-      scrollFrameRef.current = 0;
+
+      resizeObserver?.disconnect();
+      window.removeEventListener("scroll", requestSectionUpdate);
+      window.removeEventListener("resize", requestSectionUpdate);
+      window.removeEventListener("scrollend", releasePendingScrollTarget);
     };
-  }, [generatedAt, headerHeight, isReady, mobileNavHeight]);
+  }, [generatedAt, isReady, mobileNavHeight, scrollMarginTop]);
 
   function updateReportSection(field, updater) {
     onReportChange((current) => {
@@ -1121,8 +1119,17 @@ export function ReportWorkspace({
       return;
     }
 
+    pendingScrollTargetRef.current = sectionId;
+    if (pendingScrollTimeoutRef.current !== null) {
+      window.clearTimeout(pendingScrollTimeoutRef.current);
+    }
+    pendingScrollTimeoutRef.current = window.setTimeout(() => {
+      pendingScrollTargetRef.current = null;
+      pendingScrollTimeoutRef.current = null;
+      setActiveSectionId(sectionId);
+    }, 1200);
+
     setActiveSectionId(sectionId);
-    setIsHeaderCompact(true);
     section.scrollIntoView({
       behavior: "smooth",
       block: "start"
@@ -1143,12 +1150,11 @@ export function ReportWorkspace({
 
         {isReady ? (
           <div className="space-y-6 xl:grid xl:grid-cols-[220px_minmax(0,1fr)] xl:items-start xl:gap-8 xl:space-y-0">
-            <aside className="hidden xl:block">
+            <aside className="hidden xl:block xl:self-start xl:sticky" style={{ top: `${HEADER_STICKY_TOP_PX}px` }}>
               <ReportSectionNav
                 activeSectionId={activeSectionId}
                 items={REPORT_SECTION_ITEMS}
                 onSelect={scrollToSection}
-                stickyTop={24}
                 t={t}
                 variant="desktop"
               />
@@ -1156,30 +1162,42 @@ export function ReportWorkspace({
 
             <div className="min-w-0 space-y-6">
               <div
-                ref={headerRef}
-                className={`sticky z-30 rounded-lg border border-[--color-border] border-b bg-[color-mix(in_srgb,var(--color-surface)_92%,white)] shadow-sm backdrop-blur-lg transition-all duration-200 ease-out motion-reduce:transform-none motion-reduce:transition-none ${
-                  isHeaderCompact ? "px-4 py-3 sm:px-5" : "px-4 py-4 sm:px-5"
-                } ${
+                id="header"
+                ref={setSectionRef("header")}
+                className={`rounded-lg border border-[--color-border] border-b bg-[color-mix(in_srgb,var(--color-surface)_92%,white)] px-4 py-4 shadow-sm backdrop-blur-lg transition-all duration-200 ease-out motion-reduce:transform-none motion-reduce:transition-none sm:px-5 ${
                   headerVisible ? "translate-y-0 opacity-100" : "translate-y-2 opacity-0"
                 }`}
-                style={{ top: `${HEADER_STICKY_TOP_PX}px` }}
+                style={{ scrollMarginTop: `${scrollMarginTop}px` }}
               >
-                {isHeaderCompact ? (
-                  <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between lg:gap-4">
-                    <div className="min-w-0 lg:max-w-[min(42%,26rem)]">
+                <div className="flex flex-col gap-4">
+                  {generationMeta?.mode === "mock" ? (
+                    <MockModeBanner fallbackReason={generationMeta.fallbackReason} t={t} />
+                  ) : null}
+
+                  <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
+                    <div className="min-w-0">
+                      <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[--color-warning]">
+                        {t("report:generatedReport")}
+                      </p>
                       <h2
-                        className="truncate font-display text-lg font-semibold text-[--color-text] sm:text-xl"
+                        className="mt-2 font-display text-2xl font-semibold text-[--color-text] sm:text-3xl"
                         data-report-heading="true"
                         tabIndex={-1}
                         title={reportTitle}
                       >
                         {reportTitle}
                       </h2>
+                      <div className="mt-3 flex flex-wrap items-center gap-2">
+                        <span className="inline-flex items-center gap-1.5 text-sm font-medium text-[--color-primary-dark]">
+                          <CheckCircle2 size={15} />
+                          <span>{t("report:status.generated")}</span>
+                        </span>
+                        <ReviewStatusBadge hasUnsavedChanges={hasUnsavedChanges} reviewStatus={reviewStatus} t={t} />
+                      </div>
                     </div>
 
-                    <div className="w-full lg:w-auto lg:max-w-none lg:flex-1 lg:min-w-0">
+                    <div className="w-full max-w-[560px]">
                       <ReportExportToolbar
-                        compact
                         disabled={!isReady}
                         isBusy={exportActions.isBusy}
                         isEditing={isEditing}
@@ -1195,67 +1213,21 @@ export function ReportWorkspace({
                       />
                     </div>
                   </div>
-                ) : (
-                  <div className="flex flex-col gap-4">
-                    {generationMeta?.mode === "mock" ? (
-                      <MockModeBanner fallbackReason={generationMeta.fallbackReason} t={t} />
+
+                  <div className="flex flex-wrap items-center gap-2.5 text-[11px]">
+                    {generatedAt ? (
+                      <MetaPill>
+                        <Clock3 size={12} />
+                        {formatDateTime(generatedAt, language)}
+                      </MetaPill>
                     ) : null}
-
-                    <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
-                      <div className="min-w-0">
-                        <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[--color-warning]">
-                          {t("report:generatedReport")}
-                        </p>
-                        <h2
-                          className="mt-2 font-display text-2xl font-semibold text-[--color-text] sm:text-3xl"
-                          data-report-heading="true"
-                          tabIndex={-1}
-                          title={reportTitle}
-                        >
-                          {reportTitle}
-                        </h2>
-                        <div className="mt-3 flex flex-wrap items-center gap-2">
-                          <span className="inline-flex items-center gap-1.5 text-sm font-medium text-[--color-primary-dark]">
-                            <CheckCircle2 size={15} />
-                            <span>{t("report:status.generated")}</span>
-                          </span>
-                          <ReviewStatusBadge hasUnsavedChanges={hasUnsavedChanges} reviewStatus={reviewStatus} t={t} />
-                        </div>
-                      </div>
-
-                      <div className="w-full max-w-[560px]">
-                        <ReportExportToolbar
-                          disabled={!isReady}
-                          isBusy={exportActions.isBusy}
-                          isEditing={isEditing}
-                          onAction={exportActions}
-                          onToggleEditing={() => setIsEditing((current) => !current)}
-                          onToggleReview={() =>
-                            onMarkReviewed(reviewStatus === "reviewed" ? "draft" : "reviewed")
-                          }
-                          reviewActionDisabled={false}
-                          reviewActionLabel={
-                            reviewStatus === "reviewed" ? t("report:review.markDraft") : t("report:review.markReviewed")
-                          }
-                        />
-                      </div>
-                    </div>
-
-                    <div className="flex flex-wrap items-center gap-2.5 text-[11px]">
-                      {generatedAt ? (
-                        <MetaPill>
-                          <Clock3 size={12} />
-                          {formatDateTime(generatedAt, language)}
-                        </MetaPill>
-                      ) : null}
-                      <MetaPill tone={generationMeta?.mode === "mock" ? "info" : "neutral"}>{generationModeLabel}</MetaPill>
-                      {generationMeta?.attempts ? (
-                        <MetaPill>{t("report:metaAttempt", { attempts: generationMeta.attempts })}</MetaPill>
-                      ) : null}
-                      {sourceLabel ? <MetaPill>{sourceLabel}</MetaPill> : null}
-                    </div>
+                    <MetaPill tone={generationMeta?.mode === "mock" ? "info" : "neutral"}>{generationModeLabel}</MetaPill>
+                    {generationMeta?.attempts ? (
+                      <MetaPill>{t("report:metaAttempt", { attempts: generationMeta.attempts })}</MetaPill>
+                    ) : null}
+                    {sourceLabel ? <MetaPill>{sourceLabel}</MetaPill> : null}
                   </div>
-                )}
+                </div>
               </div>
 
               <div className="xl:hidden" ref={mobileNavRef}>
@@ -1263,7 +1235,7 @@ export function ReportWorkspace({
                   activeSectionId={activeSectionId}
                   items={REPORT_SECTION_ITEMS}
                   onSelect={scrollToSection}
-                  stickyTop={headerHeight + HEADER_STICKY_TOP_PX + 4}
+                  stickyTop={HEADER_STICKY_TOP_PX}
                   t={t}
                   variant="mobile"
                 />
