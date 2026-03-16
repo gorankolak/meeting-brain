@@ -24,7 +24,7 @@ function ToolbarButton({
   return (
     <Button
       aria-label={t(`export:buttons.${actionId}`)}
-      className="min-h-9 w-full justify-center rounded-md px-3.5 py-2 whitespace-nowrap sm:w-auto"
+      className="min-h-9 w-auto shrink-0 justify-center rounded-md px-3 py-2 whitespace-nowrap"
       disabled={disabled || isBusy}
       onClick={onClick}
       size="sm"
@@ -53,7 +53,6 @@ function UtilityButton({ children, disabled, icon: Icon, onClick, pressed = fals
 }
 
 export function ReportExportToolbar({
-  compact = false,
   disabled,
   isBusy,
   isEditing,
@@ -64,17 +63,14 @@ export function ReportExportToolbar({
   reviewActionLabel
 }) {
   const { t } = useTranslation(["export", "report"]);
-  const primaryActions = compact
-    ? "flex flex-col gap-1.5 sm:flex-row sm:flex-wrap sm:items-center lg:flex-nowrap lg:justify-end"
-    : "flex flex-wrap items-center gap-2";
 
   return (
     <div
       aria-label={t("export:toolbarLabel")}
-      className={`flex flex-col ${compact ? "gap-2 lg:items-end" : "gap-3"}`}
+      className="flex min-w-fit flex-col gap-3"
       role="toolbar"
     >
-      <div className={primaryActions}>
+      <div className="flex flex-nowrap items-center justify-start gap-2 sm:justify-end">
         <ToolbarButton
           actionId="downloadPdf"
           disabled={disabled}
@@ -92,7 +88,7 @@ export function ReportExportToolbar({
           isBusy={isBusy("copy")}
           isCopied={onAction.completedAction === "copy"}
           onClick={() => onAction.copyReport()}
-          tone={compact ? "ghost" : "secondary"}
+          tone="secondary"
         >
           {t("export:buttons.copyReport")}
         </ToolbarButton>
@@ -102,22 +98,20 @@ export function ReportExportToolbar({
           icon={FileSpreadsheet}
           isBusy={isBusy("jira")}
           onClick={() => onAction.exportForJira()}
-          tone={compact ? "ghost" : "secondary"}
+          tone="secondary"
         >
           {t("export:buttons.exportForJira")}
         </ToolbarButton>
       </div>
 
-      {!compact ? (
-        <div className="flex flex-wrap items-center gap-1.5 border-t border-[--color-border] pt-2.5">
-          <UtilityButton disabled={disabled} icon={isEditing ? Check : Pencil} onClick={onToggleEditing} pressed={isEditing}>
-            {isEditing ? t("export:buttons.doneEditing") : t("export:buttons.editReport")}
-          </UtilityButton>
-          <UtilityButton disabled={disabled || reviewActionDisabled} onClick={onToggleReview}>
-            {reviewActionLabel}
-          </UtilityButton>
-        </div>
-      ) : null}
+      <div className="flex flex-wrap items-center gap-1.5 border-t border-[--color-border] pt-2.5">
+        <UtilityButton disabled={disabled} icon={isEditing ? Check : Pencil} onClick={onToggleEditing} pressed={isEditing}>
+          {isEditing ? t("export:buttons.doneEditing") : t("export:buttons.editReport")}
+        </UtilityButton>
+        <UtilityButton disabled={disabled || reviewActionDisabled} onClick={onToggleReview}>
+          {reviewActionLabel}
+        </UtilityButton>
+      </div>
     </div>
   );
 }

@@ -1174,8 +1174,8 @@ export function ReportWorkspace({
                     <MockModeBanner fallbackReason={generationMeta.fallbackReason} t={t} />
                   ) : null}
 
-                  <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
-                    <div className="min-w-0">
+                  <div className="flex flex-col gap-4 lg:grid lg:grid-cols-[minmax(0,1fr)_auto] lg:items-start lg:gap-x-6">
+                    <div className="min-w-0 lg:max-w-[42rem]">
                       <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[--color-warning]">
                         {t("report:generatedReport")}
                       </p>
@@ -1196,7 +1196,7 @@ export function ReportWorkspace({
                       </div>
                     </div>
 
-                    <div className="w-full max-w-[560px]">
+                    <div className="w-full lg:w-auto lg:min-w-fit">
                       <ReportExportToolbar
                         disabled={!isReady}
                         isBusy={exportActions.isBusy}
